@@ -1,46 +1,50 @@
 @font-face { font-family: Anton; src: url(../fonts/anton-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: Pinyon; src: url(../fonts/pinyon-script-latin-400-normal.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: Italianno; src: url(../fonts/italianno-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 
+/* cada sección con su aspecto: el menú y el fondo cambian por sección */
 :root {
-  --rosa: #ff8ff9;
-  --brillo: #ff4ff0;
   --negro: #000;
-  /* centro de la estrella en la intro: de aquí sale el zoom */
-  --cx: 50%;
-  --cy: 50%;
+  --fondo: #fff;
+  --barra: #ff8ff9;
+  --letra: #fff;
+  --activa: #000;
+  --guion: Pinyon, "Snell Roundhand", "Apple Chancery", cursive;
 }
+.obra { --fondo: #ff69b4; --barra: #000; --letra: #ff69b4; --activa: #fff; }
 
 * { box-sizing: border-box; margin: 0; }
-html, body { height: 100%; }
-body { background: #fff; color: var(--negro); font-family: Anton, Impact, "Arial Narrow", sans-serif; overflow: hidden; }
-img { display: block; }
-
-/* ---------- landing ---------- */
+body { background: var(--fondo); color: var(--negro); font-family: Anton, Impact, "Arial Narrow", sans-serif; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
 
 .menu {
   position: fixed; z-index: 5; left: 0; right: 0; top: 3.5vh;
-  display: flex; justify-content: space-between;
-  padding: .35em 2.4vw; background: var(--rosa);
+  display: flex; justify-content: space-between; gap: 1em;
+  padding: .35em 2.4vw; background: var(--barra);
   font-size: clamp(16px, 2.3vw, 32px); line-height: 1.15;
 }
-.menu a { color: #fff; text-decoration: none; }
-.menu a:hover, .menu a[aria-current] { color: var(--negro); }
+.menu a { color: var(--letra); text-decoration: none; }
+.menu a:hover, .menu a[aria-current] { color: var(--activa); }
 
+/* ---------- home: landing ---------- */
+
+.home { overflow: hidden; }
 .landing { position: fixed; inset: 0; overflow: hidden; background: #f6c6f3; }
 
 /* la foto, en rosa: gris + multiplicar por rosa + un velo claro */
-.foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.05) brightness(1.25); }
+.landing .foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.05) brightness(1.25); }
 .landing::before, .landing::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .landing::before { background: #ff6cf2; mix-blend-mode: multiply; }
 .landing::after { background: #7a0a8a; mix-blend-mode: screen; opacity: .4; }
 
 .estrella, .intro-estrella { filter: drop-shadow(0 0 .8vw #ff5cf0); }
-.estrella { position: absolute; z-index: 2; height: auto; }
+.estrella { position: absolute; z-index: 2; }
 .e1 { width: 19vw; left: 35vw; top: 19vh; }
 .e2 { width: 33vw; left: 4vw;  top: 43vh; }
 .e3 { width: 35vw; left: 63vw; top: 21vh; }
 
-h1 {
+.landing h1 {
   position: absolute; z-index: 3; left: 44vw; top: 67vh;
   font-weight: 400; font-size: clamp(36px, 5.2vw, 80px); line-height: 1;
 }
@@ -48,20 +52,20 @@ h1 {
 .lema {
   position: absolute; z-index: 3; left: 0; bottom: 6vh;
   display: flex; white-space: nowrap;
-  font-family: Pinyon, "Snell Roundhand", "Apple Chancery", cursive; font-size: clamp(30px, 4.4vw, 64px); line-height: 1.3;
+  font-family: var(--guion); font-size: clamp(30px, 4.4vw, 64px); line-height: 1.3;
   animation: correr 40s linear infinite;
 }
 .lema span { padding-right: .3em; }
 @keyframes correr { to { transform: translateX(-50%); } }
 
-/* ---------- intro: blanco → estrella → foto → zoom a la landing ---------- */
+/* ---------- home: intro (blanco → estrella → foto → zoom a la landing) ---------- */
 
-#intro { position: fixed; inset: 0; z-index: 10; background: #fff; overflow: hidden; pointer-events: none; animation: zoom 1.6s cubic-bezier(.6,0,.35,1) 4.2s forwards; transform-origin: var(--cx) var(--cy); }
+#intro { position: fixed; inset: 0; z-index: 10; background: #fff; overflow: hidden; pointer-events: none; animation: zoom 1.6s cubic-bezier(.6,0,.35,1) 4.2s forwards; }
 .intro-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; opacity: 0; animation: aparecer 1.2s ease 2.6s forwards; }
-.intro-estrella { position: absolute; left: 50%; top: 50%; width: min(28vw, 46vh); height: auto; translate: -50% -50%; opacity: 0; animation: estrella 1.4s cubic-bezier(.2,.9,.3,1.2) .7s forwards; }
+.intro-estrella { position: absolute; left: 50%; top: 50%; width: min(28vw, 46vh); translate: -50% -50%; opacity: 0; animation: estrella 1.4s cubic-bezier(.2,.9,.3,1.2) .7s forwards; }
 .intro-nombre, .intro-lema { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; animation: aparecer 1s ease 1.6s forwards; }
 .intro-nombre { top: 9vh; font-size: clamp(32px, 3.6vw, 52px); }
-.intro-lema { bottom: 8vh; font-family: Pinyon, "Snell Roundhand", "Apple Chancery", cursive; font-size: clamp(30px, 3.8vw, 56px); }
+.intro-lema { bottom: 8vh; font-family: var(--guion); font-size: clamp(30px, 3.8vw, 56px); }
 
 @keyframes aparecer { to { opacity: 1; } }
 @keyframes estrella { from { opacity: 0; scale: .3; rotate: -25deg; } to { opacity: 1; scale: 1; rotate: 0deg; } }
@@ -69,20 +73,62 @@ h1 {
 
 /* la landing entra desde cerca mientras la intro se abre */
 .landing { animation: acercar 1.6s cubic-bezier(.6,0,.35,1) 4.2s both; }
-.menu { animation: aparecer .6s ease 5.4s both; }
+.home .menu { opacity: 0; animation: aparecer .6s ease 5.4s both; }
 @keyframes acercar { from { transform: scale(1.35); } }
-.menu { opacity: 0; }
 
 .sin-intro #intro { display: none; }
 .sin-intro .landing { animation: none; }
-.sin-intro .menu { animation: none; opacity: 1; }
+.sin-intro .home .menu { animation: none; opacity: 1; }
+
+/* ---------- obra: rosa, estrella blanca, letra de mano ---------- */
+
+.obra h1, .ficha-titulo { font-family: Italianno, var(--guion); font-weight: 400; }
+
+.cabecera { position: relative; height: 100vh; height: 100svh; overflow: hidden; }
+.cabecera h1 { position: absolute; left: 2vw; bottom: -.18em; font-size: 31vw; line-height: 1; }
+/* el gesto: la estrella gira mientras bajas */
+.obra-estrella { position: absolute; width: 43vw; right: -4vw; top: -8vw; animation: girar linear both; animation-timeline: scroll(); }
+@keyframes girar { to { rotate: 144deg; } }
+
+.obras { display: flex; flex-direction: column; padding: 8vh 0 20vh; }
+.ficha { position: relative; display: block; text-decoration: none; width: var(--w); margin-left: var(--x); margin-top: 4vh; }
+.ficha:nth-child(5n+1) { --w: 36vw; --x: 8vw; }
+.ficha:nth-child(5n+2) { --w: 28vw; --x: 62vw; }
+.ficha:nth-child(5n+3) { --w: 42vw; --x: 30vw; }
+.ficha:nth-child(5n+4) { --w: 26vw; --x: 4vw; }
+.ficha:nth-child(5n+5) { --w: 34vw; --x: 56vw; }
+.ficha img { width: 100%; max-height: 70vh; object-fit: cover; box-shadow: 0 4px 4px rgba(0,0,0,.25); transition: translate .3s; }
+.ficha:hover { z-index: 1; }
+.ficha:hover img { translate: 0 -.6vw; }
+.ficha-titulo { display: inline-block; font-size: clamp(40px, 5vw, 84px); line-height: .9; margin-top: .15em; }
+.ficha-año { font-size: 14px; }
+
+/* una obra */
+.pieza-cabecera { padding: max(120px, 16vh) 4vw 6vh; max-width: 60em; }
+.pieza-cabecera h1 { font-size: clamp(64px, 11vw, 190px); line-height: .85; }
+.volver, .pieza-año, .pieza-pie { font-size: 15px; }
+.volver { text-decoration: none; }
+.pieza-año { margin-top: .4em; }
+.pieza-texto { font-family: Georgia, serif; font-size: 17px; line-height: 1.5; max-width: 36em; margin-top: 1em; }
+.fotos { display: flex; flex-direction: column; gap: 6vh; padding: 0 4vw; }
+.fotos img { max-height: 88vh; max-width: 82vw; width: auto; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
+.fotos img:nth-child(3n+2) { align-self: flex-end; }
+.fotos img:nth-child(3n) { align-self: center; }
+.pieza-pie { padding: 12vh 4vw 8vh; text-align: right; }
+.pieza-pie a { text-decoration: none; }
 
 @media (max-width: 700px) {
   .menu { padding: .4em 4vw; }
-  .foto { object-position: 55% center; }
+  .landing .foto { object-position: 55% center; }
   .e1 { width: 34vw; left: 30vw; top: 14vh; }
   .e2 { width: 52vw; left: -6vw; top: 52vh; }
   .e3 { width: 56vw; left: 50vw; top: 28vh; }
-  h1 { left: 0; right: 0; text-align: center; top: 62vh; }
+  .landing h1 { left: 0; right: 0; text-align: center; top: 62vh; }
   .intro-estrella { width: 62vw; }
+
+  .cabecera h1 { font-size: 46vw; }
+  .obra-estrella { width: 70vw; right: -14vw; top: 6vh; }
+  .ficha:nth-child(odd) { --w: 78vw; --x: 4vw; }
+  .ficha:nth-child(even) { --w: 70vw; --x: 26vw; }
+  .fotos img, .fotos img:nth-child(n) { align-self: center; max-height: none; max-width: 100%; width: 100%; }
 }

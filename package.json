@@ -1,0 +1,17 @@
+{
+  "name": "sepulcrito",
+  "private": true,
+  "description": "Web de Sepulcrito: data/ + assets/ → HTML estático en dist/",
+  "type": "module",
+  "scripts": {
+    "build": "node build/build.mjs",
+    "serve": "npx -y serve@14.2.4 dist -l 8765",
+    "dev": "npm run build && npm run serve"
+  },
+  "dependencies": {
+    "sharp": "^0.35.5"
+  },
+  "engines": {
+    "node": "22"
+  }
+}

@@ -1,3 +1,8 @@
 .DS_Store
 node_modules/
+
+# la web generada: la escribe npm run build y la publica la Action
 dist/
+
+# miniaturas e imágenes para compartir: las hace el build (sharp)
+.cache/
