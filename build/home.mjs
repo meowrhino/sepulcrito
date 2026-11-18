@@ -2,8 +2,9 @@
    Va aparte del resto de plantillas (build/build.mjs) para poder rehacerla sin tocarlas:
    el build la llama con lo que necesita y pone el <head>, el menú y el CSS. */
 
-/** El cuerpo de la home. `r` es la ruta a la raíz ("" en la home). */
-export function home({ site, esc, r }) {
+/** El cuerpo de la home. `r` es la ruta a la raíz ("" en la home); `link(path)`, el enlace a una
+    página («about/»: en la vista previa va a ?p=). «Sepulcrito» lleva al about. */
+export function home({ site, esc, r, link }) {
   const lema = `${esc(site.lema)} `.repeat(4);
   return `<script>
   // sin intro si vienes de otra página de la web
@@ -20,7 +21,7 @@ export function home({ site, esc, r }) {
   <img class="estrella e1" src="${r}assets/img/star.webp" alt="">
   <img class="estrella e2" src="${r}assets/img/star.webp" alt="">
   <img class="estrella e3" src="${r}assets/img/star.webp" alt="">
-  <h1>${esc(site.title)}</h1>
+  <h1><a href="${link('about/')}">${esc(site.title)}</a></h1>
   <p class="lema" aria-label="${esc(site.lema)}"><span aria-hidden="true">${lema}</span><span aria-hidden="true">${lema}</span></p>
 </main>
 <script>

@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "Kaove · Nene",
+  "logo": "1",
+  "cover": "3",
+  "text": [],
+  "links": [
+    "https://www.youtube.com/watch?v=Q0SC7wHPi4k"
+  ],
+  "photos": [
+    "2",
+    "3"
+  ]
+}

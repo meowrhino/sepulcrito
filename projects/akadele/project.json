@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "Akadele",
+  "cover": "4",
+  "text": [],
+  "links": [],
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+  ]
+}

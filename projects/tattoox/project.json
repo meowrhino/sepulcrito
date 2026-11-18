@@ -1,0 +1,138 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "Tattoox",
+  "logo": "1",
+  "cover": "4",
+  "text": [],
+  "links": [],
+  "photos": [],
+  "groups": [
+    {
+      "slug": "direccion-comunicativa",
+      "title": "Dirección comunicativa",
+      "text": [],
+      "links": [
+        "https://www.instagram.com/p/DaIVwp9sOq8/",
+        "https://www.instagram.com/p/DZ45Dw2s4lN/",
+        "https://www.instagram.com/p/DasZmN_DO_L/?img_index=1",
+        "https://www.instagram.com/p/Dd893duDKuP/?img_index=1",
+        "https://www.instagram.com/p/DdTvsMps6q7/",
+        "https://www.instagram.com/p/Da2kIPNM-3N/",
+        "https://www.instagram.com/p/DdlvY-YNPyq/"
+      ],
+      "photos": [
+        "2",
+        "3"
+      ]
+    },
+    {
+      "slug": "riverland",
+      "title": "Riverland",
+      "text": [],
+      "links": [
+        "https://www.youtube.com/watch?v=YdYSMzOLrTY"
+      ],
+      "photos": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "slug": "l0rna",
+      "title": "L0rna",
+      "text": [],
+      "links": [
+        "https://www.youtube.com/watch?v=HCOQg3GFqCE&t=37s"
+      ],
+      "photos": [
+        "17",
+        "18",
+        "19"
+      ]
+    },
+    {
+      "slug": "xiyo-y-fernandezz",
+      "title": "Xiyo y Fernandezz",
+      "text": [],
+      "links": [
+        "https://www.youtube.com/watch?v=SlkZr55MI_4&t=17s"
+      ],
+      "photos": [
+        "20",
+        "21",
+        "22"
+      ]
+    },
+    {
+      "slug": "sinaka",
+      "title": "Sinaka",
+      "text": [],
+      "links": [],
+      "photos": [
+        "23"
+      ]
+    },
+    {
+      "slug": "taichu",
+      "title": "Taichu",
+      "text": [],
+      "links": [
+        "https://www.youtube.com/watch?v=absvO7Ab8k0"
+      ],
+      "photos": [
+        "24"
+      ]
+    },
+    {
+      "slug": "la-plazuela",
+      "title": "La Plazuela",
+      "text": [],
+      "links": [
+        "https://www.instagram.com/p/DZdOJDpMbFo/"
+      ],
+      "photos": [
+        "25",
+        "26"
+      ]
+    },
+    {
+      "slug": "perro-peligro",
+      "title": "Perro Peligro",
+      "text": [],
+      "links": [],
+      "photos": [
+        "27",
+        "28"
+      ]
+    },
+    {
+      "slug": "tarchi",
+      "title": "Tarchi",
+      "text": [],
+      "links": [],
+      "photos": [
+        "29"
+      ]
+    },
+    {
+      "slug": "soymuybestiah",
+      "title": "SoyMuyBestiah",
+      "text": [],
+      "links": [],
+      "photos": [
+        "30"
+      ]
+    }
+  ]
+}

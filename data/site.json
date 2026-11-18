@@ -1,15 +1,53 @@
 {
+  "$schema": "../schema/site.json",
   "title": "Sepulcrito",
   "description": "Sepulcrito: obra, dirección creativa y tattoo.",
   "url": "",
   "lema": "Content Destroyer.",
   "instagram": "sepulcrito",
   "email": "",
+  "lists": {
+    "obra": {
+      "name": "obra",
+      "projects": [
+        "sweet-wrecker",
+        "la-furia-del-silenci",
+        "spooky-sluts-invasion",
+        "this-is-where-i-post-from",
+        "diva-muerta-sobre-escenario",
+        "qui-al-seu-enemic-plany",
+        "no-man-no-problem"
+      ]
+    },
+    "direccion-creativa": {
+      "name": "dirección creativa",
+      "projects": [
+        "tattoox",
+        "tuttipari",
+        "desbordar",
+        "apparell",
+        "adefesio",
+        "kaove",
+        "akadele"
+      ]
+    }
+  },
   "menu": [
-    { "text": "obra", "href": "obra/" },
-    { "text": "about", "href": "about/" },
-    { "text": "home", "href": "" },
-    { "text": "tattoo", "href": "tattoo/" },
-    { "text": "dirección creativa", "href": "direccion-creativa/" }
+    {
+      "text": "obra",
+      "href": "obra/"
+    },
+    {
+      "text": "dirección creativa",
+      "href": "direccion-creativa/"
+    },
+    {
+      "text": "tattoo",
+      "href": "tattoo/"
+    },
+    {
+      "text": "about",
+      "href": "about/"
+    }
   ]
 }

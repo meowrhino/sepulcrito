@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "No man no problem",
+  "year": 2019,
+  "cover": "1",
+  "text": [],
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ]
+}

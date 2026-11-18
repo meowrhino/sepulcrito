@@ -1,8 +1,13 @@
 .DS_Store
 node_modules/
+.wrangler/
 
 # la web generada: la escribe npm run build y la publica la Action
 dist/
 
-# miniaturas e imágenes para compartir: las hace el build (sharp)
+# las fotos pequeñas y las imágenes para compartir: las hace el build (sharp)
 .cache/
+
+# de VS Code, solo lo que necesita la clienta
+.vscode/*
+!.vscode/settings.json

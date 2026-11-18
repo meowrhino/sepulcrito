@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "data/about.json: el about",
+  "description": "data/about.json: el about. Este fichero lo lee VS Code (por el \"$schema\" de arriba del JSON) para autocompletar, explicar cada campo y subrayar lo que está mal; el build y la vista previa validan con él mismo.",
+  "type": "object",
+  "required": [
+    "photo",
+    "text"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^_": {
+      "type": "string",
+      "description": "Una nota para quien edita. No sale en la web."
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "photo": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$",
+      "description": "El número de la foto de la carpeta about/: \"1\" es about/1.webp."
+    },
+    "text": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "El texto, como lista de párrafos. El primero sale también en Google y al compartir."
+    }
+  }
+}

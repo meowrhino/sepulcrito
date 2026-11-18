@@ -4,156 +4,189 @@
 @font-face { font-family: "Instrument Serif"; src: url(../fonts/instrument-serif-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: "Irish Grover"; src: url(../fonts/irish-grover-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 
-/* cada sección con su aspecto: el menú y el fondo cambian por sección */
+/* Cada sección con su aspecto: la clase del <body> pone el fondo, la letra
+   de los títulos, el color de la estrella y el del menú. --bg es el color al
+   que funde la transición entre páginas (css/transicion.css). */
 :root {
-  --negro: #000;
-  --fondo: #fff;
-  --barra: #ff8ff9;
-  --letra: #fff;
-  --activa: #000;
   --guion: Pinyon, "Snell Roundhand", "Apple Chancery", cursive;
+  --pie: 3.4rem;   /* lo que ocupa el menú de abajo */
 }
-.obra   { --fondo: #ff69b4; --barra: #000;    --letra: #ff69b4; --activa: #fff; --estrella: #d9d9d9; --titular: Italianno, var(--guion); }
-.dc     { --fondo: #fff;    --barra: #000;    --letra: #fff;    --activa: #ff69b4; --estrella: #ffd3ec; --titular: "Instrument Serif", Georgia, serif; }
-.tattoo { --fondo: #f00;    --barra: #fff;    --letra: #f00;    --activa: #000; --estrella: #d9d9d9; --titular: "Irish Grover", fantasy; }
-.about  { --fondo: #000;    --barra: #ff8ff9; --letra: #000;    --activa: #fff; --negro: #fff; }
+body   { --fondo: #fff; --tinta: #000; --menu: #000; --activa: #ff69b4; --estrella: #d9d9d9; --titular: Anton, Impact, sans-serif; --bg: var(--fondo); }
+.home  { --menu: #fff; --activa: #000; }
+.obra  { --fondo: #ff69b4; --activa: #fff; --titular: Italianno, var(--guion); }
+.dc    { --estrella: #ffd3ec; --titular: "Instrument Serif", Georgia, serif; }
+.tattoo { --fondo: #f00; --activa: #fff; --titular: "Irish Grover", fantasy; }
+.about { --fondo: #000; --tinta: #fff; --menu: #fff; --activa: #ff8ff9; }
 
 * { box-sizing: border-box; margin: 0; }
-body { background: var(--fondo); color: var(--negro); font-family: Anton, Impact, "Arial Narrow", sans-serif; }
+body { background: var(--fondo); color: var(--tinta); font-family: Anton, Impact, "Arial Narrow", sans-serif; }
+body:not(.home) { padding-bottom: var(--pie); }
 img { display: block; max-width: 100%; height: auto; }
+video { display: block; background: #000; max-width: 100%; height: auto; }
 a { color: inherit; }
 
+/* el menú: texto suelto abajo, sin barra; la estrella lleva a la home */
 .menu {
-  position: fixed; z-index: 5; left: 0; right: 0; top: 3.5vh;
-  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 1em;
-  padding: .35em 2.4vw; background: var(--barra);
-  font-size: clamp(16px, 2.3vw, 32px); line-height: 1.15;
+  position: fixed; z-index: 5; left: 0; right: 0; bottom: 0;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .3em 1.4em;
+  padding: 1em 4vw; font-size: 17px; line-height: 1; pointer-events: none;
 }
-.menu a { color: var(--letra); text-decoration: none; }
+/* fuera de la home, con el fondo de la página: las fotos pasan por debajo, no por encima */
+body:not(.home) .menu { background: var(--fondo); pointer-events: auto; }
+.menu a { color: var(--menu); text-decoration: none; pointer-events: auto; }
 .menu a:hover, .menu a[aria-current] { color: var(--activa); }
+.menu-casa svg { width: 1.05em; height: 1.05em; fill: currentColor; vertical-align: -.12em; }
 
-/* ---------- lo común de las secciones ---------- */
+/* ---------- lo común ---------- */
 
-.cabecera { position: relative; height: 100vh; height: 100svh; overflow: hidden; }
-.cabecera h1, .pieza-cabecera h1, .proyecto-titulo, .ficha-titulo, .panel h1, .panel h2, .siguiente { font-family: var(--titular); font-weight: 400; }
+.cabecera { position: relative; height: calc(100svh - var(--pie)); overflow: hidden; }
+.cabecera h1, .pieza-cabecera h1, .proyecto-titulo, .ficha-titulo, .marca-titulo, .parte-titulo, .tira-partes span { font-family: var(--titular); font-weight: 400; }
 .cabecera h1 { position: absolute; left: 2vw; bottom: -.18em; font-size: 31vw; line-height: 1; }
-.cabecera svg { position: absolute; fill: var(--estrella); }
-/* el gesto de cada sección: su estrella gira mientras bajas */
+.cabecera-estrella { position: absolute; fill: var(--estrella); }
+/* el gesto: la estrella de cada sección gira mientras bajas */
 @supports (animation-timeline: scroll()) {
-  .cabecera svg { animation: girar linear both; animation-timeline: scroll(); }
+  .cabecera-estrella { animation: girar linear both; animation-timeline: scroll(); }
 }
 @keyframes girar { to { rotate: 144deg; } }
 
-.volver, .pieza-año, .pieza-pie, .enlaces, .ficha-año { font-size: 15px; }
-.volver { text-decoration: none; }
-.pieza-texto { font-family: Georgia, serif; font-size: 17px; line-height: 1.5; max-width: 36em; margin-top: 1em; }
+.volver, .pieza-año, .pieza-pie, .enlaces, .ficha-año, .siguiente, .partes { font-size: 15px; }
+.volver, .siguiente, .enlaces a, .pieza-pie a, .partes a { text-decoration: none; }
+.volver:hover, .siguiente:hover, .enlaces a:hover, .pieza-pie a:hover, .partes a:hover, .partes a[aria-current] { text-decoration: underline; }
+.texto { font-family: Georgia, serif; font-size: 17px; line-height: 1.5; max-width: 36em; margin-top: 1em; }
 .enlaces { list-style: none; padding: 0; margin-top: 1em; line-height: 1.6; }
-.enlaces a { text-decoration: none; }
-.enlaces a:hover, .volver:hover, .pieza-pie a:hover { text-decoration: underline; }
-video { display: block; background: #000; max-width: 100%; height: auto; }
+.oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
-/* ---------- obra: rosa, estrella blanca, letra de mano ---------- */
+/* ---------- obra: rosa, estrella blanca, letra de mano; las obras en collage ---------- */
 
-.obra-estrella { width: 43vw; right: -4vw; top: -8vw; }
+.obra .cabecera-estrella { width: 43vw; right: -4vw; top: -8vw; }
 
-.obras { display: flex; flex-direction: column; padding: 8vh 0 20vh; }
+.obras { display: flex; flex-direction: column; padding: 8vh 0 16vh; }
 .ficha { position: relative; display: block; text-decoration: none; width: var(--w); margin-left: var(--x); margin-top: 4vh; }
 .ficha:nth-child(5n+1) { --w: 36vw; --x: 8vw; }
 .ficha:nth-child(5n+2) { --w: 28vw; --x: 62vw; }
 .ficha:nth-child(5n+3) { --w: 42vw; --x: 30vw; }
 .ficha:nth-child(5n+4) { --w: 26vw; --x: 4vw; }
 .ficha:nth-child(5n+5) { --w: 34vw; --x: 56vw; }
-.ficha img { width: 100%; max-height: 70vh; object-fit: cover; box-shadow: 0 4px 4px rgba(0,0,0,.25); transition: translate .3s; }
-.ficha:hover { z-index: 1; }
+.ficha img { width: 100%; max-height: 70vh; object-fit: cover; transition: translate .3s; }
 .ficha:hover img { translate: 0 -.6vw; }
 .ficha-titulo { display: inline-block; font-size: clamp(40px, 5vw, 84px); line-height: .9; margin-top: .15em; }
 
-/* una obra */
-.pieza-cabecera { padding: max(120px, 16vh) 4vw 6vh; max-width: 60em; }
+/* una obra: hacia abajo */
+.pieza-cabecera { padding: 12vh 4vw 6vh; max-width: 60em; }
 .pieza-cabecera h1 { font-size: clamp(64px, 11vw, 190px); line-height: .85; }
 .pieza-año { margin-top: .4em; }
 .fotos { display: flex; flex-direction: column; gap: 6vh; padding: 0 4vw; }
-.fotos > * { max-height: 88vh; max-width: 82vw; width: auto; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
+.fotos > * { max-height: 88vh; max-width: 82vw; width: auto; }
 .fotos > :nth-child(3n+2) { align-self: flex-end; }
 .fotos > :nth-child(3n) { align-self: center; }
-.pieza-pie { padding: 12vh 4vw 8vh; text-align: right; }
-.pieza-pie a { text-decoration: none; }
+.pieza-pie { padding: 12vh 4vw 6vh; text-align: right; }
 
-/* ---------- dirección creativa: blanco, serif, la obra en una tira de lado ---------- */
+/* ---------- dirección creativa: blanco, serif ---------- */
 
-.dc-estrella { width: 46vw; right: 6vw; bottom: -10vw; }
+.dc .cabecera-estrella { width: 46vw; right: 6vw; bottom: -10vw; }
 .dc .cabecera h1 { font-size: 15vw; line-height: .82; bottom: 4vh; }
 
-.proyectos { padding: 10vh 4vw 24vh; }
+.proyectos { padding: 10vh 4vw 16vh; }
 .proyecto { display: block; text-decoration: none; border-top: 1px solid #000; padding: 1.5vh 0; }
 .proyecto:last-child { border-bottom: 1px solid #000; }
 .proyecto-titulo { font-size: clamp(44px, 8vw, 140px); line-height: 1; }
 /* la portada aparece al pasar por el nombre, a la derecha (en el móvil, debajo) */
-.proyecto img { position: fixed; z-index: 2; right: 5vw; top: 50%; translate: 0 -50%; width: 30vw; max-height: 70vh; object-fit: cover; pointer-events: none; opacity: 0; transition: opacity .25s; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
+.proyecto img { position: fixed; z-index: 2; right: 5vw; top: 50%; translate: 0 -50%; width: 30vw; max-height: 70vh; object-fit: cover; pointer-events: none; opacity: 0; transition: opacity .25s; }
 .proyecto:hover img, .proyecto:focus-visible img { opacity: 1; }
 .proyecto:hover .proyecto-titulo { font-style: italic; }
 
-/* un proyecto: la tira */
-.dc.pieza { height: 100vh; height: 100svh; overflow: hidden; }
-.tira { display: flex; align-items: center; gap: 2vw; height: 100%; overflow-x: auto; overflow-y: hidden; padding: max(110px, 14vh) 4vw 5vh; scrollbar-width: thin; }
-.tira > img, .tira > video { flex: none; height: 100%; width: auto; max-width: none; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
-.panel { flex: none; align-self: stretch; width: min(34em, 80vw); overflow-y: auto; display: flex; flex-direction: column; }
-.panel-inicio { justify-content: flex-end; width: min(26em, 80vw); }
-.panel h1 { font-size: clamp(56px, 7vw, 120px); line-height: .9; margin-top: auto; }
-.logo { max-height: 34vh; width: auto; margin-top: auto; object-fit: contain; object-position: left bottom; }
-.h1-con-logo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-/* cada grupo empieza con una raya, como en el Figma */
-.grupo { border-left: 2px solid #000; padding-left: 2vw; margin-left: 2vw; justify-content: flex-end; width: min(24em, 70vw); }
-.grupo h2 { font-size: clamp(40px, 4.4vw, 76px); line-height: .95; }
-.panel-fin { justify-content: center; width: min(24em, 70vw); padding-left: 4vw; }
-.panel-fin a { text-decoration: none; font-size: 15px; }
-.siguiente { font-size: clamp(40px, 4.4vw, 76px); line-height: 1; }
+/* un proyecto, como en el Figma: de lado y por pantallas, con una raya entre
+   ellas. La rueda del ratón la mueve de lado (js/site.js). */
+.dc.pieza { height: 100svh; overflow: hidden; }
+.tira { display: flex; align-items: center; gap: 2vw; height: calc(100svh - var(--pie)); overflow-x: auto; overflow-y: hidden; padding: 6vh 4vw; scrollbar-width: none; }
+.tira > img, .tira > video { flex: none; height: 74%; width: auto; max-width: none; }
+.pantalla { flex: none; position: relative; align-self: stretch; }
+.raya { flex: none; align-self: stretch; width: 6px; margin: -6vh 3vw; border: 0; background: #000; rotate: 1deg; }
+
+/* la primera vista: el índice de partes arriba, la foto destacada, y la marca abajo */
+.inicio { width: calc(100vw - 8vw); }
+.inicio .volver { position: relative; z-index: 1; }
+.partes { position: relative; z-index: 1; list-style: none; padding: 0; margin-top: 3vh; display: flex; flex-wrap: wrap; gap: 2.2vh 3vw; width: 38vw; font-family: "Instrument Serif", Georgia, serif; font-size: 19px; }
+.partes li:nth-child(3n+2) { margin-top: 2.4vh; }
+.partes li:nth-child(4n+3) { margin-left: 3vw; }
+.parte-titulo { position: relative; z-index: 1; margin-top: 4vh; font-size: clamp(40px, 4.4vw, 76px); line-height: .95; }
+.destacada { position: absolute; right: 0; top: 0; max-height: 64%; max-width: 46%; width: auto; height: auto; }
+.marca { position: absolute; left: 0; bottom: 0; max-width: 60%; }
+.marca-estrella { position: absolute; width: 34vw; left: -9vw; bottom: -8vh; fill: var(--estrella); }
+.logo { position: relative; margin-left: 6vw; max-height: 26vh; max-width: 100%; width: auto; }
+.marca-titulo { position: relative; display: block; font-size: clamp(64px, 10vw, 170px); line-height: .85; }
+
+/* las partes de un proyecto (Tattoox), cada una con su foto */
+.tira-partes { display: flex; align-items: center; gap: 2vw; }
+.parte { flex: none; display: block; height: 66%; text-decoration: none; }
+.parte img { height: 100%; width: auto; max-width: none; }
+.parte span { display: block; margin-top: .3em; font-size: clamp(24px, 2.2vw, 36px); }
+.parte:hover span { font-style: italic; }
+
+/* el final: el texto y la marca otra vez */
+.final { width: min(70vw, 64em); }
+.final-texto { position: absolute; right: 0; top: 0; width: min(30em, 40vw); }
+.final-texto .texto:first-child { margin-top: 0; }
+.final .siguiente { display: inline-block; margin-top: 2em; }
 
 /* ---------- tattoo: rojo, Irish Grover ---------- */
 
-.tattoo-estrella { width: 43vw; left: -6vw; top: -6vw; }
+.tattoo .cabecera-estrella { width: 43vw; left: -6vw; top: -6vw; }
 .tattoo .cabecera h1 { font-size: 26vw; bottom: -.1em; }
-.tattoo-citas { padding: 4vh 4vw 0; font-size: clamp(18px, 2vw, 28px); }
+.tattoo-citas { position: absolute; right: 4vw; top: 4vh; font-size: clamp(18px, 2vw, 28px); text-align: right; }
 .tattoo-citas a { color: #fff; text-decoration: none; }
 .tattoo-citas a:hover { color: #000; }
-.tatuajes { columns: 3; column-gap: 1.2vw; padding: 4vh 4vw 16vh; }
+.tatuajes { columns: 3; column-gap: 1.2vw; padding: 4vh 4vw 12vh; }
 .tatuajes a { display: block; margin-bottom: 1.2vw; break-inside: avoid; }
-.tatuajes img { width: 100%; transition: filter .2s; }
-.tatuajes a:hover img { filter: contrast(1.15) saturate(1.2); }
+.tatuajes img { width: 100%; }
 
 /* ---------- about: negro ---------- */
 
-.sobre { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: end; min-height: 100vh; min-height: 100svh; padding: max(120px, 16vh) 4vw 8vh; color: #fff; }
+.sobre { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: end; min-height: calc(100svh - var(--pie)); padding: 8vh 4vw 4vh; }
 .sobre-foto { width: 100%; max-height: 80vh; object-fit: cover; }
 .sobre h1 { font-weight: 400; font-size: clamp(56px, 9vw, 150px); line-height: 1; color: #ff8ff9; }
 .sobre-lema { font-family: var(--guion); font-size: clamp(32px, 4vw, 64px); margin-top: .2em; }
 .sobre-contacto { margin-top: 2em; font-size: 18px; line-height: 1.6; }
-.sobre-contacto a { text-decoration: none; }
-.sobre-contacto a:hover { color: #ff8ff9; }
+.sobre-contacto a, .firma a { text-decoration: none; }
+.sobre-contacto a:hover, .firma a:hover { color: #ff8ff9; }
+.firma { margin-top: 3em; font-size: 12px; opacity: .7; }
 .sobre-404 { grid-template-columns: 1fr; }
 
 /* ---------- móvil ---------- */
 
 @media (max-width: 700px) {
-  .menu { padding: .4em 4vw; }
+  .menu { gap: .5em 1.1em; padding: .9em 4vw; font-size: 16px; }
   .cabecera h1 { font-size: 46vw; }
-  .obra-estrella { width: 70vw; right: -14vw; top: 6vh; }
+  .obra .cabecera-estrella { width: 70vw; right: -14vw; top: 6vh; }
   .ficha:nth-child(odd) { --w: 78vw; --x: 4vw; }
   .ficha:nth-child(even) { --w: 70vw; --x: 26vw; }
   .fotos > *, .fotos > :nth-child(n) { align-self: center; max-height: none; max-width: 100%; width: 100%; }
 
   .dc .cabecera h1 { font-size: 21vw; }
-  .dc-estrella { width: 80vw; right: -10vw; bottom: auto; top: 14vh; }
+  .dc .cabecera-estrella { width: 80vw; right: -10vw; bottom: auto; top: 10vh; }
   .proyecto img { position: static; translate: none; opacity: 1; width: 64vw; max-height: none; margin: 1vh 0 1vh auto; }
-  .dc.pieza { height: auto; overflow: visible; }
-  .tira { flex-direction: column; align-items: stretch; height: auto; overflow: visible; gap: 4vh; padding-top: 120px; }
-  .tira > img, .tira > video { height: auto; width: 100%; }
-  .panel, .grupo, .panel-fin { width: auto; overflow: visible; }
-  .grupo { border-left: 0; border-top: 2px solid #000; padding: 3vh 0 0; margin: 4vh 0 0; }
-  .panel-fin { padding: 6vh 0 8vh; }
 
-  .tattoo-estrella { width: 80vw; left: -14vw; top: 8vh; }
+  /* la tira, hacia abajo */
+  .dc.pieza { height: auto; overflow: visible; }
+  .tira { flex-direction: column; align-items: stretch; height: auto; overflow: visible; gap: 4vh; padding: 5vh 4vw; }
+  .tira > img, .tira > video { height: auto; width: 100%; }
+  .pantalla { align-self: auto; width: auto; }
+  .raya { width: auto; height: 6px; margin: 2vh -2vw; rotate: -1deg; }
+  .inicio { display: flex; flex-direction: column; gap: 3vh; }
+  .partes { width: auto; }
+  .destacada, .final-texto { position: static; max-width: 100%; width: auto; }
+  .marca { position: relative; max-width: 100%; }
+  .destacada { max-height: none; width: 100%; }
+  .marca { margin: 4vh 0 2vh 8vw; }
+  .marca-estrella { width: 46vw; left: -12vw; }
+  .tira-partes { flex-direction: column; align-items: stretch; gap: 4vh; }
+  .parte { height: auto; }
+  .parte img { width: 100%; height: auto; }
+  .final { display: flex; flex-direction: column; gap: 4vh; }
+
+  .tattoo .cabecera-estrella { width: 80vw; left: -14vw; top: 8vh; }
   .tattoo .cabecera h1 { font-size: 36vw; }
+  .tattoo-citas { left: 4vw; top: auto; bottom: 36vw; text-align: left; font-size: 18px; }
   .tatuajes { columns: 2; column-gap: 2vw; }
   .tatuajes a { margin-bottom: 2vw; }
 

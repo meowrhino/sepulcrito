@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "projects/<slug>/project.json: una obra o un proyecto",
+  "description": "projects/<slug>/project.json: una obra o un proyecto. Su dirección la da la lista de data/site.json en la que está (/obra/sweet-wrecker/). Sus fotos, en img/ de la misma carpeta (1.webp, 2.webp… de imgToWeb). Este fichero lo lee VS Code (por el \"$schema\" de arriba del JSON) para autocompletar, explicar cada campo y subrayar lo que está mal; el build y la vista previa validan con él mismo.",
+  "type": "object",
+  "required": [
+    "title",
+    "photos"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^_": {
+      "type": "string",
+      "description": "Una nota para quien edita. No sale en la web."
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "El título, tal cual se ve. Sale en su página, en la lista, en Google y al compartir."
+    },
+    "year": {
+      "type": "number",
+      "minimum": 1900,
+      "description": "El año, sin comillas: 2025."
+    },
+    "logo": {
+      "$ref": "#/$defs/numero",
+      "description": "Opcional: el número de la foto del logo, que sale en grande en la primera vista y al final: \"1\"."
+    },
+    "cover": {
+      "$ref": "#/$defs/numero",
+      "description": "La portada: la foto de la lista, la destacada de la primera vista y la de compartir. Una foto, no un vídeo: \"3\". Si no está, la primera foto."
+    },
+    "text": {
+      "$ref": "#/$defs/parrafos"
+    },
+    "links": {
+      "$ref": "#/$defs/links"
+    },
+    "photos": {
+      "$ref": "#/$defs/fotos"
+    },
+    "groups": {
+      "type": "array",
+      "description": "Opcional: el proyecto por partes, cada una con su página (como Tattoox: /direccion-creativa/tattoox/riverland/).",
+      "items": {
+        "type": "object",
+        "required": [
+          "slug",
+          "title",
+          "photos"
+        ],
+        "additionalProperties": false,
+        "patternProperties": {
+          "^_": {
+            "type": "string",
+            "description": "Una nota para quien edita. No sale en la web."
+          }
+        },
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "Su dirección: en minúsculas, sin tildes ni espacios, con guiones (\"riverland\")."
+          },
+          "title": {
+            "type": "string",
+            "description": "Su nombre, tal cual se ve."
+          },
+          "cover": {
+            "$ref": "#/$defs/numero",
+            "description": "Opcional: su foto destacada. Si no está, la primera foto."
+          },
+          "text": {
+            "$ref": "#/$defs/parrafos"
+          },
+          "links": {
+            "$ref": "#/$defs/links"
+          },
+          "photos": {
+            "$ref": "#/$defs/fotos"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "numero": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$",
+      "description": "El número de la foto o del vídeo, entre comillas y sin extensión: \"3\" es img/3.webp (o img/3.webm con su img/3.poster.webp)."
+    },
+    "parrafos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "El texto, como lista de párrafos: [\"Uno.\", \"Otro.\"]. El primero sale también en Google y al compartir."
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^https?://"
+      },
+      "description": "Enlaces de fuera (YouTube, Instagram…), uno por línea: [\"https://www.youtube.com/watch?v=…\"]. En la web sale «ver en youtube ↗»."
+    },
+    "fotos": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/numero"
+      },
+      "description": "Las fotos y los vídeos, por número y en el orden en que salen: [\"1\", \"2\", \"3\"]."
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "Spooky Sluts Invasion",
+  "year": 2023,
+  "cover": "1",
+  "text": [],
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+  ]
+}

@@ -1,4 +1,5 @@
 {
+  "$schema": "../schema/about.json",
   "photo": "1",
   "text": []
 }

@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "Apparell",
+  "cover": "1",
+  "text": [],
+  "links": [],
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/project.json",
+  "title": "This is where i post from",
+  "year": 2023,
+  "cover": "1",
+  "text": [],
+  "photos": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+  ]
+}
