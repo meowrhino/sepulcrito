@@ -1,6 +1,6 @@
 /* data/ + assets/ + tattoo/ → dist/
 
-     dist/index.html                           la home: intro (blanco → estrella → foto → zoom) y landing
+     dist/index.html                           la home: intro (blanco → estrella → se despixela) y landing
      dist/obra/                                las obras en collage; dist/obra/<slug>/, cada una
      dist/direccion-creativa/                  los proyectos en lista; dist/direccion-creativa/<slug>/,
                                                cada uno en una tira horizontal (con sus grupos, si los tiene)
@@ -186,6 +186,19 @@ async function og(src) {
   }
   ogs.add(src);
   return src;
+}
+
+/** La foto pixelada (80 bloques de ancho, del mismo tamaño que la original para que
+    case encima), para las estrellas de la landing: dist/pixel/<src>. */
+async function pixel(src) {
+  const out = join(CACHE, 'pixel', src);
+  if (!fresh(out, src)) {
+    mkdirSync(dirname(out), { recursive: true });
+    const { w, h } = await medir(src);
+    const poco = await sharp(join(ROOT, src)).resize(80, Math.round((80 * h) / w), { fit: 'fill' }).toBuffer();
+    await sharp(poco).resize(w, h, { fit: 'fill', kernel: 'nearest' }).webp({ lossless: true }).toFile(out);
+  }
+  return `pixel/${src}`;
 }
 
 /* ?v=<hash>: que un deploy no deje a nadie con el CSS o el JS viejos en caché */
@@ -379,6 +392,7 @@ const noEncontrada = () => pagina({
 const paginas = { '': homePagina() };
 
 await og('assets/img/home.webp');
+const pixelHome = await pixel('assets/img/home.webp');
 const fichasObra = await Promise.all(obra.map(async (b) => {
   const src = await og(portada(OBRA, b));
   return { b, m: { src: await mini(src), size: await medir(src) } };
@@ -412,6 +426,7 @@ rmSync(OUT, { recursive: true, force: true, maxRetries: 5 });
 mkdirSync(OUT, { recursive: true });
 for (const d of ['css', 'js', 'fonts', 'assets', 'tattoo']) cpSync(join(ROOT, d), join(OUT, d), { recursive: true, filter: (f) => !f.endsWith('.DS_Store') });
 for (const src of minis) { mkdirSync(dirname(join(OUT, 'mini', src)), { recursive: true }); cpSync(join(CACHE, 'mini', src), join(OUT, 'mini', src)); }
+mkdirSync(dirname(join(OUT, pixelHome)), { recursive: true }); cpSync(join(CACHE, pixelHome), join(OUT, pixelHome));
 for (const src of ogs) { mkdirSync(dirname(join(OUT, ogPath(src))), { recursive: true }); cpSync(join(CACHE, ogPath(src)), join(OUT, ogPath(src))); }
 
 for (const [path, html] of Object.entries(paginas)) {
