@@ -1,0 +1,147 @@
+[
+  {
+    "slug": "tattoox",
+    "title": "Tattoox",
+    "logo": "1",
+    "cover": "4",
+    "text": [],
+    "photos": [],
+    "links": [],
+    "groups": [
+      {
+        "title": "Dirección comunicativa",
+        "text": [],
+        "photos": ["2", "3"],
+        "links": [
+          "https://www.instagram.com/p/DaIVwp9sOq8/",
+          "https://www.instagram.com/p/DZ45Dw2s4lN/",
+          "https://www.instagram.com/p/DasZmN_DO_L/?img_index=1",
+          "https://www.instagram.com/p/Dd893duDKuP/?img_index=1",
+          "https://www.instagram.com/p/DdTvsMps6q7/",
+          "https://www.instagram.com/p/Da2kIPNM-3N/",
+          "https://www.instagram.com/p/DdlvY-YNPyq/"
+        ]
+      },
+      {
+        "title": "Riverland",
+        "text": [],
+        "photos": ["4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"],
+        "links": [
+          "https://www.youtube.com/watch?v=YdYSMzOLrTY"
+        ]
+      },
+      {
+        "title": "L0rna",
+        "text": [],
+        "photos": ["17", "18", "19"],
+        "links": [
+          "https://www.youtube.com/watch?v=HCOQg3GFqCE&t=37s"
+        ]
+      },
+      {
+        "title": "Xiyo y Fernandezz",
+        "text": [],
+        "photos": ["20", "21", "22"],
+        "links": [
+          "https://www.youtube.com/watch?v=SlkZr55MI_4&t=17s"
+        ]
+      },
+      {
+        "title": "Sinaka",
+        "text": [],
+        "photos": ["23"],
+        "links": []
+      },
+      {
+        "title": "Taichu",
+        "text": [],
+        "photos": ["24"],
+        "links": [
+          "https://www.youtube.com/watch?v=absvO7Ab8k0"
+        ]
+      },
+      {
+        "title": "La Plazuela",
+        "text": [],
+        "photos": ["25", "26"],
+        "links": [
+          "https://www.instagram.com/p/DZdOJDpMbFo/"
+        ]
+      },
+      {
+        "title": "Perro Peligro",
+        "text": [],
+        "photos": ["27", "28"],
+        "links": []
+      },
+      {
+        "title": "Tarchi",
+        "text": [],
+        "photos": ["29"],
+        "links": []
+      },
+      {
+        "title": "SoyMuyBestiah",
+        "text": [],
+        "photos": ["30"],
+        "links": []
+      }
+    ]
+  },
+  {
+    "slug": "tuttipari",
+    "title": "Tuttipari",
+    "logo": "1",
+    "cover": "2",
+    "text": [],
+    "photos": ["2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
+    "links": []
+  },
+  {
+    "slug": "desbordar",
+    "title": "Desbordar",
+    "cover": "1",
+    "text": [],
+    "photos": ["1", "2", "3"],
+    "links": [
+      "https://www.youtube.com/watch?v=fl59GkEZqWg"
+    ]
+  },
+  {
+    "slug": "apparell",
+    "title": "Apparell",
+    "cover": "1",
+    "text": [],
+    "photos": ["1", "2", "3", "4", "5"],
+    "links": []
+  },
+  {
+    "slug": "adefesio",
+    "title": "Adefesio",
+    "cover": "6",
+    "text": [],
+    "photos": ["1", "2", "3", "4", "5", "6", "7"],
+    "links": [
+      "https://www.instagram.com/adefesiostudio/"
+    ]
+  },
+  {
+    "slug": "kaove",
+    "title": "Kaove · Nene",
+    "logo": "1",
+    "cover": "3",
+    "text": [],
+    "photos": ["2", "3"],
+    "links": [
+      "https://www.youtube.com/watch?v=Q0SC7wHPi4k"
+    ]
+  },
+  {
+    "slug": "akadele",
+    "title": "Akadele",
+    "cover": "4",
+    "text": [],
+    "photos": ["1", "2", "3", "4", "5"],
+    "links": []
+  }
+]

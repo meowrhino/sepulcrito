@@ -3,11 +3,13 @@
   "description": "Sepulcrito: obra, dirección creativa y tattoo.",
   "url": "",
   "lema": "Content Destroyer.",
+  "instagram": "sepulcrito",
+  "email": "",
   "menu": [
     { "text": "obra", "href": "obra/" },
     { "text": "about", "href": "about/" },
     { "text": "home", "href": "" },
+    { "text": "tattoo", "href": "tattoo/" },
     { "text": "dirección creativa", "href": "direccion-creativa/" }
-  ],
-  "instagram": ""
+  ]
 }

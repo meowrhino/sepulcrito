@@ -1,6 +1,8 @@
 @font-face { font-family: Anton; src: url(../fonts/anton-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: Pinyon; src: url(../fonts/pinyon-script-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: Italianno; src: url(../fonts/italianno-latin-400-normal.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url(../fonts/instrument-serif-latin-400-normal.woff2) format("woff2"); font-display: swap; }
+@font-face { font-family: "Irish Grover"; src: url(../fonts/irish-grover-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 
 /* cada sección con su aspecto: el menú y el fondo cambian por sección */
 :root {
@@ -11,7 +13,10 @@
   --activa: #000;
   --guion: Pinyon, "Snell Roundhand", "Apple Chancery", cursive;
 }
-.obra { --fondo: #ff69b4; --barra: #000; --letra: #ff69b4; --activa: #fff; }
+.obra   { --fondo: #ff69b4; --barra: #000;    --letra: #ff69b4; --activa: #fff; --estrella: #d9d9d9; --titular: Italianno, var(--guion); }
+.dc     { --fondo: #fff;    --barra: #000;    --letra: #fff;    --activa: #ff69b4; --estrella: #ffd3ec; --titular: "Instrument Serif", Georgia, serif; }
+.tattoo { --fondo: #f00;    --barra: #fff;    --letra: #f00;    --activa: #000; --estrella: #d9d9d9; --titular: "Irish Grover", fantasy; }
+.about  { --fondo: #000;    --barra: #ff8ff9; --letra: #000;    --activa: #fff; --negro: #fff; }
 
 * { box-sizing: border-box; margin: 0; }
 body { background: var(--fondo); color: var(--negro); font-family: Anton, Impact, "Arial Narrow", sans-serif; }
@@ -20,7 +25,7 @@ a { color: inherit; }
 
 .menu {
   position: fixed; z-index: 5; left: 0; right: 0; top: 3.5vh;
-  display: flex; justify-content: space-between; gap: 1em;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 1em;
   padding: .35em 2.4vw; background: var(--barra);
   font-size: clamp(16px, 2.3vw, 32px); line-height: 1.15;
 }
@@ -80,15 +85,29 @@ a { color: inherit; }
 .sin-intro .landing { animation: none; }
 .sin-intro .home .menu { animation: none; opacity: 1; }
 
-/* ---------- obra: rosa, estrella blanca, letra de mano ---------- */
-
-.obra h1, .ficha-titulo { font-family: Italianno, var(--guion); font-weight: 400; }
+/* ---------- lo común de las secciones ---------- */
 
 .cabecera { position: relative; height: 100vh; height: 100svh; overflow: hidden; }
+.cabecera h1, .pieza-cabecera h1, .proyecto-titulo, .ficha-titulo, .panel h1, .panel h2, .siguiente { font-family: var(--titular); font-weight: 400; }
 .cabecera h1 { position: absolute; left: 2vw; bottom: -.18em; font-size: 31vw; line-height: 1; }
-/* el gesto: la estrella gira mientras bajas */
-.obra-estrella { position: absolute; width: 43vw; right: -4vw; top: -8vw; animation: girar linear both; animation-timeline: scroll(); }
+.cabecera svg { position: absolute; fill: var(--estrella); }
+/* el gesto de cada sección: su estrella gira mientras bajas */
+@supports (animation-timeline: scroll()) {
+  .cabecera svg { animation: girar linear both; animation-timeline: scroll(); }
+}
 @keyframes girar { to { rotate: 144deg; } }
+
+.volver, .pieza-año, .pieza-pie, .enlaces, .ficha-año { font-size: 15px; }
+.volver { text-decoration: none; }
+.pieza-texto { font-family: Georgia, serif; font-size: 17px; line-height: 1.5; max-width: 36em; margin-top: 1em; }
+.enlaces { list-style: none; padding: 0; margin-top: 1em; line-height: 1.6; }
+.enlaces a { text-decoration: none; }
+.enlaces a:hover, .volver:hover, .pieza-pie a:hover { text-decoration: underline; }
+video { display: block; background: #000; max-width: 100%; height: auto; }
+
+/* ---------- obra: rosa, estrella blanca, letra de mano ---------- */
+
+.obra-estrella { width: 43vw; right: -4vw; top: -8vw; }
 
 .obras { display: flex; flex-direction: column; padding: 8vh 0 20vh; }
 .ficha { position: relative; display: block; text-decoration: none; width: var(--w); margin-left: var(--x); margin-top: 4vh; }
@@ -101,21 +120,72 @@ a { color: inherit; }
 .ficha:hover { z-index: 1; }
 .ficha:hover img { translate: 0 -.6vw; }
 .ficha-titulo { display: inline-block; font-size: clamp(40px, 5vw, 84px); line-height: .9; margin-top: .15em; }
-.ficha-año { font-size: 14px; }
 
 /* una obra */
 .pieza-cabecera { padding: max(120px, 16vh) 4vw 6vh; max-width: 60em; }
 .pieza-cabecera h1 { font-size: clamp(64px, 11vw, 190px); line-height: .85; }
-.volver, .pieza-año, .pieza-pie { font-size: 15px; }
-.volver { text-decoration: none; }
 .pieza-año { margin-top: .4em; }
-.pieza-texto { font-family: Georgia, serif; font-size: 17px; line-height: 1.5; max-width: 36em; margin-top: 1em; }
 .fotos { display: flex; flex-direction: column; gap: 6vh; padding: 0 4vw; }
-.fotos img { max-height: 88vh; max-width: 82vw; width: auto; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
-.fotos img:nth-child(3n+2) { align-self: flex-end; }
-.fotos img:nth-child(3n) { align-self: center; }
+.fotos > * { max-height: 88vh; max-width: 82vw; width: auto; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
+.fotos > :nth-child(3n+2) { align-self: flex-end; }
+.fotos > :nth-child(3n) { align-self: center; }
 .pieza-pie { padding: 12vh 4vw 8vh; text-align: right; }
 .pieza-pie a { text-decoration: none; }
+
+/* ---------- dirección creativa: blanco, serif, la obra en una tira de lado ---------- */
+
+.dc-estrella { width: 46vw; right: 6vw; bottom: -10vw; }
+.dc .cabecera h1 { font-size: 15vw; line-height: .82; bottom: 4vh; }
+
+.proyectos { padding: 10vh 4vw 24vh; }
+.proyecto { display: block; text-decoration: none; border-top: 1px solid #000; padding: 1.5vh 0; }
+.proyecto:last-child { border-bottom: 1px solid #000; }
+.proyecto-titulo { font-size: clamp(44px, 8vw, 140px); line-height: 1; }
+/* la portada aparece al pasar por el nombre, a la derecha (en el móvil, debajo) */
+.proyecto img { position: fixed; z-index: 2; right: 5vw; top: 50%; translate: 0 -50%; width: 30vw; max-height: 70vh; object-fit: cover; pointer-events: none; opacity: 0; transition: opacity .25s; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
+.proyecto:hover img, .proyecto:focus-visible img { opacity: 1; }
+.proyecto:hover .proyecto-titulo { font-style: italic; }
+
+/* un proyecto: la tira */
+.dc.pieza { height: 100vh; height: 100svh; overflow: hidden; }
+.tira { display: flex; align-items: center; gap: 2vw; height: 100%; overflow-x: auto; overflow-y: hidden; padding: max(110px, 14vh) 4vw 5vh; scrollbar-width: thin; }
+.tira > img, .tira > video { flex: none; height: 100%; width: auto; max-width: none; box-shadow: 0 4px 4px rgba(0,0,0,.25); }
+.panel { flex: none; align-self: stretch; width: min(34em, 80vw); overflow-y: auto; display: flex; flex-direction: column; }
+.panel-inicio { justify-content: flex-end; width: min(26em, 80vw); }
+.panel h1 { font-size: clamp(56px, 7vw, 120px); line-height: .9; margin-top: auto; }
+.logo { max-height: 34vh; width: auto; margin-top: auto; object-fit: contain; object-position: left bottom; }
+.h1-con-logo { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+/* cada grupo empieza con una raya, como en el Figma */
+.grupo { border-left: 2px solid #000; padding-left: 2vw; margin-left: 2vw; justify-content: flex-end; width: min(24em, 70vw); }
+.grupo h2 { font-size: clamp(40px, 4.4vw, 76px); line-height: .95; }
+.panel-fin { justify-content: center; width: min(24em, 70vw); padding-left: 4vw; }
+.panel-fin a { text-decoration: none; font-size: 15px; }
+.siguiente { font-size: clamp(40px, 4.4vw, 76px); line-height: 1; }
+
+/* ---------- tattoo: rojo, Irish Grover ---------- */
+
+.tattoo-estrella { width: 43vw; left: -6vw; top: -6vw; }
+.tattoo .cabecera h1 { font-size: 26vw; bottom: -.1em; }
+.tattoo-citas { padding: 4vh 4vw 0; font-size: clamp(18px, 2vw, 28px); }
+.tattoo-citas a { color: #fff; text-decoration: none; }
+.tattoo-citas a:hover { color: #000; }
+.tatuajes { columns: 3; column-gap: 1.2vw; padding: 4vh 4vw 16vh; }
+.tatuajes a { display: block; margin-bottom: 1.2vw; break-inside: avoid; }
+.tatuajes img { width: 100%; transition: filter .2s; }
+.tatuajes a:hover img { filter: contrast(1.15) saturate(1.2); }
+
+/* ---------- about: negro ---------- */
+
+.sobre { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: end; min-height: 100vh; min-height: 100svh; padding: max(120px, 16vh) 4vw 8vh; color: #fff; }
+.sobre-foto { width: 100%; max-height: 80vh; object-fit: cover; }
+.sobre h1 { font-weight: 400; font-size: clamp(56px, 9vw, 150px); line-height: .9; color: #ff8ff9; }
+.sobre-lema { font-family: var(--guion); font-size: clamp(32px, 4vw, 64px); margin-top: .2em; }
+.sobre-contacto { margin-top: 2em; font-size: 18px; line-height: 1.6; }
+.sobre-contacto a { text-decoration: none; }
+.sobre-contacto a:hover { color: #ff8ff9; }
+.sobre-404 { grid-template-columns: 1fr; }
+
+/* ---------- móvil ---------- */
 
 @media (max-width: 700px) {
   .menu { padding: .4em 4vw; }
@@ -130,5 +200,22 @@ a { color: inherit; }
   .obra-estrella { width: 70vw; right: -14vw; top: 6vh; }
   .ficha:nth-child(odd) { --w: 78vw; --x: 4vw; }
   .ficha:nth-child(even) { --w: 70vw; --x: 26vw; }
-  .fotos img, .fotos img:nth-child(n) { align-self: center; max-height: none; max-width: 100%; width: 100%; }
+  .fotos > *, .fotos > :nth-child(n) { align-self: center; max-height: none; max-width: 100%; width: 100%; }
+
+  .dc .cabecera h1 { font-size: 21vw; }
+  .dc-estrella { width: 80vw; right: -10vw; bottom: auto; top: 14vh; }
+  .proyecto img { position: static; translate: none; opacity: 1; width: 64vw; max-height: none; margin: 1vh 0 1vh auto; }
+  .dc.pieza { height: auto; overflow: visible; }
+  .tira { flex-direction: column; align-items: stretch; height: auto; overflow: visible; gap: 4vh; padding-top: 120px; }
+  .tira > img, .tira > video { height: auto; width: 100%; }
+  .panel, .grupo, .panel-fin { width: auto; overflow: visible; }
+  .grupo { border-left: 0; border-top: 2px solid #000; padding: 3vh 0 0; margin: 4vh 0 0; }
+  .panel-fin { padding: 6vh 0 8vh; }
+
+  .tattoo-estrella { width: 80vw; left: -14vw; top: 8vh; }
+  .tattoo .cabecera h1 { font-size: 36vw; }
+  .tatuajes { columns: 2; column-gap: 2vw; }
+  .tatuajes a { margin-bottom: 2vw; }
+
+  .sobre { grid-template-columns: 1fr; }
 }
