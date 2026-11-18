@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sepulcrito</title>
+<meta name="description" content="Sepulcrito — content destroyer. obra, dirección creativa y tattoo.">
+<meta name="robots" content="noindex">
+<link rel="preload" href="assets/img/home.webp" as="image">
+<link rel="preload" href="fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // sin intro con "reducir movimiento"
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('sin-intro');
+</script>
+</head>
+<body>
+
+<div id="intro" aria-hidden="true">
+  <img class="intro-foto" src="assets/img/home.webp" alt="">
+  <p class="intro-nombre">Sepulcrito</p>
+  <img class="intro-estrella" src="assets/img/star.webp" alt="">
+  <p class="intro-lema">Content Destroyer.</p>
+</div>
+
+<nav class="menu">
+  <a href="obra/">obra</a>
+  <a href="about/">about</a>
+  <a href="./" aria-current="page">home</a>
+  <a href="direccion-creativa/">dirección creativa</a>
+</nav>
+
+<main class="landing">
+  <img class="foto" src="assets/img/home.webp" alt="Sepulcrito">
+  <img class="estrella e1" src="assets/img/star.webp" alt="">
+  <img class="estrella e2" src="assets/img/star.webp" alt="">
+  <img class="estrella e3" src="assets/img/star.webp" alt="">
+  <h1>Sepulcrito</h1>
+  <p class="lema" aria-label="Content Destroyer.">
+    <span aria-hidden="true">Content Destroyer. Content Destroyer. Content Destroyer. Content Destroyer. </span><span aria-hidden="true">Content Destroyer. Content Destroyer. Content Destroyer. Content Destroyer. </span>
+  </p>
+</main>
+
+<script>
+  // un clic o una tecla se salta la intro
+  const intro = document.getElementById('intro');
+  const fuera = () => document.documentElement.classList.add('sin-intro');
+  addEventListener('click', fuera, { once: true });
+  addEventListener('keydown', fuera, { once: true });
+  intro.addEventListener('animationend', e => { if (e.target === intro) fuera(); });
+</script>
+</body>
+</html>
