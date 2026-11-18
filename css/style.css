@@ -178,7 +178,7 @@ video { display: block; background: #000; max-width: 100%; height: auto; }
 
 .sobre { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: end; min-height: 100vh; min-height: 100svh; padding: max(120px, 16vh) 4vw 8vh; color: #fff; }
 .sobre-foto { width: 100%; max-height: 80vh; object-fit: cover; }
-.sobre h1 { font-weight: 400; font-size: clamp(56px, 9vw, 150px); line-height: .9; color: #ff8ff9; }
+.sobre h1 { font-weight: 400; font-size: clamp(56px, 9vw, 150px); line-height: 1; color: #ff8ff9; }
 .sobre-lema { font-family: var(--guion); font-size: clamp(32px, 4vw, 64px); margin-top: .2em; }
 .sobre-contacto { margin-top: 2em; font-size: 18px; line-height: 1.6; }
 .sobre-contacto a { text-decoration: none; }
