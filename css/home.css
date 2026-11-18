@@ -1,0 +1,63 @@
+/* La home: intro y landing. Solo la carga la home (build/home.mjs). */
+
+/* ---------- home: landing ---------- */
+
+.home { overflow: hidden; }
+.landing { position: fixed; inset: 0; overflow: hidden; background: #f6c6f3; }
+
+/* la foto, en rosa: gris + multiplicar por rosa + un velo claro */
+.landing .foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.05) brightness(1.25); }
+.landing::before, .landing::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.landing::before { background: #ff6cf2; mix-blend-mode: multiply; }
+.landing::after { background: #7a0a8a; mix-blend-mode: screen; opacity: .4; }
+
+.estrella, .intro-estrella { filter: drop-shadow(0 0 .8vw #ff5cf0); }
+.estrella { position: absolute; z-index: 2; }
+.e1 { width: 19vw; left: 35vw; top: 19vh; }
+.e2 { width: 33vw; left: 4vw;  top: 43vh; }
+.e3 { width: 35vw; left: 63vw; top: 21vh; }
+
+.landing h1 {
+  position: absolute; z-index: 3; left: 44vw; top: 67vh;
+  font-weight: 400; font-size: clamp(36px, 5.2vw, 80px); line-height: 1;
+}
+
+.lema {
+  position: absolute; z-index: 3; left: 0; bottom: 6vh;
+  display: flex; white-space: nowrap;
+  font-family: var(--guion); font-size: clamp(30px, 4.4vw, 64px); line-height: 1.3;
+  animation: correr 40s linear infinite;
+}
+.lema span { padding-right: .3em; }
+@keyframes correr { to { transform: translateX(-50%); } }
+
+/* ---------- home: intro (blanco → estrella → foto → zoom a la landing) ---------- */
+
+#intro { position: fixed; inset: 0; z-index: 10; background: #fff; overflow: hidden; pointer-events: none; animation: zoom 1.6s cubic-bezier(.6,0,.35,1) 4.2s forwards; }
+.intro-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; opacity: 0; animation: aparecer 1.2s ease 2.6s forwards; }
+.intro-estrella { position: absolute; left: 50%; top: 50%; width: min(28vw, 46vh); translate: -50% -50%; opacity: 0; animation: estrella 1.4s cubic-bezier(.2,.9,.3,1.2) .7s forwards; }
+.intro-nombre, .intro-lema { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; animation: aparecer 1s ease 1.6s forwards; }
+.intro-nombre { top: 9vh; font-size: clamp(32px, 3.6vw, 52px); }
+.intro-lema { bottom: 8vh; font-family: var(--guion); font-size: clamp(30px, 3.8vw, 56px); }
+
+@keyframes aparecer { to { opacity: 1; } }
+@keyframes estrella { from { opacity: 0; scale: .3; rotate: -25deg; } to { opacity: 1; scale: 1; rotate: 0deg; } }
+@keyframes zoom { 70% { opacity: 1; } to { transform: scale(7); opacity: 0; visibility: hidden; } }
+
+/* la landing entra desde cerca mientras la intro se abre */
+.landing { animation: acercar 1.6s cubic-bezier(.6,0,.35,1) 4.2s both; }
+.home .menu { opacity: 0; animation: aparecer .6s ease 5.4s both; }
+@keyframes acercar { from { transform: scale(1.35); } }
+
+.sin-intro #intro { display: none; }
+.sin-intro .landing { animation: none; }
+.sin-intro .home .menu { animation: none; opacity: 1; }
+
+@media (max-width: 700px) {
+  .landing .foto { object-position: 55% center; }
+  .e1 { width: 34vw; left: 30vw; top: 14vh; }
+  .e2 { width: 52vw; left: -6vw; top: 52vh; }
+  .e3 { width: 56vw; left: 50vw; top: 28vh; }
+  .landing h1 { left: 0; right: 0; text-align: center; top: 62vh; }
+  .intro-estrella { width: 62vw; }
+}

@@ -3,7 +3,7 @@
    - en la tira de dirección creativa, la rueda del ratón mueve de lado. */
 
 const videos = document.querySelectorAll('video');
-if (videos.length && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+if (videos.length && 'IntersectionObserver' in window) {
   const ojo = new IntersectionObserver((entradas) => {
     for (const { target, intersectionRatio } of entradas) {
       if (intersectionRatio >= 0.5) target.play().catch(() => {});

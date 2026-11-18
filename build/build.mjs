@@ -35,6 +35,8 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
+import { home } from './home.mjs';
+
 const ROOT = resolve(fileURLToPath(import.meta.url), '../..');
 const OUT = join(ROOT, 'dist');
 const CACHE = join(ROOT, '.cache');
@@ -211,7 +213,7 @@ const instagram = site.instagram ? `https://www.instagram.com/${site.instagram}/
 /* la estrella del Figma, en línea para pintarla del color de cada sección */
 const estrella = (cls) => `<svg class="${cls}" viewBox="0 0 522.13 496.575" aria-hidden="true"><path d="M261.065 0L322.694 189.675H522.13L360.783 306.9L422.412 496.575L261.065 379.35L99.718 496.575L161.347 306.9L0 189.675H199.436L261.065 0Z"/></svg>`;
 
-function pagina({ path, title, description = site.description, image, seccion, body, base, js = true }) {
+function pagina({ path, title, description = site.description, image, seccion, body, base, js = true, css }) {
   const r = base ?? '../'.repeat(path.split('/').filter(Boolean).length);
   const full = title ? `${title} · ${site.title}` : site.title;
   const actual = path.split('/')[0];
@@ -230,7 +232,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}${canonical ? `<link
 <meta property="og:locale" content="es_ES">
 ${image ? `<meta property="og:image" content="${esc(abs(ogPath(image)) ?? r + ogPath(image))}">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n<meta name="twitter:card" content="summary_large_image">\n` : ''}<link rel="icon" href="${r}assets/img/star.webp">
 <link rel="stylesheet" href="${r}${CSS}">
-${js ? `<script src="${r}${JS}" defer></script>\n` : ''}</head>
+${css ? `<link rel="stylesheet" href="${r}${v(css)}">\n` : ''}${js ? `<script src="${r}${JS}" defer></script>\n` : ''}</head>
 <body class="${seccion}">
 <nav class="menu">
 ${site.menu.map((m) => `  <a href="${r}${m.href}"${m.href.split('/')[0] === actual ? ' aria-current="page"' : ''}>${esc(m.text)}</a>`).join('\n')}
@@ -253,37 +255,11 @@ async function cargar(base) {
   return { ...m, size: await medir(m.type === 'img' ? m.src : m.poster) };
 }
 
-/* home */
+/* home: su plantilla y su CSS van aparte (build/home.mjs, css/home.css) */
 
-const lema = `${esc(site.lema)} `.repeat(4);
-const home = () => pagina({
-  path: '', seccion: 'home', image: 'assets/img/home.webp', js: false,
-  body: (r) => `<script>
-  // sin intro con "reducir movimiento" o si vienes de otra página de la web
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || document.referrer.startsWith(location.origin)) document.documentElement.classList.add('sin-intro');
-</script>
-<div id="intro" aria-hidden="true">
-  <img class="intro-foto" src="${r}assets/img/home.webp" alt="">
-  <p class="intro-nombre">${esc(site.title)}</p>
-  <img class="intro-estrella" src="${r}assets/img/star.webp" alt="">
-  <p class="intro-lema">${esc(site.lema)}</p>
-</div>
-<main class="landing">
-  <img class="foto" src="${r}assets/img/home.webp" alt="${esc(site.title)}">
-  <img class="estrella e1" src="${r}assets/img/star.webp" alt="">
-  <img class="estrella e2" src="${r}assets/img/star.webp" alt="">
-  <img class="estrella e3" src="${r}assets/img/star.webp" alt="">
-  <h1>${esc(site.title)}</h1>
-  <p class="lema" aria-label="${esc(site.lema)}"><span aria-hidden="true">${lema}</span><span aria-hidden="true">${lema}</span></p>
-</main>
-<script>
-  // un clic o una tecla se salta la intro
-  const intro = document.getElementById('intro');
-  const fuera = () => document.documentElement.classList.add('sin-intro');
-  addEventListener('click', fuera, { once: true });
-  addEventListener('keydown', fuera, { once: true });
-  intro.addEventListener('animationend', (e) => { if (e.target === intro) fuera(); });
-</script>`,
+const homePagina = () => pagina({
+  path: '', seccion: 'home', image: 'assets/img/home.webp', js: false, css: 'css/home.css',
+  body: (r) => home({ site, esc, r }),
 });
 
 /* obra */
@@ -400,7 +376,7 @@ const noEncontrada = () => pagina({
 
 /* ── escribir ── */
 
-const paginas = { '': home() };
+const paginas = { '': homePagina() };
 
 await og('assets/img/home.webp');
 const fichasObra = await Promise.all(obra.map(async (b) => {
