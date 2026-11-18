@@ -109,8 +109,8 @@ Si está vacío (`"text": []`), la página sale sin texto.
 Las fotos van por su **número**: `"5"` es la `5.webp` de su carpeta `img/`.
 
 - `cover` (portada): la foto de la lista de la sección, la destacada de la
-  primera vista y la que sale al compartir el enlace. Tiene que ser una foto,
-  no un vídeo: `"cover": "3"`.
+  primera vista (y la que sale pixelada dentro de la estrella) y la que sale
+  al compartir el enlace. Tiene que ser una foto, no un vídeo: `"cover": "3"`.
 - `photos`: las que salen en la página, en ese orden. Para cambiar el orden,
   mueve los números; para quitar una, bórrala de la lista (el archivo puede
   quedarse en `img/`, no pasa nada).
@@ -135,7 +135,9 @@ Cuanto más corto, mejor. Un archivo no puede pasar de **25 MB**.
 
 ### Enlaces (YouTube, Instagram…)
 
-En `links`, la lista de direcciones. En la web sale "ver en youtube ↗":
+En `links`, la lista de direcciones. Un vídeo de **YouTube** sale en la
+página, a pantalla entera, después de las fotos (se ve su fotograma y se pone
+al darle). Lo demás sale al final como "ver en instagram ↗":
 
 ```json
 "links": [
@@ -235,10 +237,10 @@ La imagen que sale al compartir el enlace y las fotos pequeñas de las listas
 | `title` | el título, tal cual se ve | `"Sweet Wrecker"` |
 | `year` | *(opcional)* el año, sin comillas | `2025` |
 | `cover` | la portada: la foto de la lista, la destacada y la de compartir | `"3"` |
-| `text` | el texto, lista de párrafos | `["Uno.", "Dos."]` |
+| `text` | el texto, lista de párrafos: el primero sale al principio; los demás, al final | `["Uno.", "Dos."]` |
 | `photos` | las fotos y vídeos, en orden | `["1", "2", "3"]` |
-| `links` | *(opcional)* enlaces de fuera | `["https://youtube.com/…"]` |
-| `logo` | *(opcional)* el número de la foto del logo, que sale en grande al principio y al final | `"1"` |
+| `links` | *(opcional)* enlaces de fuera; los de YouTube se ven en la página | `["https://youtube.com/…"]` |
+| `logo` | *(opcional)* el número de la foto del logo, que sale encima de la estrella al principio y al final. Mejor con fondo transparente (un PNG sin fondo: imgToWeb lo respeta) | `"1"` |
 | `groups` | *(opcional)* el proyecto por partes, cada una con su página, como Tattoox: `slug`, `title`, `text`, `links`, `photos` | ver `tattoox` |
 
 **VS Code te ayuda**: al pasar el ratón por un campo te dice qué es, al empezar

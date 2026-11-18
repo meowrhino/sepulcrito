@@ -29,7 +29,7 @@ import { closeSync, cpSync, existsSync, mkdirSync, openSync, readFileSync, readS
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { OG_H, OG_W, esc, sitio } from './paginas.mjs';
+import { OG_H, OG_W, esc, sitio, youtube } from './paginas.mjs';
 import { leerJSON, loadProjects, loadTattoo, slugOf, validar, webpSize } from './proyectos.mjs';
 
 const ROOT = resolve(fileURLToPath(import.meta.url), '../..');
@@ -135,6 +135,8 @@ const version = (file) => {
    solo si no están o ha cambiado la foto de la que salen:
      mini/<src>        la foto a 900 px de ancho, para las listas y tattoo
      og/<src>.jpg      la de compartir, 1200×630, recortada por lo que importa
+     astro/<src>       la portada en 28 bloques, para la estrella de su proyecto
+                       (el CSS la estira sin suavizar)
    Las plantillas las piden mientras pintan y sharp va aparte (es asíncrono):
    una primera pasada apunta cuáles hacen falta, se hacen, y se pinta. */
 let sharp;
@@ -145,6 +147,8 @@ const fresh = (out, src) => existsSync(out) && statSync(out).mtimeMs >= statSync
 const miniWanted = new Set();
 const ogWanted = new Set();
 const miniDone = new Set();
+const astroWanted = new Set();
+const astroDone = new Set();
 const ogDone = new Set();
 const ogPath = (src) => `og/${src.replace(/\.webp$/, '.jpg')}`;
 /* la foto de la home pixelada (80 bloques de ancho, del mismo tamaño que la original para
@@ -154,8 +158,29 @@ let pixelDone = false;
 const images = {
   mini: (img) => { miniWanted.add(img.src); return miniDone.has(img.src) ? `mini/${img.src}` : img.src; },
   pixel: (src) => (pixelDone ? `pixel/${src}` : src),
+  astro: (img) => { astroWanted.add(img.src); return astroDone.has(img.src) ? `astro/${img.src}` : img.src; },
+  yt: (id) => (ytDone.has(id) ? `yt/${id}.jpg` : null),
   og: (img) => { ogWanted.add(img.src); return ogDone.has(img.src) ? ogPath(img.src) : null; },
 };
+
+/* Los fotogramas de los vídeos de YouTube (de oriol-colomer): se bajan al publicar, a
+   .cache/yt/, y se sirven desde la web: abrir un proyecto no le pide nada a Google hasta
+   darle al play. Sin red, se piden a YouTube como antes. */
+const ytDone = new Set();
+await Promise.all([...new Set(projects.flatMap((p) => [p, ...p.groups]).flatMap((x) => x.links || []).map(youtube).filter(Boolean))].map(async (id) => {
+  const out = join(CACHE, 'yt', `${id}.jpg`);
+  if (existsSync(out)) return ytDone.add(id);
+  for (const q of ['maxresdefault', 'hqdefault']) {
+    try {
+      const r = await fetch(`https://i.ytimg.com/vi/${id}/${q}.jpg`, { signal: AbortSignal.timeout(15000) });
+      if (!r.ok) continue;
+      mkdirSync(dirname(out), { recursive: true });
+      writeFileSync(out, Buffer.from(await r.arrayBuffer()));
+      return ytDone.add(id);
+    } catch { /* se prueba la siguiente, o se queda en YouTube */ }
+  }
+  console.warn(`⚠ no he podido bajar el fotograma del vídeo de YouTube ${id}: se pide a YouTube al abrir la página`);
+}));
 
 const dry = sitio({ site, about, projects, tattoo, aboutPhoto, version, ...images });
 for (const path of dry.paths) dry.render(path);
@@ -169,6 +194,16 @@ if (sharp) {
       }
       miniDone.add(src);
     } catch (e) { console.warn(`⚠ ${src}: no se ha podido hacer su foto pequeña (${e.message})`); }
+  }
+  for (const src of astroWanted) {
+    const out = join(CACHE, 'astro', src);
+    try {
+      if (!fresh(out, src)) {
+        mkdirSync(dirname(out), { recursive: true });
+        await sharp(join(ROOT, src)).resize(28, 27, { fit: 'cover', position: 'attention' }).webp({ lossless: true }).toFile(out);
+      }
+      astroDone.add(src);
+    } catch (e) { console.warn(`⚠ ${src}: no se ha podido pixelar para la estrella (${e.message}); sale la foto tal cual`); }
   }
   try {
     const out = join(CACHE, 'pixel', PIXEL);
@@ -200,6 +235,8 @@ const sinNotas = (f) => !f.endsWith('.DS_Store') && !f.endsWith('.json');
 for (const d of ['css', 'js', 'fonts', 'assets', 'tattoo', 'about', 'projects']) cpSync(join(ROOT, d), join(OUT, d), { recursive: true, filter: sinNotas });
 cpSync(join(ROOT, '_headers'), join(OUT, '_headers'));
 for (const src of miniDone) { mkdirSync(dirname(join(OUT, 'mini', src)), { recursive: true }); cpSync(join(CACHE, 'mini', src), join(OUT, 'mini', src)); }
+for (const src of astroDone) { mkdirSync(dirname(join(OUT, 'astro', src)), { recursive: true }); cpSync(join(CACHE, 'astro', src), join(OUT, 'astro', src)); }
+if (ytDone.size) cpSync(join(CACHE, 'yt'), join(OUT, 'yt'), { recursive: true });
 if (pixelDone) { mkdirSync(dirname(join(OUT, 'pixel', PIXEL)), { recursive: true }); cpSync(join(CACHE, 'pixel', PIXEL), join(OUT, 'pixel', PIXEL)); }
 for (const src of ogDone) { mkdirSync(dirname(join(OUT, ogPath(src))), { recursive: true }); cpSync(join(CACHE, ogPath(src)), join(OUT, ogPath(src))); }
 

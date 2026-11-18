@@ -29,11 +29,11 @@
     },
     "logo": {
       "$ref": "#/$defs/numero",
-      "description": "Opcional: el número de la foto del logo, que sale en grande en la primera vista y al final: \"1\"."
+      "description": "Opcional: el número de la foto del logo, que sale encima de la estrella al principio y al final: \"1\". Mejor con fondo transparente."
     },
     "cover": {
       "$ref": "#/$defs/numero",
-      "description": "La portada: la foto de la lista, la destacada de la primera vista y la de compartir. Una foto, no un vídeo: \"3\". Si no está, la primera foto."
+      "description": "La portada: la foto de la lista, la destacada de la primera vista (y la de la estrella) y la de compartir. Una foto, no un vídeo: \"3\". Si no está, la primera foto."
     },
     "text": {
       "$ref": "#/$defs/parrafos"
@@ -107,7 +107,7 @@
         "type": "string",
         "pattern": "^https?://"
       },
-      "description": "Enlaces de fuera (YouTube, Instagram…), uno por línea: [\"https://www.youtube.com/watch?v=…\"]. En la web sale «ver en youtube ↗»."
+      "description": "Enlaces de fuera (YouTube, Instagram…), uno por línea: [\"https://www.youtube.com/watch?v=…\"]. Un vídeo de YouTube sale en la página, a pantalla entera; lo demás, al final, como «ver en instagram ↗»."
     },
     "fotos": {
       "type": "array",
