@@ -147,8 +147,13 @@ const ogWanted = new Set();
 const miniDone = new Set();
 const ogDone = new Set();
 const ogPath = (src) => `og/${src.replace(/\.webp$/, '.jpg')}`;
+/* la foto de la home pixelada (80 bloques de ancho, del mismo tamaño que la original para
+   que case encima), para las estrellas de la landing: pixel/<src>. */
+const PIXEL = 'assets/img/home.webp';
+let pixelDone = false;
 const images = {
   mini: (img) => { miniWanted.add(img.src); return miniDone.has(img.src) ? `mini/${img.src}` : img.src; },
+  pixel: (src) => (pixelDone ? `pixel/${src}` : src),
   og: (img) => { ogWanted.add(img.src); return ogDone.has(img.src) ? ogPath(img.src) : null; },
 };
 
@@ -165,6 +170,16 @@ if (sharp) {
       miniDone.add(src);
     } catch (e) { console.warn(`⚠ ${src}: no se ha podido hacer su foto pequeña (${e.message})`); }
   }
+  try {
+    const out = join(CACHE, 'pixel', PIXEL);
+    if (!fresh(out, PIXEL)) {
+      mkdirSync(dirname(out), { recursive: true });
+      const { width: w, height: h } = await sharp(join(ROOT, PIXEL)).metadata();
+      const poco = await sharp(join(ROOT, PIXEL)).resize(80, Math.round((80 * h) / w), { fit: 'fill' }).toBuffer();
+      await sharp(poco).resize(w, h, { fit: 'fill', kernel: 'nearest' }).webp({ lossless: true }).toFile(out);
+    }
+    pixelDone = true;
+  } catch (e) { console.warn(`⚠ ${PIXEL}: no se ha podido hacer la versión pixelada (${e.message}); las estrellas de la home salen con la foto tal cual`); }
   for (const src of ogWanted) {
     const out = join(CACHE, ogPath(src));
     try {
@@ -185,6 +200,7 @@ const sinNotas = (f) => !f.endsWith('.DS_Store') && !f.endsWith('.json');
 for (const d of ['css', 'js', 'fonts', 'assets', 'tattoo', 'about', 'projects']) cpSync(join(ROOT, d), join(OUT, d), { recursive: true, filter: sinNotas });
 cpSync(join(ROOT, '_headers'), join(OUT, '_headers'));
 for (const src of miniDone) { mkdirSync(dirname(join(OUT, 'mini', src)), { recursive: true }); cpSync(join(CACHE, 'mini', src), join(OUT, 'mini', src)); }
+if (pixelDone) { mkdirSync(dirname(join(OUT, 'pixel', PIXEL)), { recursive: true }); cpSync(join(CACHE, 'pixel', PIXEL), join(OUT, 'pixel', PIXEL)); }
 for (const src of ogDone) { mkdirSync(dirname(join(OUT, ogPath(src))), { recursive: true }); cpSync(join(CACHE, ogPath(src)), join(OUT, ogPath(src))); }
 
 const web = sitio({ site, about, projects, tattoo, aboutPhoto, version, ...images });

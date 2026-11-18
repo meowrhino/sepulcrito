@@ -1,27 +1,40 @@
-/* La home: intro y landing. Solo la carga la home (build/home.mjs). */
+/* La home: intro y landing. Solo la carga la home (build/home.mjs); la intro la mueve js/home.js. */
 
-/* ---------- home: landing ---------- */
+/* la estrella del Figma (la misma path que estrella() en build/paginas.mjs), de máscara */
+.home {
+  overflow: hidden;
+  --estrella: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='522.13' height='496.575' viewBox='0 0 522.13 496.575'%3E%3Cpath d='M261.065 0L322.694 189.675H522.13L360.783 306.9L422.412 496.575L261.065 379.35L99.718 496.575L161.347 306.9L0 189.675H199.436L261.065 0Z'/%3E%3C/svg%3E");
+}
 
-.home { overflow: hidden; }
+/* ---------- landing ---------- */
+
 .landing { position: fixed; inset: 0; overflow: hidden; background: #f6c6f3; }
 
+/* la foto y su versión pixelada (la hace el build), una encima de otra al píxel */
+.landing .foto, .huecos img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: 50% 30%; }
+
 /* la foto, en rosa: gris + multiplicar por rosa + un velo claro */
-.landing .foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: grayscale(1) contrast(1.05) brightness(1.25); }
+.landing .foto { filter: grayscale(1) contrast(1.05) brightness(1.25); }
 .landing::before, .landing::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .landing::before { background: #ff6cf2; mix-blend-mode: multiply; }
 .landing::after { background: #7a0a8a; mix-blend-mode: screen; opacity: .4; }
 
-.estrella, .intro-estrella { filter: drop-shadow(0 0 .8vw #ff5cf0); }
-.estrella { position: absolute; z-index: 2; }
-.e1 { width: 19vw; left: 35vw; top: 19vh; }
-.e2 { width: 33vw; left: 4vw;  top: 43vh; }
-.e3 { width: 35vw; left: 63vw; top: 21vh; }
+/* las estrellas, huecos en el rosa: la foto pixelada y en sus colores, con el halo */
+/* el halo, más claro que el rosa de la foto para que se vea */
+.huecos { position: absolute; inset: 0; z-index: 2; filter: drop-shadow(0 0 max(.4vw, 3px) #ffd6fc) drop-shadow(0 0 max(1.3vw, 10px) #ffd6fc); pointer-events: none; }
+.huecos img {
+  image-rendering: pixelated;
+  mask-image: var(--estrella), var(--estrella), var(--estrella);
+  mask-repeat: no-repeat;
+  mask-size: 19vw auto, 33vw auto, 35vw auto;
+  mask-position: 35vw 19vh, 4vw 43vh, 63vw 21vh;
+}
 
-.landing h1 a { color: inherit; text-decoration: none; }
 .landing h1 {
-  position: absolute; z-index: 3; left: 44vw; top: 67vh;
+  position: absolute; z-index: 3; left: 0; right: 0; top: 67vh; text-align: center;
   font-weight: 400; font-size: clamp(36px, 5.2vw, 80px); line-height: 1;
 }
+.landing h1 a { text-decoration: none; }
 
 .lema {
   position: absolute; z-index: 3; left: 0; bottom: calc(var(--pie) + 2vh);
@@ -32,33 +45,40 @@
 .lema span { padding-right: .3em; }
 @keyframes correr { to { transform: translateX(-50%); } }
 
-/* ---------- home: intro (blanco → estrella → foto → zoom a la landing) ---------- */
+/* ---------- intro: blanco, la estrella, entrar ---------- */
 
-#intro { position: fixed; inset: 0; z-index: 8; background: #fff; overflow: hidden; pointer-events: none; animation: zoom 1.6s cubic-bezier(.6,0,.35,1) 4.2s forwards; }
-.intro-foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; opacity: 0; animation: aparecer 1.2s ease 2.6s forwards; }
-.intro-estrella { position: absolute; left: 50%; top: 50%; width: min(28vw, 46vh); translate: -50% -50%; opacity: 0; animation: estrella 1.4s cubic-bezier(.2,.9,.3,1.2) .7s forwards; }
-.intro-nombre, .intro-lema { position: absolute; left: 0; right: 0; text-align: center; opacity: 0; animation: aparecer 1s ease 1.6s forwards; }
+/* debajo del 9 y el 10 de la transición de la casa */
+#intro { position: fixed; inset: 0; z-index: 8; background: #fff; display: none; transition: opacity .9s ease; }
+.intro #intro { display: block; }
+.saliendo #intro { opacity: 0; pointer-events: none; }
+
+/* el lienzo ocupa la pantalla como la foto; js/home.js lo pinta y mueve su máscara */
+.intro-hueco { position: absolute; inset: 0; filter: drop-shadow(0 0 max(.4vw, 3px) #ff5cf0) drop-shadow(0 0 max(1.2vw, 9px) #ff5cf0); }
+.intro-hueco canvas { width: 100%; height: 100%; mask-image: var(--estrella); mask-repeat: no-repeat; mask-size: 0 0; }
+
+.intro-hueco, .intro-nombre, .intro-lema { opacity: 0; transition: opacity .8s ease; }
+.bienvenida .intro-hueco, .bienvenida .intro-nombre, .bienvenida .intro-lema { opacity: 1; }
+.entrando .intro-nombre, .entrando .intro-lema { opacity: 0; transition-duration: .4s; }
+
+.intro-nombre, .intro-lema { position: absolute; left: 0; right: 0; text-align: center; }
 .intro-nombre { top: 9vh; font-size: clamp(32px, 3.6vw, 52px); }
 .intro-lema { bottom: 8vh; font-family: var(--guion); font-size: clamp(30px, 3.8vw, 56px); }
 
-@keyframes aparecer { to { opacity: 1; } }
-@keyframes estrella { from { opacity: 0; scale: .3; rotate: -25deg; } to { opacity: 1; scale: 1; rotate: 0deg; } }
-@keyframes zoom { 70% { opacity: 1; } to { transform: scale(7); opacity: 0; visibility: hidden; } }
+/* el menú, al acabar la intro */
+.home .menu { transition: opacity .6s ease; }
+.intro .home .menu { opacity: 0; }
 
-/* la landing entra desde cerca mientras la intro se abre */
-.landing { animation: acercar 1.6s cubic-bezier(.6,0,.35,1) 4.2s both; }
-.home .menu { opacity: 0; animation: aparecer .6s ease 5.4s both; }
-@keyframes acercar { from { transform: scale(1.35); } }
-
-.sin-intro #intro { display: none; }
-.sin-intro .landing { animation: none; }
-.sin-intro .home .menu { animation: none; opacity: 1; }
+/* si js/home.js no llega en 4 s, fuera la intro */
+.intro:not(.intro-js) #intro { animation: respaldo 0s 4s forwards; }
+.intro:not(.intro-js) .home .menu { animation: verse 0s 4s forwards; }
+@keyframes respaldo { to { visibility: hidden; } }
+@keyframes verse { to { opacity: 1; } }
 
 @media (max-width: 700px) {
-  .landing .foto { object-position: 55% center; }
-  .e1 { width: 34vw; left: 30vw; top: 14vh; }
-  .e2 { width: 52vw; left: -6vw; top: 52vh; }
-  .e3 { width: 56vw; left: 50vw; top: 28vh; }
-  .landing h1 { left: 0; right: 0; text-align: center; top: 62vh; }
-  .intro-estrella { width: 62vw; }
+  .landing .foto, .huecos img { object-position: 55% center; }
+  .huecos img {
+    mask-size: 34vw auto, 52vw auto, 56vw auto;
+    mask-position: 30vw 14vh, -6vw 52vh, 50vw 28vh;
+  }
+  .landing h1 { top: 62vh; }
 }

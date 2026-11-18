@@ -84,12 +84,13 @@ function enlaces(links) {
  *   version(file)     el ?v= de un css o js ('' en la vista previa)
  *   mini(img)         la ruta de la foto pequeña de img (en la vista previa, la grande)
  *   og(img)           la ruta de su og:image, o null si no hay
+ *   pixel(src)        la ruta de la foto pixelada de la home (en la vista previa, la normal)
  *   preview           true en la vista previa: los enlaces van a ?p=
  *
  * Devuelve las rutas de las páginas (`paths`, las que van al sitemap en
  * `listed`), render(path) y notFound().
  */
-export function sitio({ site, about, projects, tattoo, aboutPhoto, version = () => '', mini = (img) => img.src, og = () => null, preview = false }) {
+export function sitio({ site, about, projects, tattoo, aboutPhoto, version = () => '', mini = (img) => img.src, og = () => null, pixel = (src) => src, preview = false }) {
   const abs = (path) => (site.url ? new URL(path, site.url).href : null);
   const visibles = (section) => projects.filter((p) => p.section === section && !p.hidden);
   const instagram = site.instagram ? `https://www.instagram.com/${site.instagram}/` : null;
@@ -288,7 +289,7 @@ ${parrafos(about.text)}
 
   const homePagina = () => pagina({
     path: '', seccion: 'home', image: { src: 'assets/img/home.webp' }, css: 'css/home.css',
-    body: () => home({ site, esc, r: '', link }),
+    body: () => home({ site, esc, r: '', link, version, pixel }),
   });
 
   /* ── las rutas ── */
