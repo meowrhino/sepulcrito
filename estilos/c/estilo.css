@@ -1,0 +1,203 @@
+/* El estilo c · mínima (estilos/c/plantillas.mjs). Va después de css/style.css: las letras,
+   las variables de data/config.json y el menú de siempre vienen de ahí.
+   Lo que brilla es la estrella (el neón, del color --astro de cada sección); lo demás, quieto,
+   en letra pequeña y en minúscula. Nada de border-radius ni degradados. */
+
+.estilo-c {
+  --neon: var(--astro);
+  --k: .42;          /* lo que ocupa una letra del título, en em: para que quepa en una línea */
+  --ancho: 94vw;
+  --tope: 17.5vw;
+}
+.estilo-c.obra   { --k: .27; }
+.estilo-c.dc     { --k: .4; }
+.estilo-c.tattoo { --k: .56; }
+.estilo-c.about  { --k: .46; }
+
+/* el título enorme, con la letra de su sección */
+.c-titulo {
+  display: block; margin: 0; font: 400 min(var(--tope), calc(var(--ancho) / (var(--n) * var(--k))))/.85 var(--titular);
+  white-space: nowrap; letter-spacing: -.01em; text-transform: lowercase;
+}
+.c-titulo small { position: absolute; right: 0; top: -.2em; font: 15px/1 var(--letra); letter-spacing: 0; }
+
+/* la letra pequeña */
+.c-texto, .c-pie, .c-rotulo, .c-citas, .c-flash span, .c-donde, .c-siguiente > span:first-child, .c-fotos figcaption {
+  font: 15px/1.35 var(--letra); text-transform: lowercase;
+}
+.c-texto .texto, .c-texto .enlaces { font: inherit; max-width: none; margin-top: .9em; }
+.c-texto a, .c-pie, .c-flash a, .c-citas a, .c-siguiente { text-decoration: none; }
+.c-texto a:hover, .c-citas a:hover { color: var(--activa); }
+
+/* el volver: una estrella pequeña que gira al pasar */
+.flecha { white-space: nowrap; }
+.flecha::before { content: "★"; display: inline-block; margin-right: .4em; transition: rotate .5s; }
+.flecha:hover::before { rotate: 144deg; }
+.c-vuelta { margin-top: 2.2em; }
+
+/* ---------- la estrella ---------- */
+
+.estilo-c .astro { position: relative; aspect-ratio: 522.13 / 496.575; }
+.estilo-c .astro[data-forma="rect"] { aspect-ratio: auto; }
+.estilo-c .neon { filter: drop-shadow(0 0 max(.35vw, 3px) var(--neon)) drop-shadow(0 0 max(1.3vw, 10px) var(--neon)); }
+/* sin JS, la foto con la forma de la estrella */
+.estilo-c .sin-js {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover;
+  --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 522.13 496.575'%3E%3Cpath d='M261.065 0L322.694 189.675H522.13L360.783 306.9L422.412 496.575L261.065 379.35L99.718 496.575L161.347 306.9L0 189.675H199.436L261.065 0Z'/%3E%3C/svg%3E");
+  -webkit-mask: var(--forma) center / contain no-repeat; mask: var(--forma) center / contain no-repeat;
+}
+.estilo-c .sin-js.rect { -webkit-mask: none; mask: none; }
+
+/* ---------- la cabecera de una sección: la estrella en medio y el título debajo ---------- */
+
+.c-cab { position: relative; height: calc(100svh - var(--pie)); overflow: hidden; }
+.c-cab .astro { position: absolute; left: 50%; top: 6vh; translate: -50% 0; width: min(38vw, 64vh); }
+.c-cab .c-titulo { position: absolute; z-index: 2; left: 0; right: 0; bottom: 3vh; text-align: center; --tope: min(27vw, 46vh); }
+
+/* tattoo: las citas arriba, con una estrella que parpadea como un «online» */
+.c-citas { position: absolute; z-index: 2; right: 4vw; top: 4vh; text-align: right; }
+.c-citas span::before { content: "★"; margin-right: .4em; color: var(--neon); text-shadow: 0 0 6px var(--neon), 0 0 14px var(--neon); animation: parpadeo 1.1s steps(1) infinite; }
+.c-citas a { color: var(--activa); }
+@keyframes parpadeo { 50% { opacity: 0; } }
+
+/* ---------- obra: las obras en una rejilla ordenada ---------- */
+
+.c-obras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9vh 5vw; padding: 12vh 6vw 22vh; }
+.c-ficha { display: block; text-decoration: none; }
+.c-ficha:nth-child(3n+2) { translate: 0 10vh; }
+.c-ficha img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.c-pie { display: flex; gap: .7em; margin-top: .7em; }
+.c-pie span:last-child { margin-left: auto; }
+.c-ficha:hover .c-pie { color: var(--activa); }
+
+/* ---------- una lista de nombres que enseñan su estrella al pasar ---------- */
+
+.c-lista { position: relative; min-height: calc(100svh - var(--pie)); padding: 14vh 4vw 10vh; }
+.c-nombres { list-style: none; padding: 0; margin: 0; width: 56vw; font: 400 clamp(40px, 6.2vw, 120px)/1.08 var(--titular); }
+.c-nombres.dos { columns: 2; column-gap: 3vw; font-size: clamp(30px, 4.2vw, 80px); }
+.c-nombres li { break-inside: avoid; }
+.c-nombres a { text-decoration: none; text-transform: lowercase; }
+.c-nombres a:hover span, .c-nombres a:focus-visible span { font-style: italic; color: var(--activa); }
+.c-nombres .astro {
+  position: absolute; right: 6vw; top: 50%; translate: 0 -50%; width: min(32vw, 62vh);
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.c-nombres a:hover .astro, .c-nombres a:focus-visible .astro,
+.c-nombres:not(:has(a:hover, a:focus-visible)) li:first-child .astro { opacity: 1; pointer-events: auto; }
+.c-nombres:not(:has(a:hover, a:focus-visible)) li:first-child span { font-style: italic; color: var(--activa); }
+
+/* ---------- un proyecto o una obra: de lado y por pantallas (.tira y .pantalla, de siempre) ---------- */
+
+/* <body class="… proyecto">: las reglas de .proyecto (la lista de dirección creativa de
+   siempre) le caen al body y a sus fotos; aquí se quitan */
+body.proyecto { --alto: calc(100dvh - var(--pie)); height: 100dvh; overflow: hidden; padding: 0; border: 0; }
+body.proyecto:last-child { border: 0; }
+body.proyecto img { position: static; z-index: auto; right: auto; top: auto; translate: none; width: auto; max-height: none; object-fit: fill; pointer-events: auto; opacity: 1; transition: none; }
+body.proyecto .menu { justify-content: flex-end; background: none; pointer-events: none; }
+
+.c-tira .pantalla { padding: 5vh 4vw var(--pie); }
+.c-rotulo { position: absolute; z-index: 2; left: 4vw; top: 5vh; max-width: 30em; }
+
+/* 1. el inicio y 4. el final: el texto arriba, la estrella con el logo, el título abajo */
+.c-inicio { width: 100vw; }
+.c-texto { position: relative; z-index: 2; max-width: min(30em, 44vw); max-height: calc(var(--alto) * .56); overflow-y: auto; scrollbar-width: none; }
+.c-donde { opacity: .7; margin-bottom: 1.2em; }
+.c-marca { position: absolute; z-index: 1; right: 6vw; top: 5vh; width: min(34vw, 56vh); }
+.estilo-c .c-logo { position: absolute; left: 50%; bottom: 6%; translate: -50% 0; width: auto; max-width: 58%; max-height: 26%; pointer-events: none; }
+.c-inicio > .c-titulo { position: absolute; z-index: 2; left: 2vw; right: 2vw; bottom: calc(var(--pie) * .55); --tope: min(17.5vw, 34vh); }
+
+.c-final .c-texto { margin-left: auto; }
+.c-final .c-marca { right: auto; left: 6vw; }
+.c-nombre { opacity: .7; }
+.c-siguiente { position: absolute; z-index: 2; left: 2vw; bottom: calc(var(--pie) * .55); }
+.c-siguiente > span:first-child::after { content: " →"; }
+.c-siguiente .c-titulo { --tope: min(13vw, 24vh); --ancho: 58vw; }
+.c-siguiente:hover .c-titulo { color: var(--activa); }
+
+/* Tattoox: sus partes, como la lista de dirección creativa */
+.c-partes { width: 100vw; }
+.c-partes .c-nombres { margin-top: 13vh; }
+
+/* 2. las fotos en fila, todas de la misma altura, con su número */
+.c-fotos { display: flex; align-items: center; gap: 4vw; padding-inline: 8vw; }
+.c-fotos figure { flex: none; margin: 0; }
+.estilo-c .c-fotos img, .c-fotos video { height: calc(var(--alto) * .72); width: auto; max-width: none; }
+.c-fotos figcaption { margin-top: .6em; }
+
+/* 3. un vídeo: en medio, y su fotograma en mosaico de fondo a toda la pantalla */
+.c-video { width: 100vw; display: grid; place-items: center; overflow: hidden; }
+.estilo-c .c-fondo { position: absolute; inset: 0; opacity: .45; }
+.c-video video { position: relative; z-index: 1; height: calc(var(--alto) * .86); width: auto; max-width: 84vw; background: none; }
+.c-yt { width: 100vw; display: grid; place-items: center; }
+.estilo-c .c-yt .yt, .c-yt iframe { align-self: center; width: min(84vw, calc(var(--alto) * .8 * 16 / 9)); height: auto; aspect-ratio: 16 / 9; border: 0; }
+
+/* ---------- tattoo: una hoja de flash, numerada ---------- */
+
+.c-flash { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5vh 2.4vw; padding: 10vh 4vw 18vh; }
+.c-flash a { display: block; }
+.c-flash img { width: 100%; aspect-ratio: 1; object-fit: cover; transition: box-shadow .25s, rotate .25s; }
+.c-flash a:hover img { rotate: -2deg; box-shadow: 0 0 0 2px var(--neon), 0 0 12px 2px var(--neon), 0 0 34px 4px var(--neon); }
+.c-flash span { display: block; margin-top: .5em; }
+.c-flash a:nth-child(even):hover img { rotate: 2deg; }
+.c-flash a:hover span { color: var(--activa); }
+
+/* ---------- about: la foto en la estrella, el texto y el nombre enorme ---------- */
+
+.c-sobre { display: grid; grid-template-columns: minmax(0, 30em) 1fr; gap: 6vh 4vw; min-height: calc(100svh - var(--pie)); padding: 6vh 4vw 0; }
+.c-sobre .astro { grid-column: 2; grid-row: 1; justify-self: end; align-self: start; position: sticky; top: 6vh; width: min(40vw, 62vh); margin-right: 2vw; }
+.c-sobre .c-texto { grid-column: 1; grid-row: 1; max-width: none; }
+.c-sobre .c-texto { max-height: none; }
+.c-lema { font-style: italic; }
+.c-contacto, .c-firma { margin-top: 2em; }
+.c-firma { opacity: .6; font-size: 12px; }
+.c-sobre .c-titulo { grid-column: 1 / -1; align-self: end; margin: 0 -2vw; color: var(--activa); --tope: min(24vw, 40vh); }
+
+/* ---------- móvil: hacia abajo ---------- */
+
+@media (max-width: 700px) {
+  .estilo-c { --ancho: 92vw; }
+
+  .c-cab .astro { top: 9vh; width: 80vw; }
+  .c-cab .c-titulo { --tope: 50vw; bottom: 4vh; }
+  .c-citas { left: 4vw; right: 4vw; top: 2.5vh; text-align: left; }
+
+  .c-obras { grid-template-columns: 1fr 1fr; gap: 5vh 4vw; padding: 8vh 4vw 12vh; }
+  .c-ficha:nth-child(3n+2) { translate: none; }
+  .c-ficha:nth-child(even) { translate: 0 6vh; }
+  .c-pie { font-size: 13px; }
+
+  .c-lista { min-height: 0; padding: 8vh 4vw; }
+  .c-nombres, .c-nombres.dos { width: auto; columns: 1; font-size: 11vw; }
+  .c-nombres li + li { margin-top: 2vh; }
+  .c-nombres a { display: flex; align-items: center; justify-content: space-between; gap: 4vw; }
+  .c-nombres .astro, .c-nombres a:hover .astro { position: relative; right: auto; top: auto; translate: none; flex: none; width: 26vw; opacity: 1; pointer-events: auto; }
+
+  body.proyecto { height: auto; overflow: visible; padding-bottom: var(--pie); }
+  body.proyecto .menu { justify-content: flex-start; background: var(--fondo); pointer-events: auto; }
+  .c-tira .pantalla { padding: 4vh 4vw; }
+  .c-inicio, .c-partes, .c-video, .c-yt { width: auto; }
+  .c-inicio { display: flex; flex-direction: column; gap: 5vh; }
+  .c-texto, .c-final .c-texto { max-width: none; max-height: none; overflow: visible; margin: 0; }
+  .c-marca, .c-final .c-marca { position: relative; inset: auto; width: 84vw; margin: auto auto 0; }
+  .c-inicio > .c-titulo, .c-siguiente { position: relative; inset: auto; }
+  .c-inicio > .c-titulo { --tope: 30vw; }
+  .c-titulo small { position: static; display: block; margin-top: .8em; }
+  .c-siguiente { text-align: left; }
+  .c-siguiente .c-titulo { --ancho: 92vw; --tope: 20vw; }
+  .c-rotulo { position: relative; left: auto; top: auto; }
+  .c-partes .c-nombres { margin-top: 4vh; }
+
+  .c-fotos { flex-direction: column; gap: 8vh; padding: 8vh 4vw; }
+  .estilo-c .c-fotos img, .c-fotos video { width: 100%; height: auto; }
+  .c-video { min-height: var(--alto); padding: 10vh 4vw; }
+  .c-video .c-rotulo { position: absolute; left: 4vw; top: 3vh; }
+  .c-video video { width: 84vw; height: auto; max-height: 76svh; object-fit: contain; }
+  .estilo-c .c-yt .yt, .c-yt iframe { width: 100%; }
+  .c-yt { min-height: 0; padding-block: 6vh; }
+
+  .c-flash { grid-template-columns: 1fr 1fr; gap: 4vh 4vw; padding: 6vh 4vw 12vh; }
+
+  .c-sobre { display: flex; flex-direction: column; gap: 5vh; padding: 6vh 4vw 3vh; }
+  .c-sobre .astro { position: relative; right: auto; top: auto; width: 84vw; margin: 0 auto; }
+  .c-sobre .c-titulo { margin: 0; align-self: stretch; --tope: 30vw; }
+}
