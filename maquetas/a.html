@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A · censura</title>
+<link rel="stylesheet" href="base.css">
+<style>
+/* A · censura: la estrella como el mosaico de una web porno, con su neón; títulos grandes;
+   «Content Destroyer.» corriendo; botones de chicle. Lo de las referencias de la clienta. */
+.lema { bottom: 3.2rem; font: clamp(28px, 3.4vw, 54px)/1.3 Pinyon, cursive; color: #fff; }
+.boton { display: inline-block; padding: .45em 1.1em .5em; border-radius: 999px; background: #fff; color: var(--rosa); font: 15px/1 Anton, sans-serif; text-transform: lowercase; box-shadow: 0 0 0 2px var(--chicle), 0 0 18px var(--chicle); }
+.dc .boton { background: var(--rosa); color: #fff; }
+
+/* 1. la cabecera de obra */
+.h-obra .astro { width: 50vw; right: 2vw; top: 4vh; --c: var(--halo); }
+.h-obra h1 { position: absolute; left: 2vw; bottom: 6vh; font: 400 30vw/1 Italianno, cursive; }
+
+/* 2. una obra: el título grande, la estrella censurada y el texto */
+.sw .astro { width: 52vw; right: -2vw; top: -4vh; --c: var(--halo); }
+.sw .texto { position: absolute; left: 4vw; top: 6vh; }
+.sw h1 { position: absolute; z-index: 2; left: 3vw; bottom: 9vh; font: 400 13vw/.8 Italianno, cursive; letter-spacing: -.01em; }
+.sw h1 small { font: 400 15px var(--letra); margin-left: .6em; letter-spacing: 0; }
+.sw .volver { position: absolute; z-index: 3; left: 4vw; bottom: 1rem; }
+
+/* 3. un vídeo solo: en medio, entre dos estrellas con su fotograma */
+.v video, .v img.v-foto { position: absolute; z-index: 2; left: 50%; top: 46%; translate: -50% -50%; height: 82vh; width: auto; }
+.v .astro { width: 34vw; top: 18vh; }
+.v .uno { left: -6vw; rotate: -12deg; }
+.v .dos { right: -6vw; rotate: 14deg; top: 30vh; }
+.v .rotulo { position: absolute; left: 4vw; top: 5vh; font: 400 46px/1 "Instrument Serif", serif; }
+.v .rotulo span { display: block; font: 15px/1.35 var(--letra); margin-top: .4em; }
+
+/* 4. Tattoox: la estrella con el logo abajo y las partes, cada una en su estrellita */
+.tx .astro.grande { width: 44vw; left: 28vw; top: 3vh; }
+.tx .logo { position: absolute; z-index: 2; left: 50%; top: 52vh; translate: -50% 0; width: 30vw; }
+.tx .partes { position: absolute; left: 3vw; right: 3vw; bottom: 4.5rem; display: flex; justify-content: space-between; }
+.tx .parte { position: relative; width: 8.4vw; text-align: center; font: 13px/1.2 var(--letra); text-transform: lowercase; }
+.tx .parte .astro { position: relative; width: 100%; margin-bottom: .5em; --c: var(--chicle); }
+.tx .parte:nth-child(even) { translate: 0 -3vh; }
+.tx .info { position: absolute; left: 4vw; top: 5vh; }
+</style></head>
+<body>
+
+<section class="pant obra h-obra">
+  <div class="astro neon" data-n="18" data-fotos="../projects/sweet-wrecker/img/1.webp ../projects/la-furia-del-silenci/img/1.webp ../projects/spooky-sluts-invasion/img/1.webp ../projects/this-is-where-i-post-from/img/1.webp ../projects/diva-muerta-sobre-escenario/img/7.webp ../projects/qui-al-seu-enemic-plany/img/1.webp ../projects/no-man-no-problem/img/1.webp"></div>
+  <h1>obra</h1>
+  <p class="marquee lema"><span>Content Destroyer. Content Destroyer. Content Destroyer. Content Destroyer.</span><span>Content Destroyer. Content Destroyer. Content Destroyer. Content Destroyer.</span></p>
+  <nav class="menu"><span>★</span><a class="on">obra</a><a>dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant obra sw">
+  <div class="astro neon" data-n="22" data-src="../projects/sweet-wrecker/img/1.webp"></div>
+  <div class="texto"><p>“sweet wrecker, o la novia de la muerte” es un proyecto de creación e investigación que busca establecer un vínculo entre la cultura pop de masas, la noción de identidad colectiva y la disidencia identitaria como agente político. explora cómo el amor y el afecto pueden convertirse en herramientas de manipulación y violencia estructural.</p><p>el proyecto ha sido seleccionado por sala d’art jove 2025. presentado en centro rey chico de granada, 2025 y en acvic, vic, 2025</p></div>
+  <h1>sweet wrecker<small>2025</small></h1>
+  <a class="boton volver">← obra</a>
+  <nav class="menu dcha"><span>★</span><a class="on">obra</a><a>dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant dc v">
+  <div class="astro neon uno" data-n="14" data-src="../projects/tattoox/img/29.poster.webp"></div>
+  <div class="astro neon dos" data-n="14" data-y="0.2" data-src="../projects/tattoox/img/29.poster.webp"></div>
+  <video src="../projects/tattoox/img/29.webm" poster="../projects/tattoox/img/29.poster.webp" muted loop playsinline></video>
+  <p class="rotulo">tarchi<span>dirección creativa · tattoo con tarchi · 2026</span></p>
+  <nav class="menu dcha"><a class="boton">← tattoox</a><span>★</span><a>obra</a><a class="on">dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant dc tx">
+  <div class="astro neon grande" data-n="22" data-src="../projects/tattoox/img/4.webp"></div>
+  <img class="logo" src="../projects/tattoox/img/1.webp" alt="Tattoox">
+  <p class="info texto">tattoox · dirección creativa y comunicación · 2026</p>
+  <div class="partes">
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/2.poster.webp"></div>dirección comunicativa</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/4.webp"></div>riverland</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/17.webp"></div>l0rna</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/20.webp"></div>xiyo y fernandezz</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/23.poster.webp"></div>sinaka</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/24.poster.webp"></div>taichu</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/25.webp"></div>la plazuela</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/27.webp"></div>perro peligro</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/29.poster.webp"></div>tarchi</a>
+    <a class="parte"><div class="astro neon" data-n="9" data-src="../projects/tattoox/img/30.poster.webp"></div>soymuybestiah</a>
+  </div>
+  <nav class="menu dcha"><a class="boton">← dirección creativa</a><span>★</span><a>obra</a><a class="on">dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<script src="astro.js"></script>
+</body></html>

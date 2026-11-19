@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B · cam</title>
+<link rel="stylesheet" href="base.css">
+<style>
+/* B · cam: la web como una de cams. «● en directo», mosaicos, el texto como un chat y
+   botones de chicle con brillo. Lo más pocho; maximalista. */
+.vivo { display: inline-flex; align-items: center; gap: .4em; padding: .3em .6em; background: #ff1744; color: #fff; font: 13px/1 Anton, sans-serif; text-transform: uppercase; letter-spacing: .02em; }
+.vivo::before { content: ""; width: .55em; height: .55em; border-radius: 50%; background: #fff; animation: latir 1s steps(2) infinite; }
+@keyframes latir { 50% { opacity: 0; } }
+.boton { display: inline-block; padding: .55em 1.2em; border-radius: 999px; background: linear-gradient(#ff8ad8, #ff2fb0); color: #fff; font: 16px/1 Anton, sans-serif; text-transform: uppercase; box-shadow: inset 0 2px 0 rgba(255,255,255,.6), 0 0 16px #ff5cf0; text-shadow: 0 1px 0 #c0007a; }
+.barra { position: absolute; z-index: 5; left: 0; right: 0; top: 0; display: flex; gap: 1.2em; align-items: center; padding: 1.2em 3vw; font: 14px/1 var(--letra); }
+.barra .marca { margin-left: auto; font: 22px/1 Pinyon, cursive; }
+.chat { position: absolute; z-index: 4; right: 2vw; top: 9vh; bottom: 5rem; width: 24vw; display: flex; flex-direction: column; gap: .7em; padding: 1.2em; background: rgba(255,255,255,.88); border: 2px solid var(--chicle); box-shadow: 0 0 22px var(--chicle); font: 14px/1.35 var(--letra); text-transform: lowercase; overflow: hidden; }
+.chat b { color: #ff2fb0; font-weight: 700; }
+.chat .botones { margin-top: auto; display: flex; flex-wrap: wrap; gap: .5em; }
+.chat .botones .boton { font-size: 13px; }
+
+/* 1. obra: una parrilla de cams */
+.h-obra h1 { position: absolute; z-index: 3; left: 3vw; top: 6vh; font: 400 13vw/1 Italianno, cursive; }
+.cams { position: absolute; left: 3vw; right: 3vw; top: 30vh; bottom: 5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2vw; }
+.cam { position: relative; overflow: hidden; background: #000; box-shadow: 0 0 0 2px #fff; }
+.cam .astro { inset: 0; }
+.cam .vivo { position: absolute; left: .6em; top: .6em; z-index: 2; }
+.cam span.nom { position: absolute; z-index: 2; left: .6em; bottom: .5em; color: #fff; font: 22px/1 Italianno, cursive; text-shadow: 0 0 6px #000; }
+.cam span.ojos { position: absolute; z-index: 2; right: .6em; bottom: .7em; color: #fff; font: 12px var(--letra); }
+
+/* 2. una obra: la estrella como la ventana de la cam y el texto como chat */
+.sw .astro { width: 52vw; left: 6vw; top: 9vh; --c: var(--halo); }
+.sw h1 { position: absolute; z-index: 3; left: 3vw; bottom: 3.6rem; font: 400 11vw/.8 Italianno, cursive; }
+.sw .vivo.flota { position: absolute; z-index: 3; left: 30vw; top: 12vh; font-size: 16px; }
+
+/* 3. el vídeo, en su reproductor de cam */
+.v .player { position: absolute; left: 50%; top: 48%; translate: -62% -50%; height: 80vh; aspect-ratio: 9/16; box-shadow: 0 0 0 3px var(--chicle), 0 0 30px var(--chicle); }
+.v .player video { width: 100%; height: 100%; object-fit: cover; }
+.v .player .vivo { position: absolute; left: .7em; top: .7em; }
+.v .player .rec { position: absolute; right: .7em; top: .7em; color: #fff; font: 13px Anton, sans-serif; text-shadow: 0 0 4px #000; }
+
+/* 4. Tattoox TV: las partes, como cams */
+.tx .logo { position: absolute; left: 3vw; top: 8vh; width: 22vw; }
+.tx h2 { position: absolute; left: 27vw; top: 9vh; font: 400 54px/1 Pinyon, cursive; color: #ff2fb0; }
+.tx .cams { grid-template-columns: repeat(5, 1fr); top: 24vh; }
+.tx .cam span.nom { font: 15px/1 Anton, sans-serif; text-transform: uppercase; }
+</style></head>
+<body>
+
+<section class="pant obra h-obra">
+  <div class="barra"><span class="vivo">en directo</span><span>7 obras · 2019–2025</span><span class="marca">Content Destroyer.</span></div>
+  <h1>obra</h1>
+  <div class="cams">
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/sweet-wrecker/img/1.webp"></div><span class="vivo">live</span><span class="nom">sweet wrecker</span><span class="ojos">2025</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/la-furia-del-silenci/img/1.webp"></div><span class="vivo">live</span><span class="nom">la fúria del silenci</span><span class="ojos">2024</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/spooky-sluts-invasion/img/1.webp"></div><span class="vivo">live</span><span class="nom">spooky sluts invasion</span><span class="ojos">2023</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/this-is-where-i-post-from/img/1.webp"></div><span class="vivo">live</span><span class="nom">this is where i post from</span><span class="ojos">2023</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/diva-muerta-sobre-escenario/img/7.webp"></div><span class="vivo">live</span><span class="nom">diva muerta sobre escenario</span><span class="ojos">2022</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/qui-al-seu-enemic-plany/img/1.webp"></div><span class="vivo">live</span><span class="nom">qui al seu enemic plany</span><span class="ojos">2021</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/no-man-no-problem/img/1.webp"></div><span class="vivo">live</span><span class="nom">no man no problem</span><span class="ojos">2019</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="26" data-src="../projects/sweet-wrecker/img/5.webp"></div><span class="vivo">live</span><span class="nom">…</span></a>
+  </div>
+  <nav class="menu"><span>★</span><a class="on">obra</a><a>dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant obra sw">
+  <div class="barra"><span class="vivo">en directo</span><span>sweet wrecker · 2025</span><span class="marca">Content Destroyer.</span></div>
+  <div class="astro neon" data-n="22" data-src="../projects/sweet-wrecker/img/1.webp"></div>
+  <span class="vivo flota">en directo</span>
+  <h1>sweet wrecker</h1>
+  <div class="chat">
+    <p><b>sepulcrito:</b> “sweet wrecker, o la novia de la muerte” es un proyecto de creación e investigación que busca establecer un vínculo entre la cultura pop de masas, la noción de identidad colectiva y la disidencia identitaria como agente político.</p>
+    <p><b>sepulcrito:</b> explora cómo el amor y el afecto pueden convertirse en herramientas de manipulación y violencia estructural.</p>
+    <p><b>sala d’art jove:</b> seleccionado 2025 ★</p>
+    <p><b>rey chico, granada:</b> presentado, 2025</p>
+    <p><b>acvic, vic:</b> presentado, 2025</p>
+    <div class="botones"><a class="boton">fotos ▶</a><a class="boton">siguiente ▶</a><a class="boton">← obra</a></div>
+  </div>
+  <nav class="menu"><span>★</span><a class="on">obra</a><a>dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant dc v">
+  <div class="barra"><span class="vivo">en directo</span><span>tattoox · tarchi</span><span class="marca">Content Destroyer.</span></div>
+  <div class="player"><video src="../projects/tattoox/img/29.webm" poster="../projects/tattoox/img/29.poster.webp" muted loop playsinline></video><span class="vivo">live</span><span class="rec">● rec 02:10</span></div>
+  <div class="chat">
+    <p><b>sepulcrito:</b> dirección creativa</p>
+    <p><b>sepulcrito:</b> tattoo con tarchi</p>
+    <p><b>tattoox:</b> 2026 ★</p>
+    <div class="botones"><a class="boton">siguiente ▶</a><a class="boton">← tattoox</a></div>
+  </div>
+  <nav class="menu"><span>★</span><a>obra</a><a class="on">dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant dc tx">
+  <div class="barra"><span class="vivo">en directo</span><span>10 cams</span><span class="marca">Content Destroyer.</span></div>
+  <img class="logo" src="../projects/tattoox/img/1.webp" alt="Tattoox">
+  <h2>tattoox tv</h2>
+  <div class="cams">
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/2.poster.webp"></div><span class="vivo">live</span><span class="nom">dirección comunicativa</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/4.webp"></div><span class="vivo">live</span><span class="nom">riverland</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/17.webp"></div><span class="vivo">live</span><span class="nom">l0rna</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/20.webp"></div><span class="vivo">live</span><span class="nom">xiyo y fernandezz</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/23.poster.webp"></div><span class="vivo">live</span><span class="nom">sinaka</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/24.poster.webp"></div><span class="vivo">live</span><span class="nom">taichu</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/25.webp"></div><span class="vivo">live</span><span class="nom">la plazuela</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/27.webp"></div><span class="vivo">live</span><span class="nom">perro peligro</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/29.poster.webp"></div><span class="vivo">live</span><span class="nom">tarchi</span></a>
+    <a class="cam"><div class="astro rect" data-forma="rect" data-n="22" data-src="../projects/tattoox/img/30.poster.webp"></div><span class="vivo">live</span><span class="nom">soymuybestiah</span></a>
+  </div>
+  <nav class="menu"><span>★</span><a>obra</a><a class="on">dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<script src="astro.js"></script>
+</body></html>

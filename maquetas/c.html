@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C · mínima</title>
+<link rel="stylesheet" href="base.css">
+<style>
+/* C · mínima: lo de ahora, ordenado. Una estrella censurada y el título enorme; lo demás,
+   letra pequeña. El gesto raro es solo la estrella. */
+.flecha { font: 15px/1 var(--letra); text-transform: lowercase; }
+.flecha::before { content: "★ "; }
+.flecha:hover { color: #fff; }
+
+/* 1. obra */
+.h-obra .astro { width: 38vw; left: 31vw; top: 8vh; --c: var(--halo); }
+.h-obra h1 { position: absolute; left: 0; right: 0; bottom: 2vh; text-align: center; font: 400 27vw/1 Italianno, cursive; }
+
+/* 2. una obra: el título a todo lo ancho, abajo; la estrella arriba a la derecha */
+.sw .astro { width: 34vw; right: 6vw; top: 5vh; --c: var(--halo); }
+.sw .texto { position: absolute; left: 4vw; top: 6vh; }
+.sw h1 { position: absolute; left: 2vw; right: 2vw; bottom: 4vh; font: 400 17.5vw/.8 Italianno, cursive; white-space: nowrap; }
+.sw h1 small { position: absolute; right: 2vw; top: -.4em; font: 400 15px var(--letra); }
+
+/* 3. el vídeo en medio y, detrás, su fotograma en mosaico a toda pantalla */
+.v .fondo { position: absolute; inset: 0; opacity: .35; }
+.v video { position: absolute; z-index: 2; left: 50%; top: 47%; translate: -50% -50%; height: 84vh; width: auto; }
+.v .rotulo { position: absolute; z-index: 2; left: 4vw; top: 5vh; font: 15px/1.35 var(--letra); text-transform: lowercase; }
+
+/* 4. Tattoox: las partes como lista de nombres; al pasar, su estrella */
+.tx .logo { position: absolute; left: 4vw; top: 6vh; width: 16vw; }
+.tx ol { position: absolute; left: 4vw; top: 22vh; width: 56vw; list-style: none; columns: 2; column-gap: 3vw; font: 400 4.2vw/1.08 "Instrument Serif", serif; }
+.tx li.on { font-style: italic; color: var(--rosa); }
+.tx .astro { width: 30vw; right: 5vw; top: 22vh; }
+</style></head>
+<body>
+
+<section class="pant obra h-obra">
+  <div class="astro neon" data-n="16" data-fotos="../projects/sweet-wrecker/img/1.webp ../projects/la-furia-del-silenci/img/1.webp ../projects/spooky-sluts-invasion/img/1.webp ../projects/this-is-where-i-post-from/img/1.webp ../projects/diva-muerta-sobre-escenario/img/7.webp ../projects/qui-al-seu-enemic-plany/img/1.webp ../projects/no-man-no-problem/img/1.webp"></div>
+  <h1>obra</h1>
+  <nav class="menu"><span>★</span><a class="on">obra</a><a>dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant obra sw">
+  <div class="astro neon" data-n="22" data-src="../projects/sweet-wrecker/img/1.webp"></div>
+  <div class="texto"><p>“sweet wrecker, o la novia de la muerte” es un proyecto de creación e investigación que busca establecer un vínculo entre la cultura pop de masas, la noción de identidad colectiva y la disidencia identitaria como agente político. explora cómo el amor y el afecto pueden convertirse en herramientas de manipulación y violencia estructural.</p><p style="margin-top:2em"><a class="flecha">volver a obra</a></p></div>
+  <h1>sweet wrecker<small>2025</small></h1>
+  <nav class="menu dcha"><span>★</span><a class="on">obra</a><a>dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant dc v">
+  <div class="astro rect fondo" data-forma="rect" data-n="18" data-src="../projects/tattoox/img/29.poster.webp"></div>
+  <video src="../projects/tattoox/img/29.webm" poster="../projects/tattoox/img/29.poster.webp" muted loop playsinline></video>
+  <p class="rotulo">tarchi<br>dirección creativa · tattoo con tarchi · 2026<br><br><a class="flecha">volver a tattoox</a></p>
+  <nav class="menu dcha"><span>★</span><a>obra</a><a class="on">dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<section class="pant dc tx">
+  <img class="logo" src="../projects/tattoox/img/1.webp" alt="Tattoox">
+  <ol><li>dirección comunicativa</li><li>riverland</li><li class="on">l0rna</li><li>xiyo y fernandezz</li><li>sinaka</li><li>taichu</li><li>la plazuela</li><li>perro peligro</li><li>tarchi</li><li>soymuybestiah</li></ol>
+  <div class="astro neon" data-n="22" data-src="../projects/tattoox/img/17.webp"></div>
+  <nav class="menu dcha"><span>★</span><a>obra</a><a class="on">dirección creativa</a><a>tattoo</a><a>about</a></nav>
+</section>
+
+<script src="astro.js"></script>
+</body></html>
