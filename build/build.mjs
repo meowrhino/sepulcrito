@@ -32,6 +32,7 @@ import { fileURLToPath } from 'node:url';
 
 import { OG_H, OG_W, esc, sitio, youtube } from './paginas.mjs';
 import { leerJSON, loadProjects, loadTattoo, slugOf, validar, webpSize } from './proyectos.mjs';
+import { pathToFileURL } from 'node:url';
 
 const ROOT = resolve(fileURLToPath(import.meta.url), '../..');
 const OUT = join(ROOT, 'dist');
@@ -184,8 +185,15 @@ await Promise.all([...new Set(projects.flatMap((p) => [p, ...p.groups]).flatMap(
   console.warn(`⚠ no he podido bajar el fotograma del vídeo de YouTube ${id}: se pide a YouTube al abrir la página`);
 }));
 
-const dry = sitio({ site, config, about, projects, tattoo, aboutPhoto, version, ...images });
-for (const path of dry.paths) dry.render(path);
+/* Las versiones de prueba del diseño: cada carpeta de estilos/ con su plantillas.mjs se
+   publica entera en /<carpeta>/ (sin indexar), con la home de siempre. */
+const estilos = existsSync(join(ROOT, 'estilos'))
+  ? await Promise.all(readdirSync(join(ROOT, 'estilos')).filter((d) => existsSync(join(ROOT, 'estilos', d, 'plantillas.mjs')))
+    .map(async (d) => ({ nombre: d, ...(await import(pathToFileURL(join(ROOT, 'estilos', d, 'plantillas.mjs')).href)).default })))
+  : [];
+const webs = (opts) => [sitio(opts), ...estilos.map((estilo) => sitio({ ...opts, estilo, prefijo: `${estilo.nombre}/` }))];
+
+for (const dry of webs({ site, config, about, projects, tattoo, aboutPhoto, version, ...images })) for (const path of dry.paths) dry.render(path);
 if (sharp) {
   for (const src of miniWanted) {
     const out = join(CACHE, 'mini', src);
@@ -235,6 +243,7 @@ rmSync(OUT, { recursive: true, force: true, maxRetries: 5 });
 mkdirSync(OUT, { recursive: true });
 const sinNotas = (f) => !f.endsWith('.DS_Store') && !f.endsWith('.json');
 for (const d of ['css', 'js', 'fonts', 'assets', 'tattoo', 'about', 'projects']) cpSync(join(ROOT, d), join(OUT, d), { recursive: true, filter: sinNotas });
+for (const { nombre } of estilos) cpSync(join(ROOT, 'estilos', nombre), join(OUT, 'estilos', nombre), { recursive: true, filter: (f) => sinNotas(f) && !f.endsWith('.mjs') });
 cpSync(join(ROOT, '_headers'), join(OUT, '_headers'));
 for (const src of miniDone) { mkdirSync(dirname(join(OUT, 'mini', src)), { recursive: true }); cpSync(join(CACHE, 'mini', src), join(OUT, 'mini', src)); }
 for (const src of astroDone) { mkdirSync(dirname(join(OUT, 'astro', src)), { recursive: true }); cpSync(join(CACHE, 'astro', src), join(OUT, 'astro', src)); }
@@ -242,10 +251,12 @@ if (ytDone.size) cpSync(join(CACHE, 'yt'), join(OUT, 'yt'), { recursive: true })
 if (pixelDone) { mkdirSync(dirname(join(OUT, 'pixel', PIXEL)), { recursive: true }); cpSync(join(CACHE, 'pixel', PIXEL), join(OUT, 'pixel', PIXEL)); }
 for (const src of ogDone) { mkdirSync(dirname(join(OUT, ogPath(src))), { recursive: true }); cpSync(join(CACHE, ogPath(src)), join(OUT, ogPath(src))); }
 
-const web = sitio({ site, config, about, projects, tattoo, aboutPhoto, version, ...images });
-for (const path of web.paths) {
-  mkdirSync(join(OUT, path), { recursive: true });
-  writeFileSync(join(OUT, path, 'index.html'), web.render(path));
+const [web, ...versiones] = webs({ site, config, about, projects, tattoo, aboutPhoto, version, ...images });
+for (const [w, pre] of [[web, ''], ...versiones.map((v, i) => [v, `${estilos[i].nombre}/`])]) {
+  for (const path of w.paths) {
+    mkdirSync(join(OUT, pre, path), { recursive: true });
+    writeFileSync(join(OUT, pre, path, 'index.html'), w.render(path));
+  }
 }
 writeFileSync(join(OUT, '404.html'), web.notFound());
 writeFileSync(join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
@@ -257,4 +268,5 @@ writeFileSync(join(OUT, 'robots.txt'), site.noindex ? 'User-agent: *\nDisallow: 
 writeFileSync(join(OUT, '.nojekyll'), '');   // GitHub Pages: servir los archivos tal cual, sin Jekyll
 
 const n = (s) => projects.filter((p) => p.section === s).length;
+if (estilos.length) console.log(`✓ y las versiones del diseño: ${estilos.map((e) => `/${e.nombre}/`).join(', ')}`);
 console.log(`✓ dist/: ${web.paths.length} páginas (home, ${n('obra')} obras, ${n('direccion-creativa')} proyectos con sus partes, tattoo con ${tattoo.length} fotos y about), 404, sitemap y robots${site.noindex ? ', sin indexar' : ''}.`);

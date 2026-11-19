@@ -105,22 +105,25 @@ function enlaces(links) {
  *                     vista previa, la normal: la estrella sale sin pixelar)
  *   yt(id)            la ruta del fotograma de un vídeo de YouTube, o null (se pide a YouTube)
  *   preview           true en la vista previa: los enlaces van a ?p=
+ *   estilo, prefijo   para las versiones de prueba del diseño (estilos/<letra>/plantillas.mjs,
+ *                     publicadas en /<letra>/): sus plantillas, que cambian el cuerpo de cada
+ *                     página, y 'a/'. Sin ellas, la web de siempre
  *
  * Devuelve las rutas de las páginas (`paths`, las que van al sitemap en
  * `listed`), render(path) y notFound().
  */
-export function sitio({ site, config, about, projects, tattoo, aboutPhoto, version = () => '', mini = (img) => img.src, og = () => null, pixel = (src) => src, astro = (img) => img.src, yt = () => null, preview = false }) {
+export function sitio({ site, config, about, projects, tattoo, aboutPhoto, version = () => '', mini = (img) => img.src, og = () => null, pixel = (src) => src, astro = (img) => img.src, yt = () => null, preview = false, estilo: E = null, prefijo = '' }) {
   const abs = (path) => (site.url ? new URL(path, site.url).href : null);
   const visibles = (section) => projects.filter((p) => p.section === section && !p.hidden);
   const instagram = site.instagram ? `https://www.instagram.com/${site.instagram}/` : null;
 
   /* data/config.json → las variables de css/style.css, una regla por sección (la clase del
      <body>). Los colores y las letras ya vienen comprobados por schema/config.json. */
-  const estilo = Object.entries(config.sections).map(([s, c]) => `.${CLASE[s]} { --fondo: ${c.background}; --tinta: ${c.color}; --menu: ${c.color}; --activa: ${c.highlight}; --astro: ${c.star}; --estrella: ${c.header_star}; --titular: ${LETRAS[c.title_font]}; --letra: ${LETRAS[c.text_font]}; }`).join('\n');
+  const variables = Object.entries(config.sections).map(([s, c]) => `.${CLASE[s]} { --fondo: ${c.background}; --tinta: ${c.color}; --menu: ${c.color}; --activa: ${c.highlight}; --astro: ${c.star}; --estrella: ${c.header_star}; --titular: ${LETRAS[c.title_font]}; --letra: ${LETRAS[c.text_font]}; }`).join('\n');
 
   /* R: de la página que se pinta a la raíz ('../../' en obra/x/). */
   let R = '';
-  const link = (path) => (preview ? `?p=/${path}` : R + path);
+  const link = (path) => (preview ? `?p=/${prefijo}${path}` : R + prefijo + path);
   const src = (s) => R + s;
 
   /** Una foto o un vídeo, con su ancho y alto para que la página no salte al cargar. */
@@ -133,10 +136,10 @@ export function sitio({ site, config, about, projects, tattoo, aboutPhoto, versi
 
   /* `body` es una función: se pinta después de saber R, la ruta a la raíz de esta página. */
   function pagina({ path, title, description = site.description, image, seccion, body, css, noindex, volver }) {
-    R = path === null ? (site.url || '/') : (preview ? '' : '../'.repeat(path.split('/').filter(Boolean).length));
+    R = path === null ? (site.url || '/') : (preview ? '' : '../'.repeat((prefijo + path).split('/').filter(Boolean).length));
     const full = title ? `${title} · ${site.title}` : site.title;
     const actual = path?.split('/')[0];
-    const canonical = path !== null && abs(path);
+    const canonical = path !== null && !prefijo && abs(path);
     const ogImg = image && og(image);
     const ogUrl = ogImg && (abs(ogImg) || src(ogImg));
     return `<!doctype html>
@@ -146,7 +149,7 @@ export function sitio({ site, config, about, projects, tattoo, aboutPhoto, versi
 ${headScript(preview)}<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(full)}</title>
 <meta name="description" content="${esc(description)}">
-${site.noindex || noindex || path === null ? '<meta name="robots" content="noindex">\n' : ''}${canonical ? `<link rel="canonical" href="${esc(canonical)}">\n<meta property="og:url" content="${esc(canonical)}">\n` : ''}<meta property="og:site_name" content="${esc(site.title)}">
+${site.noindex || noindex || prefijo || path === null ? '<meta name="robots" content="noindex">\n' : ''}${canonical ? `<link rel="canonical" href="${esc(canonical)}">\n<meta property="og:url" content="${esc(canonical)}">\n` : ''}<meta property="og:site_name" content="${esc(site.title)}">
 <meta property="og:title" content="${esc(full)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:type" content="website">
@@ -155,16 +158,19 @@ ${ogUrl ? `<meta property="og:image" content="${esc(ogUrl)}">\n<meta property="o
 <link rel="stylesheet" href="${src('css/transicion.css')}${version('css/transicion.css')}">
 <link rel="stylesheet" href="${src('css/style.css')}${version('css/style.css')}">
 <style>
-${estilo}
+${variables}
 </style>
 ${css ? `<link rel="stylesheet" href="${src(css)}${version(css)}">\n` : ''}<script src="${src('js/transicion.js')}${version('js/transicion.js')}" defer></script>
 <script src="${src('js/site.js')}${version('js/site.js')}" defer></script>
-</head>
-<body class="${seccion}">
+${E && path !== '' ? `<link rel="stylesheet" href="${src(`estilos/${E.nombre}/estilo.css`)}${version(`estilos/${E.nombre}/estilo.css`)}">
+<script src="${src('js/astro.js')}${version('js/astro.js')}" defer></script>
+<script src="${src(`estilos/${E.nombre}/estilo.js`)}${version(`estilos/${E.nombre}/estilo.js`)}" defer></script>
+` : ''}</head>
+<body class="${seccion}${E && path !== '' ? ` estilo-${E.nombre}` : ''}">
 ${body()}
-<nav class="menu">
+${E?.menu && path !== '' ? E.menu(ctx, { path, actual, volver }) : `<nav class="menu">
 ${volver ? `  <a class="volver" href="${link(volver.href)}">←<span> ${esc(volver.text)}</span></a>\n` : ''}${path ? `  <a class="menu-casa" href="${link('')}" aria-label="home">${estrella('')}</a>\n` : ''}${site.menu.map((m) => `  <a href="${link(m.href)}"${m.href.split('/')[0] === actual ? ' aria-current="page"' : ''}>${esc(m.text)}</a>`).join('\n')}
-</nav>
+</nav>`}
 </body>
 </html>
 `;
@@ -176,7 +182,7 @@ ${volver ? `  <a class="volver" href="${link(volver.href)}">←<span> ${esc(volv
   const obraIndex = () => pagina({
     path: 'obra/', title: site.lists.obra.name, seccion: 'obra', image: obra[0]?.cover,
     description: `${site.lists.obra.name} de ${site.title}: ${obra.map((p) => p.title).join(', ')}.`,
-    body: () => `<header class="cabecera">
+    body: () => E?.obra ? E.obra(ctx) : `<header class="cabecera">
   ${estrella('cabecera-estrella')}
   <h1>${esc(site.lists.obra.name)}</h1>
 </header>
@@ -189,6 +195,13 @@ ${obra.map((p) => `  <a class="ficha" href="${link(p.path)}">
   });
 
   const siguiente = (p) => { const l = visibles(p.section); return l[(l.indexOf(p) + 1) % l.length] || l[0]; };
+  /** Adónde lleva «siguiente» desde un proyecto (o una parte, `g`): su parte siguiente o el
+      proyecto siguiente de su lista. { href, title } */
+  function sigDe(p, g) {
+    const i = g ? p.groups.indexOf(g) : -1;
+    if (g && i < p.groups.length - 1) return { href: `${p.path}${p.groups[i + 1].slug}/`, title: p.groups[i + 1].title };
+    return { href: siguiente(p).path, title: siguiente(p).title };
+  }
 
   /* ── dirección creativa ── */
 
@@ -197,7 +210,7 @@ ${obra.map((p) => `  <a class="ficha" href="${link(p.path)}">
   const dcIndex = () => pagina({
     path: 'direccion-creativa/', title: dcName, seccion: 'dc', image: dc[0]?.cover,
     description: `${dcName} de ${site.title}: ${dc.map((p) => p.title).join(', ')}.`,
-    body: () => `<header class="cabecera">
+    body: () => E?.dc ? E.dc(ctx) : `<header class="cabecera">
   ${estrella('cabecera-estrella')}
   <h1>${esc(dcName).replace(' ', '<br>')}</h1>
 </header>
@@ -241,10 +254,7 @@ ${dc.map((p) => `  <a class="proyecto" href="${link(p.path)}">
 ${p.groups.map((x) => `      <li><a href="${link(`${p.path}${x.slug}/`)}"${x === g ? ' aria-current="page"' : ''}>${esc(x.title)}</a></li>`).join('\n')}
     </ul>` : '';
     const nombre = `${esc(yo.title)}${yo.year ? ` <span>${yo.year}</span>` : ''}`;
-    const sigP = g ? p.groups[(p.groups.indexOf(g) + 1) % p.groups.length] : null;
-    const sig = g && p.groups.indexOf(g) < p.groups.length - 1
-      ? { href: `${p.path}${sigP.slug}/`, title: sigP.title }
-      : { href: siguiente(p).path, title: siguiente(p).title };
+    const sig = sigDe(p, g);
     return `<main class="tira">
 <section class="pantalla inicio">
   <div class="pantalla-texto">
@@ -279,18 +289,18 @@ ${enlaces((yo.links || []).filter((l) => !youtube(l)))}
   }
 
   const proyecto = (p, g) => pagina({
-    path: g ? `${p.path}${g.slug}/` : p.path, title: g ? `${p.title} · ${g.title}` : p.title, seccion: `${CLASE[p.section]} pieza`,
+    path: g ? `${p.path}${g.slug}/` : p.path, title: g ? `${p.title} · ${g.title}` : p.title, seccion: `${CLASE[p.section]} ${E?.proyecto ? 'proyecto' : 'pieza'}`,
     image: (g || p).cover, noindex: p.hidden,
     volver: g ? { href: p.path, text: p.title } : { href: `${p.section}/`, text: site.lists[p.section].name },
     description: (g || p).text?.[0]?.slice(0, 160) || `${g ? `${g.title}, de ${p.title}` : `${p.title}${p.year ? `, ${p.year}` : ''}`}: ${site.lists[p.section].name} de ${site.title}.`,
-    body: () => tira(p, g),
+    body: () => (E?.proyecto ? E.proyecto(ctx, p, g) : tira(p, g)),
   });
 
   /* ── tattoo y about ── */
 
   const tattooPagina = () => pagina({
     path: 'tattoo/', title: 'tattoo', seccion: 'tattoo', image: tattoo[0], description: `Tattoo de ${site.title}.`,
-    body: () => `<header class="cabecera">
+    body: () => E?.tattoo ? E.tattoo(ctx) : `<header class="cabecera">
   ${estrella('cabecera-estrella')}
   <h1>tattoo</h1>
 ${instagram ? `  <p class="tattoo-citas">citas por instagram: <a href="${esc(instagram)}" target="_blank" rel="noopener">@${esc(site.instagram)}</a></p>\n` : ''}</header>
@@ -302,7 +312,7 @@ ${tattoo.map((m, i) => `  <a href="${src(m.src)}">${miniatura(m, `tattoo ${i + 1
   const aboutPagina = () => pagina({
     path: 'about/', title: 'about', seccion: 'about', image: aboutPhoto,
     description: about.text?.[0]?.slice(0, 160) || site.description,
-    body: () => `<main class="sobre">
+    body: () => E?.about ? E.about(ctx) : `<main class="sobre">
   <img class="sobre-foto" src="${src(aboutPhoto.src)}" width="${aboutPhoto.w}" height="${aboutPhoto.h}" alt="${esc(site.title)}">
   <div class="sobre-texto">
     <h1>${esc(site.title)}</h1>
@@ -319,8 +329,17 @@ ${parrafos(about.text)}
 
   const homePagina = () => pagina({
     path: '', seccion: 'home', image: { src: 'assets/img/home.webp' }, css: 'css/home.css',
-    body: () => home({ site, esc, r: '', link, version, pixel }),
+    body: () => home({ site, esc, r: R, link, version, pixel }),
   });
+
+  /* Lo que reciben las plantillas de un estilo (estilos/<letra>/plantillas.mjs). Las funciones
+     leen R al llamarlas: sirven dentro de body(). */
+  const ctx = {
+    site, config, about, aboutPhoto, tattoo, projects, instagram, preview,
+    esc, link, src, pieza, miniatura, parrafos, enlaces, embed, youtube, estrella, visibles, siguiente, sigDe,
+    mini: (m) => src(mini(m)),
+    lista: (section) => ({ ...site.lists[section], projects: visibles(section) }),
+  };
 
   /* ── las rutas ── */
 

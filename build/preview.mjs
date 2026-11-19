@@ -86,11 +86,19 @@ async function start() {
   if (aboutSize === null) errors.push(`about/${about.photo}.webp no es un WebP de verdad (pásala por imgToWeb)`);
   if (errors.length) return oops('Así no se publicaría', errors);
 
-  const web = sitio({ site: { ...site, url: '', noindex: true }, config, about, projects, tattoo, aboutPhoto: { src: `about/${about.photo}.webp`, ...aboutSize }, preview: true });
-
-  /* ?p=/obra/sweet-wrecker/ → obra/sweet-wrecker/ */
+  /* ?p=/obra/sweet-wrecker/ → obra/sweet-wrecker/; ?p=/a/obra/ → la versión «a» del diseño
+     (estilos/a/plantillas.mjs) */
   let path = (new URLSearchParams(location.search).get('p') || '/').replace(/^\/+/, '');
   if (path && !path.endsWith('/')) path += '/';
+  let estilo = null;
+  const letra = /^([a-z])\//.exec(path)?.[1];
+  if (letra) {
+    try {
+      estilo = { nombre: letra, ...(await import(`../estilos/${letra}/plantillas.mjs`)).default };
+      path = path.slice(2);
+    } catch { /* no es un estilo: una página normal */ }
+  }
+  const web = sitio({ site: { ...site, url: '', noindex: true }, config, about, projects, tattoo, aboutPhoto: { src: `about/${about.photo}.webp`, ...aboutSize }, preview: true, estilo, prefijo: estilo ? `${letra}/` : '' });
   const html = web.render(path);
   if (!html) return oops('Esta página no existe', [`No hay ninguna página en ${location.search}. Si es un proyecto, mira que esté en «lists» de data/site.json y que su carpeta en projects/ se llame igual.`]);
   write(html);
