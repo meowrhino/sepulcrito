@@ -1,0 +1,294 @@
+/* El estilo b · cam: la web como una de cams (plantillas.mjs explica cada página).
+   Va después de css/style.css. Rectos y planos: nada de border-radius ni degradados; lo
+   único que brilla, el neón rosa (--neon). Los colores y letras de cada sección vienen de
+   data/config.json (--fondo, --tinta, --activa, --titular, --letra). */
+
+body.estilo-b {
+  --neon: #ff5cf0;       /* el halo */
+  --chicle: #ff2fb0;     /* los botones */
+  --rojo: #ff1744;       /* «● en directo» */
+  --tira: #ff8ff9;       /* la barra de arriba, como en las referencias */
+  --arriba: 42px;
+  --abajo: 50px;
+  --alto: calc(100svh - var(--arriba) - var(--abajo));
+  padding: var(--arriba) 0 var(--abajo);
+  font-family: var(--letra);
+}
+/* en rosa, el halo más claro para que se vea */
+body.estilo-b.obra { --neon: #ffd6fc; }
+
+/* .proyecto es la clase del <body> de una sala, y en css/style.css la de una fila de la
+   lista de dirección creativa: aquí se deshace lo de la lista */
+body.estilo-b.proyecto { border: 0; }
+.proyecto img { position: static; translate: none; width: auto; max-height: none; opacity: 1; pointer-events: auto; transition: none; z-index: auto; margin: 0; top: auto; right: auto; }
+
+.oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--arriba); }
+
+/* ---------- las piezas: «en directo», el botón, la estrella, el texto que corre ---------- */
+
+.vivo {
+  display: inline-flex; align-items: center; gap: .45em; padding: .38em .6em .32em;
+  background: var(--rojo); color: #fff; font: 13px/1 Anton, Impact, sans-serif;
+  text-transform: uppercase; letter-spacing: .03em; white-space: nowrap;
+}
+.vivo::before { content: ""; width: .5em; height: .5em; background: currentColor; animation: latir 1s steps(1) infinite; }
+@keyframes latir { 50% { opacity: 0; } }
+.vivo.grande { font-size: 17px; }
+
+.boton {
+  display: inline-block; padding: .6em 1em .52em; border: 2px solid #fff; background: var(--chicle); color: #fff;
+  font: 15px/1 Anton, Impact, sans-serif; text-transform: uppercase; letter-spacing: .02em; text-decoration: none;
+  box-shadow: 0 0 0 2px var(--chicle), 0 0 16px var(--neon); cursor: pointer; white-space: nowrap;
+}
+.boton:hover, .boton:focus-visible { background: #fff; color: var(--chicle); }
+.boton:active { translate: 0 2px; }
+.boton.grande { font-size: 20px; }
+
+.astro { position: relative; aspect-ratio: 522.13 / 496.575; }
+.astro.rect { aspect-ratio: auto; }
+/* sin JS, la foto tal cual en su forma; con JS, la pinta js/astro.js en un <canvas> */
+.astro > img {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover;
+  -webkit-mask: var(--forma) center / contain no-repeat; mask: var(--forma) center / contain no-repeat;
+}
+.astro { --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 522.13 496.575'%3E%3Cpath d='M261.065 0L322.694 189.675H522.13L360.783 306.9L422.412 496.575L261.065 379.35L99.718 496.575L161.347 306.9L0 189.675H199.436L261.065 0Z'/%3E%3C/svg%3E"); }
+.astro.rect > img { -webkit-mask: none; mask: none; }
+.js .astro > img { visibility: hidden; }
+.neon { filter: drop-shadow(0 0 max(.35vw, 3px) var(--neon)) drop-shadow(0 0 max(1.3vw, 10px) var(--neon)); }
+.vivo.flota { position: absolute; z-index: 2; left: 53%; top: 15%; font-size: 15px; pointer-events: none; }
+
+.ticker { overflow: hidden; background: #000; color: #fff; font: 22px/1 Anton, Impact, sans-serif; text-transform: lowercase; padding: .5em 0 .45em; white-space: nowrap; }
+.ticker-pista { display: flex; width: max-content; animation: correr-b var(--dur, 30s) linear infinite; }
+.ticker-pista span { padding-right: .6em; }
+.ticker b { color: var(--rojo); font-weight: 400; }
+@keyframes correr-b { to { transform: translateX(-50%); } }
+
+/* la pestaña que abre cada bloque */
+.pestana { display: flex; flex-wrap: wrap; align-items: center; gap: .5em .8em; margin-bottom: 3vh; font: 400 16px/1 Anton, Impact, sans-serif; text-transform: uppercase; }
+
+/* ---------- arriba, la barra; abajo, las pestañas ---------- */
+
+.barra {
+  position: fixed; z-index: 6; top: 0; left: 0; right: 0; height: var(--arriba);
+  display: flex; align-items: center; gap: 12px; padding: 0 14px;
+  background: var(--tira); color: #fff; font: 16px/1 Anton, Impact, sans-serif;
+}
+.barra .boton { padding: .38em .7em .32em; font-size: 13px; box-shadow: 0 0 0 2px var(--chicle); }
+.barra-dato { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-transform: lowercase; }
+.barra-lema { margin-left: auto; font: 26px/1 var(--guion); color: #000; text-decoration: none; white-space: nowrap; }
+.barra-lema:hover { color: #fff; }
+
+.pestanas {
+  position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; height: var(--abajo);
+  display: flex; align-items: stretch; gap: 6px; padding: 7px 10px; background: #000;
+  overflow-x: auto; scrollbar-width: none;
+}
+.pestanas::-webkit-scrollbar { display: none; }
+.pestanas a {
+  flex: none; display: flex; align-items: center; padding: 0 1.1em; border: 1px solid #555; color: #fff;
+  font: 16px/1 Anton, Impact, sans-serif; text-transform: lowercase; text-decoration: none;
+}
+.pestanas a:hover { border-color: var(--neon); color: var(--neon); }
+.pestanas a[aria-current] { background: var(--chicle); border-color: #fff; color: #fff; box-shadow: 0 0 14px var(--neon); }
+.pestanas-casa svg { width: 1.15em; height: 1.15em; fill: currentColor; }
+
+/* ---------- las cams ---------- */
+
+.cams { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; padding: 4vh 4vw 7vh; }
+.cam {
+  position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: #000; color: #fff;
+  outline: 2px solid #fff; text-decoration: none;
+}
+.cam .astro { position: absolute; inset: 0; }
+.cam > :not(.astro) { position: absolute; z-index: 2; pointer-events: none; }
+.cam .vivo { left: 8px; top: 8px; font-size: 11px; }
+.cam-nombre { left: 10px; right: 10px; bottom: 9px; font: 400 clamp(24px, 2.3vw, 38px)/.95 var(--titular); text-shadow: 0 0 2px #000, 0 0 10px #000; }
+.cam-dato { right: 9px; top: 9px; font: 12px/1 Anton, Impact, sans-serif; text-transform: uppercase; text-shadow: 0 0 2px #000, 0 0 6px #000; }
+.cam:hover, .cam:focus-visible { outline-color: var(--neon); box-shadow: 0 0 0 2px var(--neon), 0 0 26px var(--neon); }
+.cam.mas { outline-style: dashed; }
+.cam.mas .vivo { background: #000; }
+
+/* ---------- obra y dirección creativa: la portada y la parrilla ---------- */
+
+.portada {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: center; gap: 3vw;
+  min-height: calc(var(--alto) - 46px); padding: 3vh 4vw;   /* 46px: el texto que corre, también en la primera pantalla */
+}
+.portada .boton { margin-top: 3vh; }
+.portada h1 { margin: .12em 0 .08em; font: 400 clamp(84px, 13vw, 230px)/.82 var(--titular); }
+.dc .portada h1 { font-size: clamp(64px, 9.5vw, 170px); }
+.portada-dato { font: 19px/1.3 var(--letra); text-transform: lowercase; }
+.portada-cam { position: relative; justify-self: center; width: min(100%, calc(var(--alto) * .9 * 1.05)); }
+
+/* ---------- una sala: la cam (la estrella), el título y el chat ---------- */
+
+.sala {
+  display: grid; grid-template-columns: minmax(0, 1fr) min(380px, 30vw); grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0 3vw; height: var(--alto); min-height: 540px; padding: 3vh 2.4vw 3vh 4vw;
+}
+.sala-cam { grid-area: 1 / 1 / 3 / 2; position: relative; align-self: center; justify-self: center; width: min(100%, calc((var(--alto) - 6vh) * 1.05)); }
+.sala-cam .sala-logo { position: absolute; z-index: 2; left: 50%; bottom: 13%; translate: -50% 0; width: auto; max-width: 44%; max-height: 22%; pointer-events: none; }
+.sala-titulo {
+  grid-area: 2 / 1; position: relative; z-index: 3; align-self: end; pointer-events: none;
+  font: 400 clamp(64px, 10vw, 190px)/.8 var(--titular); overflow-wrap: anywhere;
+}
+.sala-titulo small { display: block; margin-bottom: .25em; font: 16px/1 Anton, Impact, sans-serif; text-transform: uppercase; }
+.sala-titulo span { font: 18px/1 Anton, Impact, sans-serif; vertical-align: top; }
+.dc .sala-titulo { font-size: clamp(56px, 7.5vw, 140px); }
+.tv .sala-titulo { color: var(--chicle); }
+
+.chat {
+  grid-area: 1 / 2 / 3 / 3; display: flex; flex-direction: column; min-height: 0;
+  background: #fff; color: #000; border: 2px solid var(--neon); box-shadow: 0 0 0 2px #fff, 0 0 26px var(--neon);
+}
+.obra .chat { border-color: var(--chicle); box-shadow: 0 0 0 2px #fff, 0 0 26px #fff; }
+.chat-cabeza { display: flex; align-items: center; gap: .5em; padding: .75em .9em .7em; background: #000; color: #fff; font: 14px/1 Anton, Impact, sans-serif; text-transform: uppercase; letter-spacing: .03em; }
+.chat-cabeza::before { content: ""; width: .55em; height: .55em; background: var(--rojo); animation: latir 1s steps(1) infinite; }
+.chat-mensajes { flex: 1; display: flex; flex-direction: column; gap: .85em; overflow-y: auto; padding: 1em .95em; font: 15px/1.42 var(--letra); text-transform: lowercase; }
+.chat-mensajes > :first-child { margin-top: auto; }
+.chat-mensajes .sistema { color: #888; font-style: italic; }
+.chat-mensajes p { animation: llegar .35s backwards; animation-delay: calc(.25s + var(--i, 0) * .55s); }
+@keyframes llegar { from { opacity: 0; translate: 0 .6em; } }
+.chat b { color: #d6008f; }
+.chat-botones { display: flex; flex-wrap: wrap; gap: 10px; padding: .95em; border-top: 2px solid #000; }
+.chat-botones .boton { font-size: 13px; }
+
+/* tattoox tv: los canales */
+.canales { flex: 1; overflow-y: auto; list-style: none; padding: .6em .95em; font: 16px/1 Anton, Impact, sans-serif; text-transform: lowercase; }
+.canales a { display: flex; gap: .8em; padding: .55em 0; border-bottom: 1px solid #000; text-decoration: none; }
+.canales a span { color: var(--rojo); }
+.canales a:hover { color: var(--chicle); }
+
+/* ---------- los bloques de una sala: canales, fotos, vídeos ---------- */
+
+.bloque { padding: 7vh 4vw; }
+.bloque .cams { padding: 0; }
+.fotos { columns: 3 300px; column-gap: 18px; }
+.fotos figure { position: relative; margin-bottom: 18px; break-inside: avoid; outline: 2px solid #fff; background: #000; }
+.fotos img { width: 100%; }
+.fotos figure:hover { outline-color: var(--neon); box-shadow: 0 0 0 2px var(--neon), 0 0 26px var(--neon); }
+.fotos.pocas { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 18px; }
+.fotos.pocas figure { margin: 0; height: min(54vh, 600px); }
+.fotos.pocas img { width: auto; height: 100%; }
+.fotos figcaption { position: absolute; left: 8px; top: 8px; padding: .35em .5em .3em; background: #000; color: #fff; font: 11px/1 Anton, Impact, sans-serif; letter-spacing: .04em; }
+
+/* los vídeos, en reproductores de cam, centrados; uno solo, en medio de su pantalla */
+.emision { background: #000; color: #fff; }
+.players { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 7vh 4vw; padding-bottom: 4vh; }
+.players.solo { min-height: calc(var(--alto) - 14vh - 40px); }
+.player { position: relative; flex: none; outline: 3px solid var(--neon); box-shadow: 0 0 34px var(--neon); background: #000; }
+.player.vertical { height: calc(var(--alto) - 18vh); max-height: 900px; }
+.player.ancho { width: min(100%, 1100px); aspect-ratio: 16 / 9; }
+.player video, .player .yt, .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; align-self: auto; }
+.player > .vivo, .player .rec, .player-pie { position: absolute; z-index: 2; pointer-events: none; }
+.player > .vivo { left: 10px; top: 10px; }
+.player .rec { right: 10px; top: 12px; color: #fff; font: 14px/1 Anton, Impact, sans-serif; text-shadow: 0 0 4px #000; }
+.player .rec::first-letter { color: var(--rojo); }
+.player-pie { left: 0; top: calc(100% + 10px); font: 13px/1 Anton, Impact, sans-serif; text-transform: lowercase; white-space: nowrap; }
+
+/* ---------- el final: fin del directo ---------- */
+
+.fin { padding: 7vh 0 4vh; }
+.fin > .pestana, .fin-cosas, .mas-cams { padding-inline: 4vw; }
+.fin-texto { margin: 2vh 0 5vh; padding: .25em 0 .2em; background: none; color: inherit; border-block: 2px solid; font: 400 clamp(40px, 6vw, 96px)/1.15 var(--titular); }
+.fin-texto b { color: var(--chicle); }
+.obra .fin-texto b { color: #fff; }
+.fin-cosas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 5vw; }
+.fin-cam { position: relative; justify-self: center; width: min(100%, 64vh); }
+.fin-cam .sala-logo { position: absolute; z-index: 2; left: 50%; bottom: 13%; translate: -50% 0; width: auto; max-width: 44%; max-height: 22%; pointer-events: none; }
+.fin-botones { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+.siguiente-sala { width: min(100%, 520px); aspect-ratio: 16 / 10; margin-top: 2vh; }
+.siguiente-sala .cam-nombre { font-size: clamp(30px, 3.4vw, 56px); }
+
+.mas-cams { margin-top: 8vh; }
+.mas-cams-fila { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 14px; padding: 4px 4px 12px; }
+.mas-cams-fila a { font: 13px/1.15 Anton, Impact, sans-serif; text-transform: lowercase; text-decoration: none; }
+.mas-cams-fila img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; outline: 2px solid #fff; }
+.mas-cams-fila span { display: block; margin-top: .55em; }
+.mas-cams-fila a:hover img, .mas-cams-fila [aria-current] img { outline-color: var(--neon); box-shadow: 0 0 0 2px var(--neon), 0 0 18px var(--neon); }
+.mas-cams-fila [aria-current] span::after { content: " · estás aquí"; color: var(--chicle); }
+
+/* ---------- tattoo: el muro ---------- */
+
+.tattoo .portada h1 { font-size: clamp(90px, 15vw, 260px); }
+.tattoo .portada .boton.grande { margin-top: 2.2vh; }
+.ticker-tattoo { background: var(--chicle); }
+.ticker-tattoo b { color: #000; }
+.mando { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 1.2em; padding: 4vh 4vw 0; font: 16px/1.3 var(--letra); text-transform: lowercase; }
+.muro { columns: 4 220px; column-gap: 14px; padding: 3vh 4vw 8vh; }
+.muro .cam { margin-bottom: 14px; break-inside: avoid; }
+.muro .cam.destapada { outline-color: var(--neon); box-shadow: 0 0 0 3px var(--neon), 0 0 34px var(--neon); }
+
+/* la cam privada: una foto de tattoo, en grande (estilo.js) */
+.privada { position: fixed; inset: 0; z-index: 8; display: grid; place-items: center; padding: calc(var(--arriba) + 3vh) 4vw calc(var(--abajo) + 3vh); background: rgba(0, 0, 0, .9); }
+.privada figure { position: relative; max-height: 100%; outline: 3px solid var(--neon); box-shadow: 0 0 40px var(--neon); }
+.privada img { max-height: calc(100svh - var(--arriba) - var(--abajo) - 6vh); width: auto; }
+.privada .vivo { position: absolute; left: 10px; top: 10px; }
+.privada .boton { position: absolute; right: 10px; top: 10px; font-size: 13px; }
+
+/* ---------- about: el perfil ---------- */
+
+.perfil { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5vw; align-items: start; padding: 5vh 4vw 8vh; }
+.perfil-cam { position: sticky; top: calc(var(--arriba) + 5vh); }
+.perfil h1 { font: 400 clamp(64px, 8.5vw, 150px)/1 var(--titular); color: var(--activa); }
+.perfil-lema { margin: .1em 0 1.2em; font: clamp(34px, 4vw, 62px)/1.2 var(--guion); }
+.perfil-texto { max-width: 36em; font: 16px/1.5 var(--letra); text-transform: lowercase; }
+.perfil-p + .perfil-p { margin-top: .9em; }
+.perfil-botones { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 4vh; }
+.firma { margin-top: 5vh; font: 12px var(--letra); opacity: .7; }
+.firma a { text-decoration: none; }
+.firma a:hover { color: var(--activa); }
+
+/* ---------- el móvil ---------- */
+
+@media (max-width: 700px) {
+  body.estilo-b { --arriba: 40px; --abajo: 48px; }
+  .barra { gap: 8px; padding: 0 10px; }
+  .barra .vivo { font-size: 11px; }
+  .barra-lema { display: none; }
+  .pestanas { gap: 4px; padding: 6px; }
+  .pestanas a { padding: 0 .65em; font-size: 14px; }
+
+  .portada { grid-template-columns: 1fr; gap: 3vh; min-height: 0; padding: 4vh 4vw 5vh; }
+  .portada h1 { font-size: 24vw; }
+  .dc .portada h1 { font-size: 17vw; }
+  .tattoo .portada h1 { font-size: 26vw; }
+  .portada-cam { width: 100%; }
+  .ticker { font-size: 18px; }
+  .cams { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 3vh 3vw 6vh; }
+  .cam-nombre { font-size: 22px; }
+  .cam-dato { display: none; }
+
+  .sala { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 3vh 4vw 5vh; }
+  .sala-cam { width: 100%; }
+  .sala-titulo { align-self: flex-start; margin: -.45em 0 4vh; font-size: 17vw; }
+  .dc .sala-titulo { font-size: 13vw; }
+  .chat-mensajes { overflow: visible; }
+  .bloque { padding: 6vh 4vw; }
+  .fotos { columns: 1; }
+  .fotos.pocas figure { height: auto; }
+  .fotos.pocas img { width: 100%; height: auto; }
+  .player.vertical { width: 100%; height: auto; max-height: none; }
+  .players.solo { min-height: 0; }
+  .player-pie { white-space: normal; }
+  .players { gap: 9vh; }
+
+  .fin-cosas { grid-template-columns: 1fr; }
+  .fin-texto { font-size: 44px; }
+  .mas-cams-fila { display: flex; overflow-x: auto; }
+  .mas-cams-fila a { flex: none; width: 120px; }
+
+  .muro { columns: 2; column-gap: 8px; padding: 3vh 3vw 6vh; }
+  .muro .cam { margin-bottom: 8px; }
+
+  .perfil { grid-template-columns: 1fr; }
+  .perfil-cam { position: relative; top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vivo::before, .chat-cabeza::before, .ticker-pista, .chat-mensajes > :first-child { margin-top: auto; }
+.chat-mensajes .sistema { color: #888; font-style: italic; }
+.chat-mensajes p { animation: none; }
+  html { scroll-behavior: auto; }
+}
