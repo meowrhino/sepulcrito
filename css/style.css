@@ -76,13 +76,14 @@ body:not(.home) .menu { background: var(--fondo); pointer-events: auto; }
 .dc .cabecera h1 { font-size: 15vw; line-height: .82; bottom: 4vh; }
 
 .proyectos { padding: 10vh 4vw 16vh; }
-.proyecto { display: block; text-decoration: none; border-top: 1px solid; padding: 1.5vh 0; }
-.proyecto:last-child { border-bottom: 1px solid; }
+.proyectos .proyecto { display: block; text-decoration: none; border-top: 1px solid; padding: 1.5vh 0; }
+.proyectos .proyecto:last-child { border-bottom: 1px solid; }
 .proyecto-titulo { font-size: clamp(44px, 8vw, 140px); line-height: 1; }
-/* la portada aparece al pasar por el nombre, a la derecha (en el móvil, debajo) */
-.proyecto img { position: fixed; z-index: 2; right: 5vw; top: 50%; translate: 0 -50%; width: 30vw; max-height: 70vh; object-fit: cover; pointer-events: none; opacity: 0; transition: opacity .25s; }
-.proyecto:hover img, .proyecto:focus-visible img { opacity: 1; }
-.proyecto:hover .proyecto-titulo { font-style: italic; }
+/* la portada aparece al pasar por el nombre, a la derecha (en el móvil, debajo). Dentro de
+   .proyectos: en las versiones de estilos/, .proyecto es también la clase del <body> de un proyecto */
+.proyectos .proyecto img { position: fixed; z-index: 2; right: 5vw; top: 50%; translate: 0 -50%; width: 30vw; max-height: 70vh; object-fit: cover; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.proyectos .proyecto:hover img, .proyectos .proyecto:focus-visible img { opacity: 1; }
+.proyectos .proyecto:hover .proyecto-titulo { font-style: italic; }
 
 /* ---------- un proyecto o una obra: de lado y por pantallas ---------- */
 
@@ -185,7 +186,7 @@ body.pieza .menu { justify-content: flex-end; background: none; pointer-events: 
 
   .dc .cabecera h1 { font-size: 21vw; }
   .dc .cabecera-estrella { width: 80vw; right: -10vw; bottom: auto; top: 10vh; }
-  .proyecto img { position: static; translate: none; opacity: 1; width: 64vw; max-height: none; margin: 1vh 0 1vh auto; }
+  .proyectos .proyecto img { position: static; translate: none; opacity: 1; width: 64vw; max-height: none; margin: 1vh 0 1vh auto; }
 
   /* un proyecto, hacia abajo; el menú, con su fondo (pasa por encima de las fotos) y el
      volver en una flecha */
