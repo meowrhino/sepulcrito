@@ -1,5 +1,10 @@
 {
   "$schema": "../schema/about.json",
   "photo": "1",
-  "text": []
+  "text": [
+    "Òscar Clarissó (Tàrrega, 1999), también conocido como Sepulcrito, es un artista, director creativo y creador de contenido afincado en Barcelona. Su trayectoria se ha desarrollado entre Granada y Barcelona, conectando la creación artística, la cultura visual y la comunicación.",
+    "Su práctica artística investiga las relaciones entre identidad, política y cultura de masas a través de la cultura pop y los imaginarios de internet. Mediante la creación gráfica, la imagen, el vídeo y el trabajo con materiales y espacios, explora cómo los códigos visuales contemporáneos construyen identidades y discursos colectivos, conectando lo íntimo y lo político.",
+    "En paralelo, desarrolla proyectos de dirección creativa, creación de contenido y gestión de redes para marcas y espacios culturales. En Tattoox ha trabajado en la dirección creativa y comunicativa, desarrollando narrativas y contenidos que conectan el tatuaje con el arte y la cultura contemporánea, y coordinando colaboraciones con artistas. También ha trabajado en Apparel e Industrial Copera, donde ha desarrollado proyectos de comunicación visual y contenido vinculados a la escena musical actual.",
+    "Su trabajo artístico se ha presentado en espacios como Mirada Pilot, Homesession, en el marco de Art Nou, y La Escocesa. En 2024 desarrolló La fúria del silenci durante la residencia TRANSDOCUMENTAR (ACUR), y en 2025 fue seleccionado por Sala d’Art Jove para desarrollar Sweet Wrecker. Paralelamente, desarrolla su práctica de tatuaje bajo el nombre de Sepulcrito."
+  ]
 }

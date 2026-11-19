@@ -2,7 +2,11 @@
   "$schema": "../../schema/project.json",
   "title": "Apparell",
   "cover": "1",
-  "text": [],
+  "text": [
+    "Dirección de arte",
+    "Atrezo y estilismo de espacios",
+    "Campaña Merch Dellafuente 2024"
+  ],
   "links": [],
   "photos": [
     "1",

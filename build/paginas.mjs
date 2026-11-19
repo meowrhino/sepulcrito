@@ -16,22 +16,34 @@
      obra/                                las obras, en collage
      obra/<slug>/                         una obra, como un proyecto (abajo)
      direccion-creativa/                  los proyectos, en lista (la portada al pasar)
-     direccion-creativa/<slug>/           un proyecto, de lado (en el móvil, hacia abajo) y por
-                                          pantallas: el inicio (el texto arriba a la izquierda,
-                                          la foto principal y, abajo a la izquierda, el logo
-                                          encima de la estrella), las fotos y los vídeos con
-                                          aire, los vídeos de YouTube a pantalla entera, y el
-                                          final (más texto y la marca otra vez)
+     direccion-creativa/<slug>/           un proyecto, de lado (en el móvil, hacia abajo) y en
+                                          cuatro partes: el inicio (la estrella con el logo y el
+                                          texto), las fotos, los vídeos (.webm y YouTube) y el
+                                          final (como el inicio, con text2)
      direccion-creativa/<slug>/<parte>/   una parte de un proyecto (Tattoox → Riverland), igual
      tattoo/                              las fotos de tattoo/, en columnas
      about/                               la foto, el texto y el contacto
 
-   Y la 404. Cada sección tiene su aspecto (css/style.css: la clase del <body>). */
+   Y la 404. Cada sección tiene su aspecto: sus colores y letras, en data/config.json (que
+   aquí se vuelve un <style>); lo demás, en css/style.css, por la clase del <body>. */
 
 import { home } from './home.mjs';
 
 /** Escapa lo que va al documento, también las comillas (sirve en atributos). */
 export const esc = (v) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/* La clase del <body> de cada sección de data/config.json, y cada letra del esquema con
+   las de recambio (las woff2 están en fonts/ y en css/style.css). */
+const CLASE = { obra: 'obra', 'direccion-creativa': 'dc', tattoo: 'tattoo', about: 'about' };
+const LETRAS = {
+  Anton: 'Anton, Impact, sans-serif',
+  Italianno: 'Italianno, var(--guion)',
+  Pinyon: 'var(--guion)',
+  'Instrument Serif': '"Instrument Serif", Georgia, serif',
+  'Irish Grover': '"Irish Grover", fantasy',
+  Times: '"Times New Roman", Times, serif',
+  Georgia: 'Georgia, serif',
+};
 
 export const OG_W = 1200;
 export const OG_H = 630;
@@ -81,6 +93,7 @@ function enlaces(links) {
  * La web, con lo que hace falta para pintarla:
  *
  *   site, about       data/site.json y data/about.json
+ *   config            data/config.json: los colores y las letras de cada sección
  *   projects          los de proyectos.mjs (loadProjects)
  *   tattoo            las fotos de tattoo/ (loadTattoo)
  *   aboutPhoto        { src, w, h } de about/<photo>.webp
@@ -96,10 +109,14 @@ function enlaces(links) {
  * Devuelve las rutas de las páginas (`paths`, las que van al sitemap en
  * `listed`), render(path) y notFound().
  */
-export function sitio({ site, about, projects, tattoo, aboutPhoto, version = () => '', mini = (img) => img.src, og = () => null, pixel = (src) => src, astro = (img) => img.src, yt = () => null, preview = false }) {
+export function sitio({ site, config, about, projects, tattoo, aboutPhoto, version = () => '', mini = (img) => img.src, og = () => null, pixel = (src) => src, astro = (img) => img.src, yt = () => null, preview = false }) {
   const abs = (path) => (site.url ? new URL(path, site.url).href : null);
   const visibles = (section) => projects.filter((p) => p.section === section && !p.hidden);
   const instagram = site.instagram ? `https://www.instagram.com/${site.instagram}/` : null;
+
+  /* data/config.json → las variables de css/style.css, una regla por sección (la clase del
+     <body>). Los colores y las letras ya vienen comprobados por schema/config.json. */
+  const estilo = Object.entries(config.sections).map(([s, c]) => `.${CLASE[s]} { --fondo: ${c.background}; --tinta: ${c.color}; --menu: ${c.color}; --activa: ${c.highlight}; --astro: ${c.star}; --estrella: ${c.header_star}; --titular: ${LETRAS[c.title_font]}; --letra: ${LETRAS[c.text_font]}; }`).join('\n');
 
   /* R: de la página que se pinta a la raíz ('../../' en obra/x/). */
   let R = '';
@@ -137,6 +154,9 @@ ${site.noindex || noindex || path === null ? '<meta name="robots" content="noind
 ${ogUrl ? `<meta property="og:image" content="${esc(ogUrl)}">\n<meta property="og:image:width" content="${OG_W}">\n<meta property="og:image:height" content="${OG_H}">\n<meta name="twitter:card" content="summary_large_image">\n` : ''}<link rel="icon" href="${src('assets/img/star.webp')}">
 <link rel="stylesheet" href="${src('css/transicion.css')}${version('css/transicion.css')}">
 <link rel="stylesheet" href="${src('css/style.css')}${version('css/style.css')}">
+<style>
+${estilo}
+</style>
 ${css ? `<link rel="stylesheet" href="${src(css)}${version(css)}">\n` : ''}<script src="${src('js/transicion.js')}${version('js/transicion.js')}" defer></script>
 <script src="${src('js/site.js')}${version('js/site.js')}" defer></script>
 </head>
@@ -205,16 +225,22 @@ ${dc.map((p) => `  <a class="proyecto" href="${link(p.path)}">
     return `<a class="yt" href="${esc(l)}" target="_blank" rel="noopener" data-yt="${id}"${t ? ` data-t="${t}"` : ''} aria-label="ver el vídeo: ${esc(titulo)}"><img src="${yt(id) ? src(yt(id)) : `https://i.ytimg.com/vi/${id}/hqdefault.jpg`}" alt="" loading="lazy"></a>`;
   }
 
-  /** Un proyecto o una obra (o una parte, `g`), de lado y por pantallas. */
+  /** Un proyecto o una obra (o una parte, `g`), de lado y por pantallas, en cuatro partes:
+      1. el inicio: el fondo de su sección, la estrella con el logo y el texto;
+      2. las fotos (en Tattoox, antes, sus partes);
+      3. los vídeos: los suyos (.webm) y los de YouTube, si hay;
+      4. el final: como el inicio, con el segundo texto (text2; si no hay, el mismo),
+         los enlaces y el siguiente. */
   function tira(p, g) {
     const yo = g || p;
     const titulo = g ? `${p.title} · ${g.title}` : p.title;
-    const resto = yo.images.filter((m) => m !== yo.cover);
-    const videos = (yo.links || []).filter(youtube);
-    const texto = yo.text || [];   // el primer párrafo, al inicio; el resto, al final
+    const fotos = yo.images.filter((m) => !m.video);
+    const webms = yo.images.filter((m) => m.video);
+    const yts = (yo.links || []).filter(youtube);
     const partes = p.groups.length ? `<ul class="partes">
 ${p.groups.map((x) => `      <li><a href="${link(`${p.path}${x.slug}/`)}"${x === g ? ' aria-current="page"' : ''}>${esc(x.title)}</a></li>`).join('\n')}
     </ul>` : '';
+    const nombre = `${esc(yo.title)}${yo.year ? ` <span>${yo.year}</span>` : ''}`;
     const sigP = g ? p.groups[(p.groups.indexOf(g) + 1) % p.groups.length] : null;
     const sig = g && p.groups.indexOf(g) < p.groups.length - 1
       ? { href: `${p.path}${sigP.slug}/`, title: sigP.title }
@@ -223,10 +249,9 @@ ${p.groups.map((x) => `      <li><a href="${link(`${p.path}${x.slug}/`)}"${x ===
 <section class="pantalla inicio">
   <div class="pantalla-texto">
     ${partes}
-    <h1 class="pieza-titulo">${esc(yo.title)}${yo.year ? ` <span>${yo.year}</span>` : ''}</h1>
-${parrafos(texto.slice(0, 1))}
+    <h1 class="pieza-titulo">${nombre}</h1>
+${parrafos(yo.text)}
   </div>
-  <div class="destacada">${pieza(yo.cover, titulo)}</div>
   ${marca(p, yo.cover)}
 </section>
 ${!g && p.groups.length ? `<section class="pantalla fila">
@@ -235,15 +260,16 @@ ${p.groups.map((x) => `  <a class="parte" href="${link(`${p.path}${x.slug}/`)}">
     <span>${esc(x.title)}</span>
   </a>`).join('\n')}
 </section>` : ''}
-${resto.length ? `<section class="pantalla fila">
-${resto.map((m, i) => `  ${pieza(m, `${titulo}, ${i + 2}`, true)}`).join('\n')}
+${fotos.length ? `<section class="pantalla fila">
+${fotos.map((m, i) => `  ${pieza(m, `${titulo}, ${i + 1}`, i > 0)}`).join('\n')}
 </section>` : ''}
-${videos.length ? `<section class="pantalla videos">
-${videos.map((l) => `  ${embed(l, titulo)}`).join('\n')}
+${webms.length || yts.length ? `<section class="pantalla videos">
+${[...webms.map((m, i) => pieza(m, `${titulo}, vídeo ${i + 1}`)), ...yts.map((l) => embed(l, titulo))].map((x) => `  ${x}`).join('\n')}
 </section>` : ''}
-<section class="pantalla final">
+<section class="pantalla inicio final">
   <div class="pantalla-texto">
-${parrafos(texto.slice(1))}
+    <p class="pieza-titulo">${nombre}</p>
+${parrafos(yo.text2?.length ? yo.text2 : yo.text)}
 ${enlaces((yo.links || []).filter((l) => !youtube(l)))}
     <a class="siguiente" href="${link(sig.href)}">siguiente: ${esc(sig.title)} →</a>
   </div>
@@ -252,7 +278,6 @@ ${enlaces((yo.links || []).filter((l) => !youtube(l)))}
 </main>`;
   }
 
-  const CLASE = { obra: 'obra', 'direccion-creativa': 'dc' };
   const proyecto = (p, g) => pagina({
     path: g ? `${p.path}${g.slug}/` : p.path, title: g ? `${p.title} · ${g.title}` : p.title, seccion: `${CLASE[p.section]} pieza`,
     image: (g || p).cover, noindex: p.hidden,

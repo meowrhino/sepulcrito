@@ -53,9 +53,10 @@ async function size(src) {
 async function start() {
   const site = await json('data/site.json');
   const about = await json('data/about.json');
-  if (!site || !about) return oops('No encuentro los datos', ['Falta data/site.json o data/about.json.']);
-  const schemas = Object.fromEntries(await Promise.all(['site', 'about', 'project'].map(async (t) => [t, await json(`schema/${t}.json`)])));
-  let invalid = [...validar(site, schemas.site, 'data/site.json'), ...validar(about, schemas.about, 'data/about.json')];
+  const config = await json('data/config.json');
+  if (!site || !about || !config) return oops('No encuentro los datos', ['Falta data/site.json, data/about.json o data/config.json.']);
+  const schemas = Object.fromEntries(await Promise.all(['site', 'about', 'config', 'project'].map(async (t) => [t, await json(`schema/${t}.json`)])));
+  let invalid = [...validar(site, schemas.site, 'data/site.json'), ...validar(about, schemas.about, 'data/about.json'), ...validar(config, schemas.config, 'data/config.json')];
   if (invalid.length) return oops('Así no se publicaría', invalid);
 
   /* El navegador no puede mirar qué hay en una carpeta: pide los proyectos
@@ -85,7 +86,7 @@ async function start() {
   if (aboutSize === null) errors.push(`about/${about.photo}.webp no es un WebP de verdad (pásala por imgToWeb)`);
   if (errors.length) return oops('Así no se publicaría', errors);
 
-  const web = sitio({ site: { ...site, url: '', noindex: true }, about, projects, tattoo, aboutPhoto: { src: `about/${about.photo}.webp`, ...aboutSize }, preview: true });
+  const web = sitio({ site: { ...site, url: '', noindex: true }, config, about, projects, tattoo, aboutPhoto: { src: `about/${about.photo}.webp`, ...aboutSize }, preview: true });
 
   /* ?p=/obra/sweet-wrecker/ → obra/sweet-wrecker/ */
   let path = (new URLSearchParams(location.search).get('p') || '/').replace(/^\/+/, '');

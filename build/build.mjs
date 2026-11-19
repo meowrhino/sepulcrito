@@ -11,6 +11,7 @@
                                     las listas (qué proyectos salen en obra y en dirección
                                     creativa, y en qué orden) y el menú
      data/about.json                la foto y el texto del about
+     data/config.json               los colores y las letras de cada sección
      projects/<slug>/project.json   cada obra o proyecto
      projects/<slug>/img/1.webp …   sus fotos (imgToWeb); un vídeo, N.webm + N.poster.webp (videoToWeb)
      tattoo/1.webp …                las fotos de tattoo, sin JSON
@@ -55,6 +56,7 @@ function read(file, type) {
 
 const site = read('data/site.json', 'site');
 const about = read('data/about.json', 'about');
+const config = read('data/config.json', 'config');
 if (invalid.length) fail(invalid);
 const files = new Map();
 for (const list of Object.values(site.lists)) {
@@ -182,7 +184,7 @@ await Promise.all([...new Set(projects.flatMap((p) => [p, ...p.groups]).flatMap(
   console.warn(`⚠ no he podido bajar el fotograma del vídeo de YouTube ${id}: se pide a YouTube al abrir la página`);
 }));
 
-const dry = sitio({ site, about, projects, tattoo, aboutPhoto, version, ...images });
+const dry = sitio({ site, config, about, projects, tattoo, aboutPhoto, version, ...images });
 for (const path of dry.paths) dry.render(path);
 if (sharp) {
   for (const src of miniWanted) {
@@ -240,7 +242,7 @@ if (ytDone.size) cpSync(join(CACHE, 'yt'), join(OUT, 'yt'), { recursive: true })
 if (pixelDone) { mkdirSync(dirname(join(OUT, 'pixel', PIXEL)), { recursive: true }); cpSync(join(CACHE, 'pixel', PIXEL), join(OUT, 'pixel', PIXEL)); }
 for (const src of ogDone) { mkdirSync(dirname(join(OUT, ogPath(src))), { recursive: true }); cpSync(join(CACHE, ogPath(src)), join(OUT, ogPath(src))); }
 
-const web = sitio({ site, about, projects, tattoo, aboutPhoto, version, ...images });
+const web = sitio({ site, config, about, projects, tattoo, aboutPhoto, version, ...images });
 for (const path of web.paths) {
   mkdirSync(join(OUT, path), { recursive: true });
   writeFileSync(join(OUT, path, 'index.html'), web.render(path));

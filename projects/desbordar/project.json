@@ -2,7 +2,12 @@
   "$schema": "../../schema/project.json",
   "title": "Desbordar",
   "cover": "1",
-  "text": [],
+  "text": [
+    "Producción, edición y dirección",
+    "Sepulcrito",
+    "Desbordar",
+    "2025"
+  ],
   "links": [
     "https://www.youtube.com/watch?v=fl59GkEZqWg"
   ],

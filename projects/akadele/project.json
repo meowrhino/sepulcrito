@@ -2,7 +2,11 @@
   "$schema": "../../schema/project.json",
   "title": "Akadele",
   "cover": "4",
-  "text": [],
+  "text": [
+    "Dirección estratégica y comunicación",
+    "Gestión cultural y RRSS",
+    "Campaña Akadele 2023"
+  ],
   "links": [],
   "photos": [
     "1",

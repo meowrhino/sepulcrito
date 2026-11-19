@@ -33,10 +33,14 @@
     },
     "cover": {
       "$ref": "#/$defs/numero",
-      "description": "La portada: la foto de la lista, la destacada de la primera vista (y la de la estrella) y la de compartir. Una foto, no un vídeo: \"3\". Si no está, la primera foto."
+      "description": "La portada: la foto de la lista, la de dentro de la estrella y la de compartir. Una foto, no un vídeo: \"3\". Si no está, la primera foto."
     },
     "text": {
       "$ref": "#/$defs/parrafos"
+    },
+    "text2": {
+      "$ref": "#/$defs/parrafos",
+      "description": "Opcional: el texto del final (la última pantalla), como lista de párrafos. Si no está, al final sale otra vez «text»."
     },
     "links": {
       "$ref": "#/$defs/links"
@@ -78,6 +82,10 @@
           "text": {
             "$ref": "#/$defs/parrafos"
           },
+          "text2": {
+            "$ref": "#/$defs/parrafos",
+            "description": "Opcional: el texto del final. Si no está, sale otra vez «text»."
+          },
           "links": {
             "$ref": "#/$defs/links"
           },
@@ -99,7 +107,7 @@
       "items": {
         "type": "string"
       },
-      "description": "El texto, como lista de párrafos: [\"Uno.\", \"Otro.\"]. El primero sale también en Google y al compartir."
+      "description": "El texto del principio (la primera pantalla, al lado de la estrella), como lista de párrafos: [\"Uno.\", \"Otro.\"]. El primero sale también en Google y al compartir."
     },
     "links": {
       "type": "array",
@@ -107,14 +115,14 @@
         "type": "string",
         "pattern": "^https?://"
       },
-      "description": "Enlaces de fuera (YouTube, Instagram…), uno por línea: [\"https://www.youtube.com/watch?v=…\"]. Un vídeo de YouTube sale en la página, a pantalla entera; lo demás, al final, como «ver en instagram ↗»."
+      "description": "Enlaces de fuera (YouTube, Instagram…), uno por línea: [\"https://www.youtube.com/watch?v=…\"]. Un vídeo de YouTube sale en la pantalla de los vídeos, entero; lo demás, al final, como «ver en instagram ↗»."
     },
     "fotos": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/numero"
       },
-      "description": "Las fotos y los vídeos, por número y en el orden en que salen: [\"1\", \"2\", \"3\"]."
+      "description": "Las fotos y los vídeos, por número y en el orden en que salen: [\"1\", \"2\", \"3\"]. Las fotos van en su pantalla y los vídeos (.webm), en la de los vídeos, con los de YouTube."
     }
   }
 }

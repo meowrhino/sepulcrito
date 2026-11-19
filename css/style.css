@@ -4,10 +4,12 @@
 @font-face { font-family: "Instrument Serif"; src: url(../fonts/instrument-serif-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 @font-face { font-family: "Irish Grover"; src: url(../fonts/irish-grover-latin-400-normal.woff2) format("woff2"); font-display: swap; }
 
-/* Cada sección con su aspecto: la clase del <body> pone el fondo, la letra
-   de los títulos, el color de la estrella (--astro, la de un proyecto: rosa
-   en blanco y en rojo, blanca en rosa) y el del menú. --bg es el color al
-   que funde la transición entre páginas (css/transicion.css). */
+/* Cada sección con su aspecto: los colores y las letras de cada una están en
+   data/config.json, y el build los pone en un <style> de cada página como estas
+   variables, por la clase del <body> (.obra, .dc, .tattoo, .about): --fondo,
+   --tinta y --menu, --activa, --astro (la estrella de un proyecto), --estrella
+   (la grande de la cabecera), --titular y --letra. Aquí, lo de por defecto y la
+   home. --bg es el color al que funde la transición (css/transicion.css). */
 :root {
   --guion: Pinyon, "Snell Roundhand", "Apple Chancery", cursive;
   --letra: "Times New Roman", Times, serif;   /* la de los textos: la de siempre, pequeña y en minúscula */
@@ -15,10 +17,6 @@
 }
 body   { --fondo: #fff; --tinta: #000; --menu: #000; --activa: #ff69b4; --estrella: #d9d9d9; --astro: #ff69b4; --titular: Anton, Impact, sans-serif; --bg: var(--fondo); }
 .home  { --menu: #fff; --activa: #000; }
-.obra  { --fondo: #ff69b4; --activa: #fff; --astro: #fff; --titular: Italianno, var(--guion); }
-.dc    { --estrella: #ffd3ec; --titular: "Instrument Serif", Georgia, serif; }
-.tattoo { --fondo: #f00; --activa: #fff; --titular: "Irish Grover", fantasy; }
-.about { --fondo: #000; --tinta: #fff; --menu: #fff; --activa: #ff8ff9; }
 
 * { box-sizing: border-box; margin: 0; }
 body { background: var(--fondo); color: var(--tinta); font-family: Anton, Impact, "Arial Narrow", sans-serif; }
@@ -54,7 +52,7 @@ body:not(.home) .menu { background: var(--fondo); pointer-events: auto; }
 .enlaces, .ficha-año, .siguiente { font-size: 15px; }
 .siguiente, .enlaces a, .partes a { text-decoration: none; }
 .siguiente:hover, .enlaces a:hover, .partes a:hover, .partes a[aria-current] { text-decoration: underline; }
-.texto { font-family: Georgia, serif; font-size: 17px; line-height: 1.5; max-width: 36em; margin-top: 1em; }
+.texto { font-family: var(--letra); font-size: 17px; line-height: 1.5; max-width: 36em; margin-top: 1em; }
 .enlaces { list-style: none; padding: 0; margin-top: 1em; line-height: 1.6; }
 
 /* ---------- obra: rosa, estrella blanca, letra de mano; las obras en collage ---------- */
@@ -78,8 +76,8 @@ body:not(.home) .menu { background: var(--fondo); pointer-events: auto; }
 .dc .cabecera h1 { font-size: 15vw; line-height: .82; bottom: 4vh; }
 
 .proyectos { padding: 10vh 4vw 16vh; }
-.proyecto { display: block; text-decoration: none; border-top: 1px solid #000; padding: 1.5vh 0; }
-.proyecto:last-child { border-bottom: 1px solid #000; }
+.proyecto { display: block; text-decoration: none; border-top: 1px solid; padding: 1.5vh 0; }
+.proyecto:last-child { border-bottom: 1px solid; }
 .proyecto-titulo { font-size: clamp(44px, 8vw, 140px); line-height: 1; }
 /* la portada aparece al pasar por el nombre, a la derecha (en el móvil, debajo) */
 .proyecto img { position: fixed; z-index: 2; right: 5vw; top: 50%; translate: 0 -50%; width: 30vw; max-height: 70vh; object-fit: cover; pointer-events: none; opacity: 0; transition: opacity .25s; }
@@ -110,13 +108,13 @@ body.pieza .menu { justify-content: flex-end; background: none; pointer-events: 
 .partes li:nth-child(3n+2) { margin-top: 1.1em; }
 .pantalla-texto .siguiente { display: inline-block; margin-top: 2.4em; }
 
-/* la marca, abajo a la izquierda: la estrella se sale por la esquina y el logo va encima.
+/* la marca: la estrella grande, a la derecha y en medio, con el logo (o el título) encima.
    La estrella es un hueco, siempre pixelada y de un color: la portada en 28 bloques (la
    hace el build), en gris y multiplicada sobre --astro, con su halo. Al pasar, la foto
    tal cual. */
-.marca { position: absolute; z-index: 1; left: 0; bottom: 0; pointer-events: none; }
-.marca > * { pointer-events: auto; }
-.marca-estrella { position: absolute; left: -7vw; bottom: -9vh; width: min(40vw, 72vh); filter: drop-shadow(0 0 max(.4vw, 3px) var(--astro)) drop-shadow(0 0 max(1.2vw, 9px) var(--astro)); }
+.marca { position: absolute; z-index: 1; right: 6vw; top: calc(var(--alto) / 2); translate: 0 -50%; width: min(46vw, 78vh); display: grid; place-items: center; pointer-events: none; }
+.marca > * { grid-area: 1 / 1; pointer-events: auto; }
+.marca-estrella { width: 100%; filter: drop-shadow(0 0 max(.4vw, 3px) var(--astro)) drop-shadow(0 0 max(1.2vw, 9px) var(--astro)); }
 .marca-forma {
   --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='522.13' height='496.575' viewBox='0 0 522.13 496.575'%3E%3Cpath d='M261.065 0L322.694 189.675H522.13L360.783 306.9L422.412 496.575L261.065 379.35L99.718 496.575L161.347 306.9L0 189.675H199.436L261.065 0Z'/%3E%3C/svg%3E");
   position: relative; aspect-ratio: 522.13 / 496.575; background: var(--astro);
@@ -126,16 +124,15 @@ body.pieza .menu { justify-content: flex-end; background: none; pointer-events: 
 .marca-px { image-rendering: pixelated; filter: grayscale(1) contrast(1.15) brightness(1.2); mix-blend-mode: multiply; opacity: .8; }   /* .8: una foto oscura no se come el color */
 .marca-foto { opacity: 0; transition: opacity .5s; }
 .marca:hover .marca-foto { opacity: 1; }
-.logo { position: relative; margin: 0 0 calc(var(--pie) + 2vh) 9vw; max-height: 24vh; max-width: 30vw; width: auto; }
-.marca-titulo { position: relative; display: block; margin: 0 0 var(--pie) 5vw; max-width: 60vw; font: italic clamp(56px, 8vw, 150px)/.85 var(--letra); text-transform: lowercase; letter-spacing: -.02em; }
+.logo { position: relative; translate: 0 6%; width: auto; max-width: 62%; max-height: 42%; pointer-events: none; }
+.marca-titulo { position: relative; translate: 0 6%; max-width: 100%; text-align: center; font: italic clamp(48px, 6.5vw, 130px)/.85 var(--letra); text-transform: lowercase; letter-spacing: -.02em; pointer-events: none; }
 
-/* 1. el inicio: el texto a la izquierda y la foto principal a la derecha */
-.inicio { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 4vw; width: 100vw; }
-.destacada { position: relative; z-index: 2; justify-self: end; }
-.destacada > * { width: auto; max-width: 100%; max-height: calc(var(--alto) - 8vh); }
+/* 1. el inicio y 4. el final: el fondo de la sección, el texto a la izquierda y la estrella */
+.inicio { width: 100vw; }
+.inicio .pantalla-texto { max-width: min(30em, 42vw); max-height: calc(var(--alto) - 4vh); overflow-y: auto; scrollbar-width: none; }
 
-/* 2. las fotos y los vídeos (o las partes de un proyecto, cada una con su foto): uno al
-      lado de otro, con aire, a distintas alturas */
+/* 2. las fotos (o las partes de un proyecto, cada una con su foto): una al lado de otra,
+      con aire, a distintas alturas */
 .fila { display: flex; align-items: center; gap: 11vw; padding-inline: 12vw; }
 .fila > * { flex: none; width: auto; max-width: none; height: calc(var(--alto) * .68); }
 .fila > :nth-child(4n+2) { align-self: flex-start; height: calc(var(--alto) * .5); }
@@ -146,23 +143,21 @@ body.pieza .menu { justify-content: flex-end; background: none; pointer-events: 
 .parte span { display: block; margin-top: .5em; }
 .parte:hover span { text-decoration: underline; }
 
-/* 3. un vídeo de YouTube: la pantalla entera (menos la franja del menú). Es su fotograma
-      con el play hasta que se le da (js/site.js) */
-.videos { display: flex; padding: 0; }
-.yt, .videos iframe { position: relative; flex: none; display: block; width: 100vw; height: var(--alto); border: 0; background: #000; }
+/* 3. los vídeos: los suyos, grandes y con aire; los de YouTube, la pantalla entera (menos
+      la franja del menú), su fotograma con el play hasta que se le da (js/site.js) */
+.videos { display: flex; align-items: center; padding: 0; }
+.videos video { flex: none; width: auto; max-width: none; height: calc(var(--alto) * .8); margin-inline: 8vw; }
+.yt, .videos iframe { position: relative; flex: none; align-self: flex-start; display: block; width: 100vw; height: var(--alto); border: 0; background: #000; }
 .yt img { width: 100%; height: 100%; max-width: none; object-fit: cover; }
 .yt::after { content: ""; position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 7vmin; height: 8vmin; background: #fff; clip-path: polygon(0 0, 100% 50%, 0 100%); }
-
-/* 4. el final: el texto y la marca otra vez; el margen, para que la estrella no pise lo de antes */
-.final { width: 100vw; margin-left: 8vw; }
 
 /* ---------- tattoo: rojo, Irish Grover ---------- */
 
 .tattoo .cabecera-estrella { width: 43vw; left: -6vw; top: -6vw; }
 .tattoo .cabecera h1 { font-size: 26vw; bottom: -.1em; }
 .tattoo-citas { position: absolute; right: 4vw; top: 4vh; font-size: clamp(18px, 2vw, 28px); text-align: right; }
-.tattoo-citas a { color: #fff; text-decoration: none; }
-.tattoo-citas a:hover { color: #000; }
+.tattoo-citas a { color: var(--activa); text-decoration: none; }
+.tattoo-citas a:hover { color: var(--tinta); }
 .tatuajes { columns: 3; column-gap: 1.2vw; padding: 4vh 4vw 12vh; }
 .tatuajes a { display: block; margin-bottom: 1.2vw; break-inside: avoid; }
 .tatuajes img { width: 100%; }
@@ -171,11 +166,11 @@ body.pieza .menu { justify-content: flex-end; background: none; pointer-events: 
 
 .sobre { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: end; min-height: calc(100svh - var(--pie)); padding: 8vh 4vw 4vh; }
 .sobre-foto { width: 100%; max-height: 80vh; object-fit: cover; }
-.sobre h1 { font-weight: 400; font-size: clamp(56px, 9vw, 150px); line-height: 1; color: #ff8ff9; }
+.sobre h1 { font-weight: 400; font-size: clamp(56px, 9vw, 150px); line-height: 1; color: var(--activa); }
 .sobre-lema { font-family: var(--guion); font-size: clamp(32px, 4vw, 64px); margin-top: .2em; }
 .sobre-contacto { margin-top: 2em; font-size: 18px; line-height: 1.6; }
 .sobre-contacto a, .firma a { text-decoration: none; }
-.sobre-contacto a:hover, .firma a:hover { color: #ff8ff9; }
+.sobre-contacto a:hover, .firma a:hover { color: var(--activa); }
 .firma { margin-top: 3em; font-size: 12px; opacity: .7; }
 .sobre-404 { grid-template-columns: 1fr; }
 
@@ -199,17 +194,15 @@ body.pieza .menu { justify-content: flex-end; background: none; pointer-events: 
   .pantalla { min-width: 0; width: auto; height: auto; min-height: var(--alto); padding-bottom: 4vh; }
   body.pieza .menu { justify-content: flex-start; background: var(--fondo); pointer-events: auto; }
   .volver span { display: none; }
-  .inicio { display: block; }
-  .destacada { margin: 4vh 0 44vh; }
-  .destacada > * { width: 100%; max-height: none; }
-  .marca-estrella { left: -16vw; bottom: -5vh; width: 78vw; }
-  .logo { margin: 0 0 4vh 10vw; max-width: 56vw; max-height: 18vh; }
-  .marca-titulo { margin-bottom: 3vh; font-size: 15vw; max-width: 90vw; }
+  .inicio { display: flex; flex-direction: column; gap: 6vh; padding-bottom: 8vh; }
+  .inicio .pantalla-texto { max-width: none; max-height: none; overflow: visible; }
+  .marca { position: relative; right: auto; top: auto; translate: none; width: 88vw; margin: auto auto 0; }
+  .marca-titulo { font-size: 14vw; }
   .fila { flex-direction: column; align-items: stretch; gap: 12vh; padding: 12vh 4vw; }
   .fila > *, .fila > :nth-child(n), .parte img { align-self: auto; width: 100%; height: auto; }
-  .videos { display: block; }
-  .yt, .videos iframe { width: 100%; height: auto; aspect-ratio: 16 / 9; }
-  .final { width: auto; margin-left: 0; padding-bottom: 50vh; }
+  .videos { display: flex; flex-direction: column; gap: 12vh; padding: 12vh 0; }
+  .videos video { width: 100%; height: auto; margin: 0; }
+  .yt, .videos iframe { align-self: stretch; width: 100%; height: auto; aspect-ratio: 16 / 9; }
 
   .tattoo .cabecera-estrella { width: 80vw; left: -14vw; top: 8vh; }
   .tattoo .cabecera h1 { font-size: 36vw; }

@@ -2,7 +2,11 @@
   "$schema": "../../schema/project.json",
   "title": "Adefesio",
   "cover": "6",
-  "text": [],
+  "text": [
+    "Producción, edición y dirección",
+    "ADEFESIO",
+    "2025"
+  ],
   "links": [
     "https://www.instagram.com/adefesiostudio/"
   ],

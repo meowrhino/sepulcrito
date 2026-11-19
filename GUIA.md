@@ -55,6 +55,7 @@ data/
   site.json                   ← qué sale en obra y en dirección creativa, y en qué orden;
                                  tu Instagram, tu email, el menú…
   about.json                  ← el texto del about
+  config.json                 ← los colores y las letras de cada sección
 ```
 
 El **nombre de la carpeta** de un proyecto es su dirección en la web: la
@@ -90,6 +91,18 @@ luego los pasos 3 a 5.
 
 ## 3. Lo que más vas a hacer
 
+### Cómo es la página de una obra o de un proyecto
+
+Se lee de lado (en el móvil, hacia abajo), en cuatro partes:
+
+1. **El inicio**: el fondo de su sección, la estrella con el logo (o el
+   título) y el texto (`text`).
+2. **Las fotos** (`photos`).
+3. **Los vídeos**: los suyos (`.webm`) y los de YouTube (`links`). Si no hay,
+   esta parte no sale.
+4. **El final**: como el inicio, con el segundo texto (`text2`). Si no hay
+   `text2`, sale otra vez `text`.
+
 ### Cambiar el texto de una obra o de un proyecto
 
 En su `project.json`, en `text`. Es una **lista de párrafos**, cada uno entre
@@ -102,15 +115,21 @@ comillas y separados por comas:
 ],
 ```
 
-Si está vacío (`"text": []`), la página sale sin texto.
+Si está vacío (`"text": []`), la página sale sin texto. Para que el final
+tenga otro texto, añade `text2` debajo, igual:
+
+```json
+"text2": [
+  "El texto del final."
+],
+```
 
 ### Cambiar la portada, el orden de las fotos o quitar una
 
 Las fotos van por su **número**: `"5"` es la `5.webp` de su carpeta `img/`.
 
-- `cover` (portada): la foto de la lista de la sección, la destacada de la
-  primera vista (y la que sale pixelada dentro de la estrella) y la que sale
-  al compartir el enlace. Tiene que ser una foto, no un vídeo: `"cover": "3"`.
+- `cover` (portada): la foto de la lista de la sección, la que sale pixelada
+  dentro de la estrella y la que sale al compartir el enlace. Tiene que ser una foto, no un vídeo: `"cover": "3"`.
 - `photos`: las que salen en la página, en ese orden. Para cambiar el orden,
   mueve los números; para quitar una, bórrala de la lista (el archivo puede
   quedarse en `img/`, no pasa nada).
@@ -129,15 +148,16 @@ con la opción **fotograma** activada: de cada vídeo salen dos archivos, el
 vídeo (`.webm`) y su fotograma (`.poster.webp`), que es lo que se ve mientras
 llega. Los dos van a `img/` con el mismo número: `img/5.webm` y
 `img/5.poster.webp`, y en el JSON se pone `"5"` como con una foto. En la web
-se pone solo, sin sonido, cuando se ve; con los mandos se le da sonido.
+sale en la parte de los vídeos, después de las fotos, y se pone solo, sin
+sonido, cuando se ve; con los mandos se le da sonido.
 
 Cuanto más corto, mejor. Un archivo no puede pasar de **25 MB**.
 
 ### Enlaces (YouTube, Instagram…)
 
 En `links`, la lista de direcciones. Un vídeo de **YouTube** sale en la
-página, a pantalla entera, después de las fotos (se ve su fotograma y se pone
-al darle). Lo demás sale al final como "ver en instagram ↗":
+parte de los vídeos, a pantalla entera (se ve su fotograma y se pone al
+darle). Lo demás sale al final como "ver en instagram ↗":
 
 ```json
 "links": [
@@ -191,6 +211,25 @@ número. No hay JSON: solo las fotos.
   sin la @: `"sepulcrito"`) y `"email"`. Salen en el about, y el Instagram
   también en tattoo, para pedir cita.
 
+### Los colores y las letras
+
+En `data/config.json`, uno por sección (`obra`, `direccion-creativa`,
+`tattoo`, `about`). Lo de una sección vale también para sus obras o proyectos:
+
+| campo | qué es | ejemplo |
+|---|---|---|
+| `background` | el fondo | `"#ff69b4"` |
+| `color` | la letra y el menú | `"#000000"` |
+| `highlight` | lo activo: la sección del menú en la que estás y lo que pasas con el ratón | `"#ffffff"` |
+| `star` | la estrella de cada obra o proyecto, y su brillo | `"#ff69b4"` |
+| `header_star` | la estrella grande del principio de la sección | `"#d9d9d9"` |
+| `title_font` | la letra de los títulos grandes | `"Italianno"` |
+| `text_font` | la letra de los textos | `"Times"` |
+
+Los colores van en hexadecimal (`"#"` y seis cifras o letras). Las letras que
+hay: `"Anton"`, `"Italianno"`, `"Pinyon"`, `"Instrument Serif"`,
+`"Irish Grover"`, `"Times"` y `"Georgia"` (VS Code te las propone).
+
 ---
 
 ## 4. Añadir una obra o un proyecto nuevo
@@ -236,12 +275,13 @@ La imagen que sale al compartir el enlace y las fotos pequeñas de las listas
 |---|---|---|
 | `title` | el título, tal cual se ve | `"Sweet Wrecker"` |
 | `year` | *(opcional)* el año, sin comillas | `2025` |
-| `cover` | la portada: la foto de la lista, la destacada y la de compartir | `"3"` |
-| `text` | el texto, lista de párrafos: el primero sale al principio; los demás, al final | `["Uno.", "Dos."]` |
-| `photos` | las fotos y vídeos, en orden | `["1", "2", "3"]` |
+| `cover` | la portada: la foto de la lista, la de dentro de la estrella y la de compartir | `"3"` |
+| `text` | el texto del principio, lista de párrafos | `["Uno.", "Dos."]` |
+| `text2` | *(opcional)* el texto del final; si no está, sale otra vez `text` | `["Tres."]` |
+| `photos` | las fotos y vídeos, en orden (los vídeos salen en su parte) | `["1", "2", "3"]` |
 | `links` | *(opcional)* enlaces de fuera; los de YouTube se ven en la página | `["https://youtube.com/…"]` |
 | `logo` | *(opcional)* el número de la foto del logo, que sale encima de la estrella al principio y al final. Mejor con fondo transparente (un PNG sin fondo: imgToWeb lo respeta) | `"1"` |
-| `groups` | *(opcional)* el proyecto por partes, cada una con su página, como Tattoox: `slug`, `title`, `text`, `links`, `photos` | ver `tattoox` |
+| `groups` | *(opcional)* el proyecto por partes, cada una con su página, como Tattoox: `slug`, `title`, `text`, `text2`, `links`, `photos` | ver `tattoox` |
 
 **VS Code te ayuda**: al pasar el ratón por un campo te dice qué es, al empezar
 a escribir uno nuevo te propone los que hay, y uno mal escrito (`"covr"`) sale

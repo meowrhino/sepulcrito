@@ -1,0 +1,41 @@
+{
+  "$schema": "../schema/config.json",
+  "sections": {
+    "obra": {
+      "background": "#ff69b4",
+      "color": "#000000",
+      "highlight": "#ffffff",
+      "star": "#ffffff",
+      "header_star": "#d9d9d9",
+      "title_font": "Italianno",
+      "text_font": "Times"
+    },
+    "direccion-creativa": {
+      "background": "#ffffff",
+      "color": "#000000",
+      "highlight": "#ff69b4",
+      "star": "#ff69b4",
+      "header_star": "#ffd3ec",
+      "title_font": "Instrument Serif",
+      "text_font": "Times"
+    },
+    "tattoo": {
+      "background": "#ff0000",
+      "color": "#000000",
+      "highlight": "#ffffff",
+      "star": "#ff69b4",
+      "header_star": "#d9d9d9",
+      "title_font": "Irish Grover",
+      "text_font": "Times"
+    },
+    "about": {
+      "background": "#000000",
+      "color": "#ffffff",
+      "highlight": "#ff8ff9",
+      "star": "#ff69b4",
+      "header_star": "#d9d9d9",
+      "title_font": "Anton",
+      "text_font": "Georgia"
+    }
+  }
+}
