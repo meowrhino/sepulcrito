@@ -1,0 +1,269 @@
+/* A · censura (estilos/a/plantillas.mjs). Se carga después de css/style.css: los colores y
+   las letras de cada sección vienen de ahí (--fondo, --tinta, --activa, --titular, --letra).
+   Nada de border-radius ni degradados; lo único que brilla es el neón rosa. */
+
+.estilo-a {
+  --neon: #ff5cf0;            /* el rosa chicle de las referencias */
+  --barra: 2.1rem;            /* la barra del menú, arriba */
+  --alto: calc(100dvh - var(--barra));
+  padding: var(--barra) 0 0;
+}
+/* en el rosa de obra y el rojo de tattoo, el halo claro (el rosa no se vería) */
+.estilo-a.obra, .estilo-a.tattoo { --neon: #ffd6fc; }
+
+/* el <body> de un proyecto lleva la clase .proyecto, y css/style.css esconde con
+   `.proyecto img` las portadas de su lista: aquí no (va antes que lo demás, que gana) */
+.estilo-a img { position: static; z-index: auto; translate: none; width: auto; max-height: none; object-fit: fill; pointer-events: auto; opacity: 1; transition: none; }
+
+/* ---------- la estrella: la censura, con su neón ---------- */
+
+.astro { position: relative; aspect-ratio: 522.13 / 496.575; }
+.estilo-a .neon { filter: drop-shadow(0 0 max(.35vw, 3px) var(--neon)) drop-shadow(0 0 max(1.3vw, 10px) var(--neon)); }
+/* sin JS, la foto en la estrella; con JS la pinta js/astro.js */
+.astro > img {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover;
+  -webkit-mask: var(--forma) center / contain no-repeat; mask: var(--forma) center / contain no-repeat;
+}
+.js .astro > img { display: none; }
+.estilo-a {
+  --forma: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 522.13 496.575'%3E%3Cpath d='M261.065 0L322.694 189.675H522.13L360.783 306.9L422.412 496.575L261.065 379.35L99.718 496.575L161.347 306.9L0 189.675H199.436L261.065 0Z'/%3E%3C/svg%3E");
+}
+
+/* una foto censurada: la foto y, encima, la estrella de mosaico (estilo.js), en su sitio */
+.censurada { position: relative; display: block; overflow: hidden; }
+.censurada img { width: 100%; }
+.censura { --neon: #ff5cf0; position: absolute; inset: 0; pointer-events: none; filter: drop-shadow(0 0 3px var(--neon)) drop-shadow(0 0 12px var(--neon)); transition: opacity .3s; }
+.censura canvas {
+  width: 100%; height: 100%; display: block; image-rendering: pixelated;
+  -webkit-mask: var(--forma) var(--x) var(--y) / var(--w) auto no-repeat; mask: var(--forma) var(--x) var(--y) / var(--w) auto no-repeat;
+}
+.censurada.limpia .censura { opacity: 0; }
+/* cada una con la estrella en otro sitio y de otro tamaño */
+.e0 { --x: 62%; --y: 18%; --w: 46%; }
+.e1 { --x: 12%; --y: 40%; --w: 58%; }
+.e2 { --x: 85%; --y: 70%; --w: 40%; }
+.e3 { --x: 30%; --y: 8%; --w: 52%; }
+
+/* ---------- lo de siempre: el chicle, el lema, los títulos ---------- */
+
+/* el botón de chicle: recto y plano, con su neón */
+.chicle {
+  display: inline-block; padding: .5em 1em .55em; background: #fff; color: #ff69b4;
+  font: 400 15px/1 Anton, Impact, sans-serif; text-transform: lowercase; text-decoration: none; letter-spacing: .02em;
+  box-shadow: 0 0 0 2px var(--neon), 0 0 16px var(--neon);
+  transition: background .15s, color .15s;
+}
+.chicle:hover, .chicle:focus-visible { background: #ff69b4; color: #fff; outline: none; }
+.dc .chicle { background: #ff69b4; color: #fff; }
+.dc .chicle:hover, .dc .chicle:focus-visible { background: #fff; color: #ff69b4; }
+
+/* «Content Destroyer.», corriendo */
+.estilo-a .lema {
+  position: absolute; z-index: 3; left: 0; display: flex; white-space: nowrap; pointer-events: none;
+  font: clamp(28px, 3.6vw, 56px)/1.3 var(--guion); animation: correr 40s linear infinite;
+}
+.estilo-a .lema span { padding-right: .3em; }
+@keyframes correr { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .estilo-a .lema { animation: none; } }
+
+.a-gigante { font: 400 1em/.85 var(--titular); }
+.texto { font: 15px/1.4 var(--letra); text-transform: lowercase; max-width: 32em; margin-top: .9em; }
+.estilo-a .enlaces { font: 15px/1.6 var(--letra); text-transform: lowercase; }
+.estilo-a .enlaces a { text-decoration: none; }
+.estilo-a .enlaces a:hover { text-decoration: underline; }
+
+/* ---------- el menú: la barra de chicle arriba (la de las referencias) ---------- */
+
+.a-menu {
+  position: fixed; z-index: 6; left: 0; right: 0; top: 0; height: var(--barra);
+  display: flex; justify-content: space-between; align-items: center; gap: 1em; padding: 0 2vw;
+  background: #ff8ff9; font: 400 17px/1 Anton, Impact, sans-serif; text-transform: lowercase;
+}
+.obra .a-menu { background: #ffb3fa; }
+.a-menu a { color: #fff; text-decoration: none; padding: .25em .5em; }
+.a-menu a:hover, .a-menu a[aria-current] { background: #fff; color: #ff69b4; box-shadow: 0 0 12px var(--neon); }
+.a-casa svg { width: 1em; height: 1em; fill: currentColor; vertical-align: -.12em; margin-right: .35em; }
+
+/* el volver: abajo a la izquierda, siempre a mano */
+.a-volver { position: fixed; z-index: 6; left: 2vw; bottom: 1.2rem; }
+
+/* ---------- las listas: la cabecera ---------- */
+
+.a-cabecera { position: relative; height: var(--alto); overflow: hidden; }
+.a-cabecera-astro { position: absolute; width: min(52vw, 86vh); right: 3vw; top: 4vh; }
+.a-cabecera .a-gigante { position: absolute; z-index: 2; left: 2vw; bottom: 12vh; font-size: 30vw; }
+.dc .a-cabecera .a-gigante { font-size: 13.5vw; line-height: .8; max-width: 7em; }
+.tattoo .a-cabecera .a-gigante { font-size: 24vw; }
+.a-cabecera .lema { bottom: 1vh; }
+.dc .a-cabecera-astro { right: 2vw; }
+.tattoo .a-cabecera-astro { left: 44vw; right: auto; top: 6vh; rotate: 12deg; }
+.a-citas { position: absolute; z-index: 3; left: 3vw; top: 5vh; }
+.a-citas .chicle { font-size: clamp(17px, 1.8vw, 26px); }
+
+/* obra: las obras, en zigzag, cada portada con su censura y el título enorme encima del pie */
+.a-obras { display: flex; flex-direction: column; gap: 16vh; padding: 16vh 0 24vh; }
+.a-obras { overflow-x: clip; }
+/* el título puede ser más ancho que la foto: sobresale hacia dentro de la página */
+.a-obra { position: relative; display: flex; flex-direction: column; align-items: flex-start; width: 40vw; margin-left: 9vw; text-decoration: none; }
+.a-obra:nth-child(even) { margin-left: 51vw; align-items: flex-end; }
+.a-obra .censurada { align-self: stretch; }
+.a-obra:nth-child(3n) { width: 48vw; margin-left: 24vw; }
+.a-obra .censurada img { aspect-ratio: 4 / 5; object-fit: cover; }
+.a-obra:nth-child(3n) .censurada img { aspect-ratio: 3 / 2; }
+.a-obra-titulo { position: relative; z-index: 2; display: block; width: max-content; max-width: 86vw; margin: -.42em 0 0 -.25em; font: 400 clamp(64px, 9vw, 160px)/.9 var(--titular); }
+.a-obra:nth-child(even) .a-obra-titulo { margin: -.42em -.25em 0 0; text-align: right; }
+.a-obra-titulo small, .a-titulo small { font: 15px var(--letra); margin-left: .5em; }
+.a-obra:hover .a-obra-titulo, .a-obra:focus-visible .a-obra-titulo { color: #fff; text-shadow: 0 0 10px #ff5cf0, 0 0 26px #ff5cf0; }
+
+/* dirección creativa: una lista de nombres enormes, cada uno con su estrella */
+.a-proyectos { padding: 10vh 3vw 20vh; }
+.a-proyecto { display: grid; grid-template-columns: 3em 1fr auto; align-items: center; gap: 2vw; padding: 2vh 0; text-decoration: none; border-top: 2px solid; }
+.a-proyecto:last-child { border-bottom: 2px solid; }
+.a-num { font: 15px var(--letra); align-self: start; padding-top: 1.2em; }
+.a-proyecto-titulo { font: 400 clamp(52px, 9vw, 160px)/.95 var(--titular); }
+.a-proyecto-astro { width: clamp(90px, 13vw, 200px); transition: rotate .4s, scale .4s; }
+.a-proyecto:hover .a-proyecto-astro, .a-proyecto:focus-visible .a-proyecto-astro { rotate: 18deg; scale: 1.25; }
+.a-proyecto:hover .a-proyecto-titulo { font-style: italic; color: #ff69b4; }
+
+/* tattoo: las fotos en columnas, censuradas; al pasar, sin censura */
+.a-tatuajes { columns: 4; column-gap: 1.5vw; padding: 8vh 3vw 16vh; }
+.a-tatuajes a { display: block; margin-bottom: 1.5vw; break-inside: avoid; }
+.a-tatuajes a:nth-child(3n+2) .censurada { rotate: -1.5deg; }
+.a-tatuajes a:nth-child(5n+3) .censurada { rotate: 2deg; }
+.a-tatuajes .censurada { transition: rotate .25s, scale .25s; }
+.a-tatuajes a:hover .censurada { rotate: -3deg; scale: 1.04; position: relative; z-index: 2; }
+/* entre las fotos, una pegatina de chicle: pide cita */
+.a-tatuajes .a-pegatina { display: block; margin: 1vw 0 2.5vw; padding: 1em .8em 1.1em; text-align: center; font-size: clamp(22px, 2.4vw, 40px); line-height: .95; rotate: -4deg; }
+.a-tatuajes .a-pegatina:nth-of-type(even) { rotate: 3deg; }
+.a-pegatina small { display: block; margin-top: .4em; font: 15px var(--letra); }
+
+/* ---------- un proyecto: de lado y por pantallas ---------- */
+
+.estilo-a.proyecto { height: 100dvh; overflow: hidden; }
+.a-tira { height: var(--alto); }
+.a-tira .pantalla { height: var(--alto); padding: 5vh 3vw 4vh; }
+
+/* 1. el inicio y 4. el final: la estrella grande a la derecha, el texto arriba a la
+      izquierda y el título enorme abajo, encima de la estrella */
+.a-inicio { width: 100vw; overflow: hidden; }
+.a-inicio .a-astro { position: absolute; width: min(54vw, 96vh); right: -2vw; top: 50%; translate: 0 -54%; }
+.a-final .a-astro { right: auto; left: -4vw; rotate: -14deg; }
+.a-texto { position: relative; z-index: 2; max-width: min(32em, 40vw); max-height: 56vh; overflow-y: auto; scrollbar-width: none; }
+.a-final .a-texto { margin-left: auto; margin-right: 4vw; max-height: none; }
+.a-rotulo { font: 15px/1.3 var(--letra); text-transform: lowercase; opacity: .75; }
+.a-rotulo a { text-decoration: none; }
+.a-rotulo a:hover { text-decoration: underline; }
+.a-texto .texto { font-size: 15px; }
+.a-titulo { position: absolute; z-index: 3; left: 3vw; right: 3vw; bottom: 10vh; font: 400 clamp(72px, 13vw, 240px)/.82 var(--titular); }
+.obra .a-titulo { font-size: clamp(90px, 14vw, 260px); }
+.a-titulo small { font-size: 15px; }
+.a-siguiente { margin-top: 2.2em; }
+.a-final .lema { bottom: 1vh; }
+
+/* con logo: el logo es el título, abajo, sobre la estrella (como en el Figma) */
+.con-logo .a-astro { right: 50%; translate: 50% -56%; width: min(48vw, 84vh); }
+.a-logo { position: absolute; z-index: 3; left: 50%; bottom: 14vh; translate: -50% 0; width: min(34vw, 560px); }
+.a-logo img { width: 100%; filter: drop-shadow(0 0 14px #fff); }
+/* Tattoox: la estrella arriba, el logo y sus partes abajo, cada una en su estrellita */
+.con-partes .a-astro { width: min(40vw, 64vh); translate: 50% -64%; }
+.con-partes .a-logo { bottom: 27vh; width: min(30vw, 480px); }
+
+.a-partes { position: absolute; z-index: 3; left: 12vw; right: 3vw; bottom: 3vh; display: flex; justify-content: space-between; gap: 1vw; }
+.a-parte { width: 7.6vw; min-width: 64px; text-align: center; text-decoration: none; font: 13px/1.2 var(--letra); text-transform: lowercase; }
+.a-parte:nth-child(even) { translate: 0 -3vh; }
+.a-parte .astro { --neon: #ff5cf0; margin-bottom: .45em; transition: scale .3s, rotate .3s; }
+.a-parte:hover .astro, .a-parte[aria-current] .astro { scale: 1.2; rotate: -10deg; }
+.a-parte[aria-current] span { background: #ff69b4; color: #fff; padding: .1em .3em; }
+.a-final .a-partes { left: 3vw; right: 3vw; bottom: 11vh; }
+.a-final:has(.a-partes) .a-astro { width: min(34vw, 60vh); top: 4vh; translate: 0 0; }
+
+/* 2. las fotos: una al lado de otra, a la misma altura, con su número */
+.a-fotos { display: flex; align-items: center; gap: 4vw; padding-inline: 8vw; }
+.a-fotos figure { flex: none; }
+.a-fotos img, .a-fotos video { height: calc(var(--alto) * .74); width: auto; max-width: none; }
+.a-fotos figcaption { font: 13px/1.6em var(--letra); }
+
+/* 3. los vídeos: en fila y centrados; uno solo, en medio de la pantalla, entre dos estrellas */
+.a-videos { display: flex; align-items: center; gap: 4vw; padding-inline: 8vw; }
+.a-videos.solo { width: 100vw; justify-content: center; }
+.a-video { position: relative; z-index: 2; flex: none; }
+.a-video video { height: calc(var(--alto) * .8); width: auto; max-width: none; }
+.a-video .yt, .a-video iframe { display: block; height: calc(var(--alto) * .8); width: auto; aspect-ratio: 16 / 9; border: 0; background: #000; position: relative; }
+.a-video .yt img { width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.a-video .yt::after { content: ""; position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 6vmin; height: 7vmin; background: #fff; clip-path: polygon(0 0, 100% 50%, 0 100%); filter: drop-shadow(0 0 8px var(--neon)); }
+.a-flanco { position: absolute; width: min(34vw, 60vh); top: 50%; }
+.a-flanco.uno { left: 4vw; translate: 0 -62%; rotate: -12deg; }
+.a-flanco.dos { right: 4vw; translate: 0 -38%; rotate: 14deg; }
+
+/* ---------- about: la foto en la estrella, el nombre enorme con neón ---------- */
+
+.a-about { position: relative; min-height: var(--alto); display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 3vw; padding: 6vh 4vw 16vh; overflow: hidden; }
+.a-about .a-astro { width: 100%; max-width: 86vh; justify-self: center; }
+.a-about .a-gigante { font-size: clamp(64px, 9vw, 160px); color: #fff; text-shadow: 0 0 6px var(--neon), 0 0 22px var(--neon), 0 0 44px var(--neon); margin-bottom: .25em; }
+.a-about .texto { font-size: 16px; }
+.a-contacto { display: flex; flex-wrap: wrap; gap: 1em; margin-top: 2em; }
+.a-about .firma { margin-top: 2.5em; font: 12px var(--letra); opacity: .7; }
+.a-about .firma a { text-decoration: none; }
+.a-about .lema { bottom: 1vh; color: #fff; }
+
+/* ---------- móvil: hacia abajo ---------- */
+
+@media (max-width: 700px) {
+  .estilo-a { --barra: 2.4rem; }
+  .a-menu { padding: 0 1vw; font-size: 14px; gap: 0; }
+  .a-menu a { padding: .3em .35em; }
+  .a-casa span { display: none; }
+  .a-volver { left: 3vw; bottom: 3vw; }
+
+  .a-cabecera { height: calc(100svh - var(--barra)); }
+  .a-cabecera-astro, .tattoo .a-cabecera-astro { width: 92vw; left: 4vw; right: auto; top: 10vh; }
+  .a-cabecera .a-gigante { font-size: 44vw; bottom: 10vh; }
+  .dc .a-cabecera .a-gigante { font-size: 19vw; }
+  .tattoo .a-cabecera .a-gigante { font-size: 29vw; }
+  .a-citas { top: 2.5vh; }
+
+  .a-obras { gap: 10vh; padding: 8vh 4vw 16vh; }
+  .a-obra, .a-obra:nth-child(3n) { width: 84%; margin-left: 0; }
+  .a-obra:nth-child(even) { margin-left: auto; }
+  .a-obra-titulo { font-size: 17vw; max-width: 92vw; margin-left: 0; }
+  .a-obra:nth-child(even) .a-obra-titulo { margin-right: 0; }
+
+  .a-proyecto { grid-template-columns: 1fr auto; }
+  .a-num { display: none; }
+  .a-proyecto-titulo { font-size: 12vw; }
+  .a-proyecto-astro { width: 24vw; }
+
+  .a-tatuajes { columns: 2; column-gap: 3vw; padding-inline: 3vw; }
+  .a-tatuajes a { margin-bottom: 3vw; }
+
+  /* un proyecto, hacia abajo */
+  .estilo-a.proyecto { height: auto; overflow: visible; }
+  .a-tira, .a-tira .pantalla { height: auto; }
+  .a-tira .pantalla { padding: 4vh 4vw; }
+  .a-inicio { display: flex; flex-direction: column; min-height: var(--alto); padding-bottom: 6vh; }
+  .a-inicio .a-astro, .con-logo .a-astro, .con-partes .a-astro, .a-final .a-astro, .a-final:has(.a-partes) .a-astro { position: relative; order: -1; width: 92vw; right: auto; left: auto; top: auto; translate: none; rotate: none; margin: 0 auto 0; }
+  .a-final .a-astro { rotate: -8deg; width: 70vw; }
+  .a-texto, .a-final .a-texto { max-width: none; max-height: none; overflow: visible; margin: 0; }
+  .a-titulo, .obra .a-titulo { position: relative; order: -1; left: auto; right: auto; bottom: auto; margin: -14vw 0 4vh; font-size: 19vw; }
+  .a-logo, .con-partes .a-logo { position: relative; order: -1; left: auto; bottom: auto; translate: none; width: 70vw; margin: -24vw auto 5vh; }
+  .a-partes, .a-final .a-partes { position: relative; left: auto; right: auto; bottom: auto; flex-wrap: wrap; justify-content: center; gap: 4vh 4vw; margin-top: 6vh; }
+  .a-parte { width: 26vw; }
+  .a-parte:nth-child(even) { translate: none; }
+  .a-final { padding-bottom: 18vh !important; }
+
+  .a-fotos, .a-videos { flex-direction: column; gap: 6vh; padding: 6vh 4vw; }
+  .a-fotos figure, .a-video { height: auto; width: 100%; }
+  .a-fotos img, .a-fotos video, .a-video video { width: 100%; height: auto; }
+  .a-video .yt, .a-video iframe { width: 100%; height: auto; }
+  .a-videos.solo { width: auto; min-height: var(--alto); }
+  .a-videos.solo .a-video { width: 78%; }
+  .a-flanco { width: 46vw; }
+  .a-flanco.uno { left: -10vw; top: 22%; }
+  .a-flanco.dos { right: -10vw; top: 78%; }
+
+  .a-about { grid-template-columns: 1fr; padding: 4vh 4vw 18vh; }
+  .a-about .a-gigante { font-size: 17vw; }
+}
+
+/* en una fila, la estrella responde a la fila entera (estilo.js), no a sí misma */
+.a-proyecto .astro, .a-parte .astro { pointer-events: none; }
